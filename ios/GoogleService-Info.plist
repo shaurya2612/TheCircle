@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>227255097562-1bmtk4lvar9r37f753q47na3j7r5oq4b.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.227255097562-1bmtk4lvar9r37f753q47na3j7r5oq4b</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>227255097562-k16vjbju5b7cg59qm449ik9os39i3ulb.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD2Et7scw-G0p4cBYwK9XBD5E5EfZHlgm8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>227255097562</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>org.reactjs.native.example.TheCircle-Native</string>
+	<key>PROJECT_ID</key>
+	<string>thecircle-native</string>
+	<key>STORAGE_BUCKET</key>
+	<string>thecircle-native.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:227255097562:ios:b4449e0fb2e39a3418ade3</string>
+</dict>
+</plist>
