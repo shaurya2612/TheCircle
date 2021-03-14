@@ -55,7 +55,7 @@ export const changeUserMatchingStatus = newStatus => {
         let viaFriendId = null; //Friend via which final fof is chosen
 
         //pick a random friend
-        const friendsSnapshot = await db.ref('/friends').child(uid).get(); //**** potentially heavy data downloaded ****
+        const friendsSnapshot = await db.ref('/friends').child(uid).once('value'); //**** potentially heavy data downloaded ****
 
         if (!friendsSnapshot.exists()) {
           //user does not have friends yet
