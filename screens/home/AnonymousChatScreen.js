@@ -39,6 +39,7 @@ const AnonymousChatScreen = (props) => {
   const [userLikes, setUserLikes] = useState(matchingStatus === 3);
   const isFOFOnline = useSelector((state) => state.matching.isFOFOnline);
   const [replying, setReplying] = useState(false); //Render chat list footer and reply property in new message accordingly
+  const [attachedImage, setAttachedImage] = useState(null);
   const isFOFTyping = useSelector((state) => state.matching.isFOFTyping);
   const [userIsAlreadyTyping, setUserIsAlreadyTyping] = useState(null);
 
@@ -192,6 +193,7 @@ const AnonymousChatScreen = (props) => {
         onSend={onSend}
         renderAvatar={null}
         isTyping={isFOFTyping}
+        scrollToBottom
         textInputProps={{
           onBlur: () => {
             setUserIsTyping(FOF.id, false);
@@ -239,7 +241,7 @@ const AnonymousChatScreen = (props) => {
             }}
           ></Actions>
         )}
-        renderSend={(props) => <CustomSend {...props} />}
+        renderSend={(props) => <CustomSend {...props} iconColor="blue" />}
       />
     </View>
   );

@@ -4,7 +4,10 @@ import { Send } from "react-native-gifted-chat";
 import { scale } from "react-native-size-matters";
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
 
-const CustomSend = (props) => {
+const CustomSend = ({
+  iconColor,
+  ...props
+}) => {
   return (
     <Send {...props}>
       <View
@@ -19,7 +22,7 @@ const CustomSend = (props) => {
       >
         <FontAwesome5Icon
           name={"chevron-circle-right"}
-          color={"white"}
+          color={iconColor}
           size={scale(30)}
         />
       </View>
