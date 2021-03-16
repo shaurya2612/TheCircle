@@ -236,9 +236,6 @@ PODS:
     - FirebaseAuth (~> 7.7.0)
   - Firebase/CoreOnly (7.7.0):
     - FirebaseCore (= 7.7.0)
-  - Firebase/Crashlytics (7.7.0):
-    - Firebase/CoreOnly
-    - FirebaseCrashlytics (~> 7.7.0)
   - Firebase/Database (7.7.0):
     - Firebase/CoreOnly
     - FirebaseDatabase (~> 7.7.0)
@@ -262,12 +259,6 @@ PODS:
     - GoogleUtilities/Environment (~> 7.0)
     - GoogleUtilities/Logger (~> 7.0)
     - nanopb (~> 2.30907.0)
-  - FirebaseCrashlytics (7.7.0):
-    - FirebaseCore (~> 7.0)
-    - FirebaseInstallations (~> 7.0)
-    - GoogleDataTransport (~> 8.0)
-    - nanopb (~> 2.30907.0)
-    - PromisesObjC (~> 1.2)
   - FirebaseDatabase (7.7.0):
     - FirebaseCore (~> 7.0)
     - leveldb-library (~> 1.22)
@@ -283,11 +274,6 @@ PODS:
     - "gRPC-C++ (~> 1.28.0)"
     - leveldb-library (~> 1.22)
     - nanopb (~> 2.30907.0)
-  - FirebaseInstallations (7.8.0):
-    - FirebaseCore (~> 7.0)
-    - GoogleUtilities/Environment (~> 7.0)
-    - GoogleUtilities/UserDefaults (~> 7.0)
-    - PromisesObjC (~> 1.2)
   - FirebaseStorage (7.7.0):
     - FirebaseCore (~> 7.0)
     - GTMSessionFetcher/Core (~> 1.4)
@@ -356,8 +342,6 @@ PODS:
     - GoogleUtilities/Reachability
   - "GoogleUtilities/NSData+zlib (7.3.0)"
   - GoogleUtilities/Reachability (7.3.0):
-    - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (7.3.0):
     - GoogleUtilities/Logger
   - "gRPC-C++ (1.28.2)":
     - "gRPC-C++/Implementation (= 1.28.2)"
@@ -588,7 +572,7 @@ PODS:
   - React-jsinspector (0.64.0)
   - react-native-image-picker (3.2.1):
     - React-Core
-  - react-native-pager-view (5.1.1):
+  - react-native-pager-view (5.1.2):
     - React-Core
   - react-native-safe-area-context (3.2.0):
     - React-Core
@@ -661,10 +645,6 @@ PODS:
     - React-Core
   - RNFBAuth (11.0.0):
     - Firebase/Auth (= 7.7.0)
-    - React-Core
-    - RNFBApp
-  - RNFBCrashlytics (11.0.0):
-    - Firebase/Crashlytics (= 7.7.0)
     - React-Core
     - RNFBApp
   - RNFBDatabase (11.0.0):
@@ -775,7 +755,6 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
-  - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
   - "RNFBDatabase (from `../node_modules/@react-native-firebase/database`)"
   - "RNFBFirestore (from `../node_modules/@react-native-firebase/firestore`)"
   - "RNFBStorage (from `../node_modules/@react-native-firebase/storage`)"
@@ -796,10 +775,8 @@ SPEC REPOS:
     - FirebaseAuth
     - FirebaseCore
     - FirebaseCoreDiagnostics
-    - FirebaseCrashlytics
     - FirebaseDatabase
     - FirebaseFirestore
-    - FirebaseInstallations
     - FirebaseStorage
     - Flipper
     - Flipper-DoubleConversion
@@ -887,8 +864,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBAuth:
     :path: "../node_modules/@react-native-firebase/auth"
-  RNFBCrashlytics:
-    :path: "../node_modules/@react-native-firebase/crashlytics"
   RNFBDatabase:
     :path: "../node_modules/@react-native-firebase/database"
   RNFBFirestore:
@@ -921,10 +896,8 @@ SPEC CHECKSUMS:
   FirebaseAuth: 76aa97ecd51e20ecd21321d08474d25f5d2b7b9f
   FirebaseCore: ac35d680a0bf32319a59966a1478e0741536b97b
   FirebaseCoreDiagnostics: 066f996579cf097bdad3d7dc9a918d6b9e129c50
-  FirebaseCrashlytics: 47af228115805e190b566db12c028263531b8ce0
   FirebaseDatabase: 4da0e43266f9cb0278464a2a4b1102b3d122c245
   FirebaseFirestore: 5e314d8ad3280576d641caf228f399dfb74f7914
-  FirebaseInstallations: 7f7ed0e7e27fb51f57291e1876e2ddb1524126c1
   FirebaseStorage: 9b940765fa33494258fab6131b6180fc7c2d80f5
   Flipper: d3da1aa199aad94455ae725e9f3aa43f3ec17021
   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
@@ -956,7 +929,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 06a9c77b56902ae7ffcdd7a4905f664adc5d237b
   React-jsinspector: 0ae35a37b20d5e031eb020a69cc5afdbd6406301
   react-native-image-picker: 64d12e81f3d9dad0af107fe6536b295d51932ec0
-  react-native-pager-view: 52aed9e0ed93f7fbdf4cfe8ed4254d93c6d12baf
+  react-native-pager-view: c1ec84a464024641ccb1102e9ec12be020d3d74c
   react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   React-perflogger: 9c547d8f06b9bf00cb447f2b75e8d7f19b7e02af
   React-RCTActionSheet: 3080b6e12e0e1a5b313c8c0050699b5c794a1b11
@@ -972,7 +945,6 @@ SPEC CHECKSUMS:
   ReactCommon: cfe2b7fd20e0dbd2d1185cd7d8f99633fbc5ff05
   RNFBApp: 1624ffcfc328c00ec3049d2f1bbf09d3e78dcdb7
   RNFBAuth: 888e490f4bc371e6afa68d587c7c791976a5f52f
-  RNFBCrashlytics: 9dda657f72f488b5112d02c6d96e86840f90dab6
   RNFBDatabase: cf5052e21d489f927af30d84571b26b52684cca5
   RNFBFirestore: 2e602fc143aaae72d99333caa6d36266d6fa14aa
   RNFBStorage: 8f40c919c0c9872424a40bfe942c6323dc58de06

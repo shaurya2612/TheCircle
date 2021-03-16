@@ -79,6 +79,7 @@ export const fetchUser = () => {
 
       //Setting dp from storage
       const dp = await storage().ref(`/profiles/${uid}/0`).getDownloadURL();
+      console.warn(dp);
       dispatch({ type: SET_DP, payload: dp });
     } catch (err) {
       dispatch(setErrorMessage(err.message));
