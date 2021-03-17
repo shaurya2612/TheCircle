@@ -21,7 +21,7 @@ export default function App() {
   
   return (
     <Fragment>
-      <StatusBar barStyle={'default'} />
+      <StatusBar barStyle={'light-content'} />
       <SafeAreaProvider>
         <Provider store={store}>
           <NavigationContainer>
