@@ -160,7 +160,6 @@ export const MatchesListScreen = props => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <SearchBar
           style={{width: '100%'}}
-          textInputStyle={{color: 'black'}}
           placeholder="Search your matches"
         />
 
