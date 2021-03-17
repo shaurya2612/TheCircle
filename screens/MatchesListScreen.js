@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,25 +8,25 @@ import {
   Dimensions,
   ScrollView,
   ActivityIndicator,
-} from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { scale, verticalScale } from "react-native-size-matters";
-import AppText from "../components/AppText";
-import AvatarCircle from "../components/AvatarCircle";
-import ChatListItem from "../components/ChatListItem";
-import styles from "../styles";
-import Modal from "react-native-modalbox";
+} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {scale, verticalScale} from 'react-native-size-matters';
+import AppText from '../components/AppText';
+import AvatarCircle from '../components/AvatarCircle';
+import ChatListItem from '../components/ChatListItem';
+import styles from '../styles';
+import Modal from 'react-native-modalbox';
 // import Modal from 'react-native-modal';
-import UserProfileScreen from "./UserProfileScreen";
-import { createRef } from "react";
-import SearchBar from "../components/SearchBar";
-import { useDispatch, useSelector } from "react-redux";
-import colors from "../constants/colors";
-import { listenForMatches } from "../store/actions/user";
-import { setMatch } from "../store/actions/chat";
-import MatchProfileScreen from "./MatchProfileScreen";
-import LinearGradient from "react-native-linear-gradient";
-import Icon from "react-native-vector-icons/Feather";
+import UserProfileScreen from './UserProfileScreen';
+import {createRef} from 'react';
+import SearchBar from '../components/SearchBar';
+import {useDispatch, useSelector} from 'react-redux';
+import colors from '../constants/colors';
+import {listenForMatches} from '../store/actions/user';
+import {setMatch} from '../store/actions/chat';
+import MatchProfileScreen from './MatchProfileScreen';
+import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/Feather';
 // const data = [
 //   {
 //     name: "Mila",
@@ -102,12 +102,12 @@ import Icon from "react-native-vector-icons/Feather";
 //   },
 // ];
 
-export const MatchesListScreen = (props) => {
+export const MatchesListScreen = props => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentMatchId, setCurrentMatchId] = useState(null);
-  const matches = useSelector((state) => state.user.matches);
+  const matches = useSelector(state => state.user.matches);
   const listeningForMatches = useSelector(
-    (state) => state.user.listeningForMatches
+    state => state.user.listeningForMatches,
   );
   const dispatch = useDispatch();
   const scrollViewRef = createRef();
@@ -120,14 +120,14 @@ export const MatchesListScreen = (props) => {
 
   if (!listeningForMatches) {
     return (
-      <View style={{ ...styles.expandedCenterView, backgroundColor: "white" }}>
-        <ActivityIndicator color={colors.primary} size={"large"} />
+      <View style={{...styles.expandedCenterView, backgroundColor: 'white'}}>
+        <ActivityIndicator color={colors.primary} size={'large'} />
       </View>
     );
   }
 
   //This function helps in closing the scrollview modal whenever the offset is negative
-  const handleOnScroll = (event) => {
+  const handleOnScroll = event => {
     if (event.nativeEvent.contentOffset.y < -25) {
       setIsModalVisible(false);
       modalRef.current.close();
@@ -135,9 +135,9 @@ export const MatchesListScreen = (props) => {
   };
 
   return (
-    <View style={{ ...styles.rootView, backgroundColor: "white" }}>
+    <View style={{...styles.rootView, backgroundColor: 'white'}}>
       <Modal
-        style={{ margin: 0 }}
+        style={{margin: 0}}
         ref={modalRef}
         swipeToClose={true}
         swipeArea={verticalScale(25)} // The height in pixels of the swipeable area, window height by default
@@ -147,8 +147,7 @@ export const MatchesListScreen = (props) => {
           setIsModalVisible(false);
         }}
         backdropOpacity={0}
-        isVisible={isModalVisible}
-      >
+        isVisible={isModalVisible}>
         <MatchProfileScreen
           matchId={currentMatchId}
           scrollViewRef={scrollViewRef}
@@ -156,43 +155,44 @@ export const MatchesListScreen = (props) => {
         />
       </Modal>
 
-      <View style={{ paddingTop: insets.top }} />
+      <View style={{paddingTop: insets.top}} />
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <SearchBar
-          style={{ width: "100%" }}
+          style={{width: '100%'}}
+          textInputStyle={{color: 'black'}}
           placeholder="Search your matches"
         />
 
-        {(matches || []).filter((item) => {
+        {(matches || []).filter(item => {
           if (item.lastMessage === null && !item.hasPhoto) return true;
           else return false;
         }).length === 0 ? null : (
           <View>
-            <View style={{ padding: scale(10), backgroundColor: "white" }}>
+            <View style={{padding: scale(10), backgroundColor: 'white'}}>
               <AppText style={styles.titleText}>Match queue</AppText>
             </View>
             <FlatList
               horizontal={true}
               showsHorizontalScrollIndicator={false}
-              data={(matches || []).filter((item) => {
+              data={(matches || []).filter(item => {
                 if (item.lastMessage === null) return true;
                 else return false;
               })}
               keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => {
+              renderItem={({item}) => {
                 return (
                   <AvatarCircle
                     onPress={() => {
                       dispatch(setMatch(item));
-                      props.navigation.navigate("ChatScreen");
+                      props.navigation.navigate('ChatScreen');
                     }}
                     style={{
                       marginHorizontal: scale(5),
                       marginVertical: scale(10),
                     }}
                     size={100}
-                    source={{ uri: item.dp }}
+                    source={{uri: item.dp}}
                   />
                 );
               }}
@@ -202,7 +202,7 @@ export const MatchesListScreen = (props) => {
         <View>
           <FlatList
             data={matches}
-            contentContainerStyle={{ flexGrow: 1 }}
+            contentContainerStyle={{flexGrow: 1}}
             keyExtractor={(item, index) => item.id}
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={() => {
@@ -210,14 +210,13 @@ export const MatchesListScreen = (props) => {
                 <View
                   style={{
                     paddingHorizontal: scale(10),
-                    backgroundColor: "white",
-                  }}
-                >
+                    backgroundColor: 'white',
+                  }}>
                   <AppText style={styles.titleText}>Conversations</AppText>
                 </View>
               );
             }}
-            renderItem={({ item }) => {
+            renderItem={({item}) => {
               if (item.lastMessage || item.hasPhoto)
                 return (
                   <ChatListItem
@@ -228,7 +227,7 @@ export const MatchesListScreen = (props) => {
                     }}
                     onPress={() => {
                       dispatch(setMatch(item));
-                      props.navigation.navigate("ChatScreen");
+                      props.navigation.navigate('ChatScreen');
                     }}
                     id={item.id}
                     imageUri={item.dp}
@@ -236,16 +235,16 @@ export const MatchesListScreen = (props) => {
                     label={item.unseen}
                     lastMessage={
                       item.hasPhoto ? (
-                        <View style={{ flexDirection: "row" }}>
+                        <View style={{flexDirection: 'row'}}>
                           <Icon
-                            style={{ marginRight: scale(5) }}
-                            name={"camera"}
+                            style={{marginRight: scale(5)}}
+                            name={'camera'}
                             size={15}
                           />
                           <AppText>Photo</AppText>
                         </View>
                       ) : item.lastMessage.length > 15 ? (
-                        item.lastMessage.substring(0, 16) + "..."
+                        item.lastMessage.substring(0, 16) + '...'
                       ) : (
                         item.lastMessage
                       )
