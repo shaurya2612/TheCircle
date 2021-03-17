@@ -15,7 +15,6 @@ import {
   verticalScale,
 } from 'react-native-size-matters';
 import Icon from 'react-native-vector-icons/Feather';
-// import * as ImagePicker from "expo-image-picker";
 import {useDispatch, useSelector} from 'react-redux';
 import {setSignupFormData} from '../store/actions/signupForm';
 
@@ -33,16 +32,6 @@ export const SignupUserPhotoGrid = () => {
   const data = signUpFormData.userPhotos;
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const dispatch = useDispatch();
-
-  const pickImage = () => {
-    let imageUri = null;
-    launchImageLibrary({mediaType: 'photo', quality: 1}, response => {
-      if (!response.didCancel) imageUri = response.uri;
-      console.log('1', imageUri);
-    });
-    console.log('2', imageUri);
-    return imageUri;
-  };
 
   const calculateFixedArray = () => {
     var arr = [];
