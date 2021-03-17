@@ -104,7 +104,7 @@ export default (state = initialState, action) => {
 
       //User cleared the action.key field in info
       if (payload === null) {
-        if (updatedProfile.info && updatedProfile["info"][action.key])
+        if (updatedProfile?.info?.[action.key])
           delete updatedProfile["info"][action.key];
       } else {
         if (!updatedProfile["info"]) updatedProfile["info"] = {};
