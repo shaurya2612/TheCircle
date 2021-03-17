@@ -21,8 +21,9 @@ import styles from '../../styles';
 const SettingsScreen = props => {
   const data = [
     {title: 'FAQs', onPress: () => {}},
-    {title: 'FAQs', onPress: () => {}},
-    {title: 'FAQs', onPress: () => {}},
+    {title: 'Contact Us', onPress: () => {}},
+    {title: 'Terms of Use', onPress: () => {}},
+    {title: 'Privacy Policy', onPress: () => {}}
   ];
   const dispatch = useDispatch();
 
