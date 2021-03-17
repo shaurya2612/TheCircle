@@ -2,7 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import EditProfileScreen from "../screens/user/EditProfileScreen";
 import UserScreen from "../screens/user/UserScreen";
-import SettingsScreen from "../screens/user/SettingsScreen";
+import SettingsScreen from "../screens/settings/SettingsScreen";
 import UserCueCardsScreen from "../screens/user/UserCueCardsScreen";
 
 const CurrentUserProfileStackNavigator = createStackNavigator();
