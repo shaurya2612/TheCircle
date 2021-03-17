@@ -100,6 +100,7 @@ const ChatScreen = props => {
         onClosed={() => {
           setIsModalVisible(false);
         }}
+        onOpened={() => {Keyboard.dismiss()}}
         backdropOpacity={0}
         isVisible={isModalVisible}>
         <MatchProfileScreen matchId={match.id} />
