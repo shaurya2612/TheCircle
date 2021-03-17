@@ -10,11 +10,12 @@ const CustomComposer = (props) => {
       textInputStyle={{
         ...styles.chatComposerText,
         backgroundColor: "white",
-        borderRadius: scale(50),
+        borderRadius: scale(25),
         paddingHorizontal: scale(10),
         marginRight: scale(5),
         justifyContent: "center",
         alignItems: "center",
+        overflow: "scroll"
       }}
     ></Composer>
   );

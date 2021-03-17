@@ -145,7 +145,7 @@ const ChatScreen = props => {
           messages={messages}
           renderAvatar={null}
           onSend={newMessages => {
-            if (attachedImage) newMessages[0].image = attachedImage;
+            if (attachedImage) newMessages[0].image = attachedImage.uri;
             onSend(newMessages);
           }}
           alwaysShowSend={attachedImage ? true : false}
@@ -186,9 +186,9 @@ const ChatScreen = props => {
                 {attachedImage ? (
                   <ImageChatFooter
                     text={
-                      attachedImage.substring(0, 30) +
+                      attachedImage.uri.substring(0, 30) +
                       '...' +
-                      attachedImage.substring(attachedImage.indexOf('.'))
+                      attachedImage.extension
                     }
                     onDismiss={() => {
                       setAttachedImage(null);
@@ -214,7 +214,10 @@ const ChatScreen = props => {
                     {mediaType: 'photo', quality: 1},
                     response => {
                       if (response.didCancel) return;
-                      const pickedImage = response.uri;
+                      const pickedImage = {
+                        uri: response.uri,
+                        extension: response.type,
+                      };
                       setAttachedImage(pickedImage);
                     },
                   );
@@ -229,6 +232,8 @@ const ChatScreen = props => {
               containerStyle={{
                 backgroundColor: '#0078ff',
                 borderTopColor: 'black',
+                marginTop: 0,
+                overflow: "hidden"
               }}
             />
           )}
