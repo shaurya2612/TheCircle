@@ -1,10 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   TouchableOpacity,
   FlatList,
   TouchableNativeFeedback,
+  ScrollView,
+  Text,
 } from 'react-native';
+import ReactNativeModal from 'react-native-modal';
 import {scale, verticalScale} from 'react-native-size-matters';
 import Icon from 'react-native-vector-icons/Feather';
 import {useDispatch} from 'react-redux';
@@ -17,6 +20,8 @@ import SelectionButton from '../../components/SelectionButton';
 import StackHeader from '../../components/StackHeader';
 import {logoutUser} from '../../store/actions/user';
 import styles from '../../styles';
+import ModalCardView from '../../components/ModalCardView';
+import {termsOfUse} from '../../constants/official';
 
 const SettingsScreen = props => {
   const data = [
@@ -27,14 +32,52 @@ const SettingsScreen = props => {
       },
     },
     {title: 'Contact Us', onPress: () => {}},
-    {title: 'Terms of Use', onPress: () => {}},
+    {
+      title: 'Terms of Use',
+      onPress: () => {
+        setIsTermsOfUseVisible(true);
+      },
+    },
     {title: 'Privacy Policy', onPress: () => {}},
   ];
+
+  const [isTermsOfUseVisible, setIsTermsOfUseVisible] = useState(false);
+
   const dispatch = useDispatch();
 
   return (
     <View style={{...styles.rootView, backgroundColor: 'white'}}>
       <CustomSafeAreaView style={{flex: 1}}>
+        {/* Modal */}
+        <ReactNativeModal
+          useNativeDriver={true}
+          isVisible={isTermsOfUseVisible}>
+          <View style={styles.centerView}>
+            <ModalCardView>
+              <View style={{height: scale(20), flexDirection: 'row-reverse'}}>
+                <Icon
+                  name={'x'}
+                  onPress={() => {
+                    setIsTermsOfUseVisible(false);
+                  }}
+                  size={scale(20)}
+                />
+              </View>
+              <FlatList
+                data={termsOfUse}
+                contentContainerStyle={{overflow: "scroll"}}
+                renderItem={({item}) => {
+                  return (
+                    <View style={{marginVertical: scale(10)}}>
+                      <Text style={{fontSize: scale(20)}}>{item.heading}</Text>
+                      <View>{item.text}</View>
+                    </View>
+                  );
+                }}></FlatList>
+            </ModalCardView>
+          </View>
+        </ReactNativeModal>
+
         <CustomHeader>
           <TouchableOpacity
             onPress={() => {
