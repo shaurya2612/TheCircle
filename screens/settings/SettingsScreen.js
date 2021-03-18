@@ -21,7 +21,7 @@ import StackHeader from '../../components/StackHeader';
 import {logoutUser} from '../../store/actions/user';
 import styles from '../../styles';
 import ModalCardView from '../../components/ModalCardView';
-import {termsOfUse} from '../../constants/official';
+import {privacyPolicy, termsOfUse} from '../../constants/official';
 
 const SettingsScreen = props => {
   const data = [
@@ -38,11 +38,16 @@ const SettingsScreen = props => {
         setIsTermsOfUseVisible(true);
       },
     },
-    {title: 'Privacy Policy', onPress: () => {}},
+    {
+      title: 'Privacy Policy',
+      onPress: () => {
+        setIsPrivacyPolicyVisible(true);
+      },
+    },
   ];
 
   const [isTermsOfUseVisible, setIsTermsOfUseVisible] = useState(false);
-
+  const [isPrivacyPolicyVisible, setIsPrivacyPolicyVisible] = useState(false);
   const dispatch = useDispatch();
 
   return (
@@ -51,7 +56,7 @@ const SettingsScreen = props => {
         {/* Modal */}
         <ReactNativeModal
           useNativeDriver={true}
-          isVisible={isTermsOfUseVisible}>
+          isVisible={isTermsOfUseVisible || isPrivacyPolicyVisible}>
           <View style={styles.centerView}>
             <ModalCardView>
               <View style={{height: scale(20), flexDirection: 'row-reverse'}}>
@@ -59,13 +64,14 @@ const SettingsScreen = props => {
                   name={'x'}
                   onPress={() => {
                     setIsTermsOfUseVisible(false);
+                    setIsPrivacyPolicyVisible(false);
                   }}
                   size={scale(20)}
                 />
               </View>
               <FlatList
-                data={termsOfUse}
-                contentContainerStyle={{overflow: "scroll"}}
+                data={isTermsOfUseVisible ? termsOfUse : privacyPolicy}
+                contentContainerStyle={{overflow: 'scroll'}}
                 renderItem={({item}) => {
                   return (
                     <View style={{marginVertical: scale(10)}}>
