@@ -38,7 +38,7 @@ const UserScreen = (props) => {
           <Icon
             style={{ marginHorizontal: scale(5) }}
             onPress={() => {
-              props.navigation.navigate("SettingsScreen");
+              props.navigation.navigate("SettingsStack");
             }}
             name="settings"
             size={scale(25)}

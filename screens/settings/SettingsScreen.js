@@ -20,15 +20,20 @@ import styles from '../../styles';
 
 const SettingsScreen = props => {
   const data = [
-    {title: 'FAQs', onPress: () => {}},
+    {
+      title: 'FAQs',
+      onPress: () => {
+        props.navigation.navigate('FAQsScreen');
+      },
+    },
     {title: 'Contact Us', onPress: () => {}},
     {title: 'Terms of Use', onPress: () => {}},
-    {title: 'Privacy Policy', onPress: () => {}}
+    {title: 'Privacy Policy', onPress: () => {}},
   ];
   const dispatch = useDispatch();
 
   return (
-    <View style={{...styles.rootView, backgroundColor:"white"}}>
+    <View style={{...styles.rootView, backgroundColor: 'white'}}>
       <CustomSafeAreaView style={{flex: 1}}>
         <CustomHeader>
           <TouchableOpacity
@@ -59,7 +64,7 @@ const SettingsScreen = props => {
                 style={{
                   backgroundColor: 'white',
                   marginVertical: verticalScale(5),
-                  ...styles.elevation_small
+                  ...styles.elevation_small,
                 }}
                 fontStyle={item.fontStyle || {}}
                 onPress={item.onPress}
@@ -73,7 +78,7 @@ const SettingsScreen = props => {
               backgroundColor: 'white',
               marginVertical: verticalScale(5),
               ...styles.centerView,
-              ...styles.elevation_small
+              ...styles.elevation_small,
             }}
             fontStyle={{color: 'red'}}
             onPress={() => {

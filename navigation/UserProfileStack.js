@@ -4,6 +4,7 @@ import EditProfileScreen from "../screens/user/EditProfileScreen";
 import UserScreen from "../screens/user/UserScreen";
 import SettingsScreen from "../screens/settings/SettingsScreen";
 import UserCueCardsScreen from "../screens/user/UserCueCardsScreen";
+import { SettingsStack } from "./SettingsStack";
 
 const CurrentUserProfileStackNavigator = createStackNavigator();
 
@@ -21,8 +22,8 @@ const CurrentUserProfileStack = () => {
         component={EditProfileScreen}
       />
       <CurrentUserProfileStackNavigator.Screen
-        name="SettingsScreen"
-        component={SettingsScreen}
+        name="SettingsStack"
+        component={SettingsStack}
       />
       <CurrentUserProfileStackNavigator.Screen
         name="UserCueCardsScreen"
