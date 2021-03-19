@@ -1,17 +1,17 @@
-import { bdToAge } from "../utils";
-import database from "@react-native-firebase/database";
-import auth from "@react-native-firebase/auth";
-import storage from "@react-native-firebase/storage";
-import { Platform } from "react-native";
+import {bdToAge} from '../utils';
+import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage';
+import {Platform} from 'react-native';
 
-export const isUsernameValid = async (username) => {
+export const isUsernameValid = async username => {
   const db = database();
-  const snapshot = await db.ref("/usernames").child(username).once("value");
+  const snapshot = await db.ref('/usernames').child(username).once('value');
   if (snapshot.val() === null) return true;
   return false;
 };
 
-export const uploadUserPhotos = async (userPhotos) => {
+export const uploadUserPhotos = async userPhotos => {
   //Upload user photos in parallel
   const uid = auth().currentUser.uid;
   await Promise.all(
@@ -22,25 +22,25 @@ export const uploadUserPhotos = async (userPhotos) => {
       }
       //Create Blob
       const uploadUri =
-        Platform.OS === "ios" ? item.replace("file://", "") : item;
+        Platform.OS === 'ios' ? item.replace('file://', '') : item;
       const response = await fetch(uploadUri);
       const blob = await response.blob();
 
       //Return Promise
       return storage().ref(`/profiles/${uid}/${index}`).put(blob);
-    })
+    }),
   );
 };
 
-export const searchFriendByUsername = async (username) => {
+export const searchFriendByUsername = async username => {
   const db = database();
-  const friendId = await db.ref("/usernames").child(username).once("value");
+  const friendId = await db.ref('/usernames').child(username).once('value');
   if (!friendId) return null;
   const [name, dp] = await Promise.all(
-    db.ref("/users").child("name").once("value"),
-    storage().ref(`/profiles/${friendId}/0`).getDownloadURL()
+    db.ref('/users').child('name').once('value'),
+    storage().ref(`/profiles/${friendId}/0`).getDownloadURL(),
   );
-  return { id: friendId, name: name.val(), dp };
+  return {id: friendId, name: name.val(), dp};
 };
 
 // export const checkRelation = async (userId, targetUserId) => {
@@ -84,7 +84,7 @@ export const searchFriendByUsername = async (username) => {
 
 export const searchFriendsByNameOrUsername = async (
   nameOrUsername,
-  numOfResults
+  numOfResults,
 ) => {
   let friends = [];
   const db = database();
@@ -93,22 +93,22 @@ export const searchFriendsByNameOrUsername = async (
   let lowerCaseUsername =
     nameOrUsername.charAt(0).toLowerCase() + nameOrUsername.slice(1); //first char lower case
   let friendIdByUsername = await db
-    .ref("/usernames")
+    .ref('/usernames')
     .child(lowerCaseUsername)
-    .once("value");
+    .once('value');
   friendIdByUsername = friendIdByUsername.val();
 
   if (friendIdByUsername && friendIdByUsername !== auth().currentUser.uid) {
     numOfResults--; //query one user less by name
     let [name, dp, bd] = await Promise.all([
-      db.ref("/users").child(friendIdByUsername).child("name").once("value"),
+      db.ref('/users').child(friendIdByUsername).child('name').once('value'),
 
       storage()
-        .ref("/profiles")
+        .ref('/profiles')
         .child(friendIdByUsername)
-        .child("0")
+        .child('0')
         .getDownloadURL(),
-      db.ref("/users").child(friendIdByUsername).child("bd").once("value"),
+      db.ref('/users').child(friendIdByUsername).child('bd').once('value'),
     ]);
 
     friends.push({
@@ -124,11 +124,11 @@ export const searchFriendsByNameOrUsername = async (
   const firstName =
     nameOrUsername.charAt(0).toUpperCase() + nameOrUsername.slice(1); //capitalized first letter
   const searchByNameQuery = db
-    .ref("/users")
-    .orderByChild("name")
+    .ref('/users')
+    .orderByChild('name')
     .equalTo(firstName)
     .limitToFirst(numOfResults);
-  let usersByName = await searchByNameQuery.once("value");
+  let usersByName = await searchByNameQuery.once('value');
   usersByName = usersByName.val(); //returns Object of Objects
 
   if (usersByName) {
@@ -149,23 +149,23 @@ export const searchFriendsByNameOrUsername = async (
   return friends;
 };
 
-export const sendFriendRequest = async (receiverId) => {
+export const sendFriendRequest = async receiverId => {
   const db = database();
-  await db.ref("/requests").child(receiverId).push(auth().currentUser.uid);
+  await db.ref('/requests').child(receiverId).push(auth().currentUser.uid);
 };
 
-export const fetchNameAgeUsernameDpById = async (id) => {
+export const fetchNameAgeUsernameDpById = async id => {
   const db = database();
   const [name, bd, username, dp] = await Promise.all([
-    db.ref("/users").child(id).child("name").once("value"),
-    db.ref("/users").child(id).child("bd").once("value"),
+    db.ref('/users').child(id).child('name').once('value'),
+    db.ref('/users').child(id).child('bd').once('value'),
     db
-      .ref("/usernames")
+      .ref('/usernames')
       .orderByValue()
       .equalTo(id)
       .limitToFirst(1)
-      .once("value"),
-    storage().ref("/profiles").child(id).child("0").getDownloadURL(),
+      .once('value'),
+    storage().ref('/profiles').child(id).child('0').getDownloadURL(),
   ]);
   return {
     id,
@@ -176,34 +176,47 @@ export const fetchNameAgeUsernameDpById = async (id) => {
   };
 };
 
-export const declineRequest = async (keyInRequests) => {
-  const { uid } = auth().currentUser;
+export const declineRequest = async keyInRequests => {
+  const {uid} = auth().currentUser;
   const db = database();
-  await db.ref("/requests").child(uid).child(keyInRequests).remove();
+  await db.ref('/requests').child(uid).child(keyInRequests).remove();
 };
 
-export const unfriend = async (unfriendId) => {
-  const { uid } = auth().currentUser;
+export const unfriend = async unfriendId => {
+  const {uid} = auth().currentUser;
   const db = database();
 
   await Promise.all([
-    db.ref("/friends").child(uid).child(unfriendId).remove(),
-    db.ref("/friends").child(unfriendId).child(uid).remove(),
+    db.ref('/friends').child(uid).child(unfriendId).remove(),
+    db.ref('/friends').child(unfriendId).child(uid).remove(),
+  ]);
+};
+
+export const unmatch = async unmatchId => {
+  const {uid} = auth().currentUser;
+  const db = database();
+  const refString =
+    uid < unmatchId ? uid + '@' + unmatchId : unmatchId + '@' + uid;
+  await Promise.all([
+    db.ref('/matches').child(uid).child(unmatchId).remove(),
+    db.ref('/matches').child(unmatchId).child(uid).remove(),
+    db.ref('/messages').child(refString).remove(),
+    storage().ref('/messages').child(refString).delete(),
   ]);
 };
 
 export const setUserIsTyping = async (chatPartnerId, userIsTyping) => {
   const db = database();
-  const { uid } = auth().currentUser;
+  const {uid} = auth().currentUser;
   const refString =
-    uid < chatPartnerId ? uid + "@" + chatPartnerId : chatPartnerId + "@" + uid;
+    uid < chatPartnerId ? uid + '@' + chatPartnerId : chatPartnerId + '@' + uid;
   if (userIsTyping) {
     await db
-      .ref("/isTyping")
+      .ref('/isTyping')
       .child(refString)
       .child(uid)
       .onDisconnect()
       .remove();
-    db.ref("/isTyping").child(refString).child(uid).set(true);
-  } else db.ref("/isTyping").child(refString).child(uid).remove();
+    db.ref('/isTyping').child(refString).child(uid).set(true);
+  } else db.ref('/isTyping').child(refString).child(uid).remove();
 };

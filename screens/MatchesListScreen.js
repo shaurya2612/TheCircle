@@ -8,6 +8,7 @@ import {
   Dimensions,
   ScrollView,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {scale, verticalScale} from 'react-native-size-matters';
@@ -27,6 +28,10 @@ import {setMatch} from '../store/actions/chat';
 import MatchProfileScreen from './MatchProfileScreen';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Feather';
+import ReactNativeModal from 'react-native-modal';
+import NameText from '../components/NameText';
+import ModalCardView from '../components/ModalCardView';
+import {unmatch} from '../firebase/utils';
 // const data = [
 //   {
 //     name: "Mila",
@@ -103,7 +108,9 @@ import Icon from 'react-native-vector-icons/Feather';
 // ];
 
 export const MatchesListScreen = props => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isActionsModalVisible, setIsActionsModalVisible] = useState(false);
+  const [modalMatch, setModalMatch] = useState(null);
+  const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
   const [currentMatchId, setCurrentMatchId] = useState(null);
   const matches = useSelector(state => state.user.matches);
   const listeningForMatches = useSelector(
@@ -129,25 +136,53 @@ export const MatchesListScreen = props => {
   //This function helps in closing the scrollview modal whenever the offset is negative
   const handleOnScroll = event => {
     if (event.nativeEvent.contentOffset.y < -25) {
-      setIsModalVisible(false);
+      setIsProfileModalVisible(false);
       modalRef.current.close();
     }
   };
 
   return (
     <View style={{...styles.rootView, backgroundColor: 'white'}}>
+      {/* Actions Modal */}
+      <ReactNativeModal
+        style={{justifyContent: 'flex-end', margin: 0}}
+        onBackdropPress={() => setIsActionsModalVisible(false)}
+        onModalHide={() => {
+          setModalMatch(null);
+        }}
+        isVisible={isActionsModalVisible}
+        backdropTransitionInTiming={0}
+        backdropTransitionOutTiming={0}>
+        <ModalCardView>
+          <View>
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <AppText style={styles.titleText}>Actions</AppText>
+            </View>
+            <TouchableOpacity
+              onPress={async () => {
+                unmatch(modalMatch.id);
+                setIsActionsModalVisible(false);
+              }}
+              style={{padding: scale(10)}}>
+              <NameText style={{color: '#ff3217'}}>Unmatch</NameText>
+            </TouchableOpacity>
+          </View>
+        </ModalCardView>
+      </ReactNativeModal>
+
+      {/* Profile Modal */}
       <Modal
         style={{margin: 0}}
         ref={modalRef}
         swipeToClose={true}
         swipeArea={verticalScale(25)} // The height in pixels of the swipeable area, window height by default
         swipeThreshold={50} // The threshold to reach in pixels to close the modal
-        isOpen={isModalVisible}
+        isOpen={isProfileModalVisible}
         onClosed={() => {
-          setIsModalVisible(false);
+          setIsProfileModalVisible(false);
         }}
         backdropOpacity={0}
-        isVisible={isModalVisible}>
+        isVisible={isProfileModalVisible}>
         <MatchProfileScreen
           matchId={currentMatchId}
           scrollViewRef={scrollViewRef}
@@ -158,10 +193,7 @@ export const MatchesListScreen = props => {
       <View style={{paddingTop: insets.top}} />
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        <SearchBar
-          style={{width: '100%'}}
-          placeholder="Search your matches"
-        />
+        <SearchBar style={{width: '100%'}} placeholder="Search your matches" />
 
         {(matches || []).filter(item => {
           if (item.lastMessage === null && !item.hasPhoto) return true;
@@ -219,10 +251,14 @@ export const MatchesListScreen = props => {
               if (item.lastMessage || item.hasPhoto)
                 return (
                   <ChatListItem
+                    onLongPress={() => {
+                      setModalMatch(item);
+                      setIsActionsModalVisible(true);
+                    }}
                     onPressAvatar={() => {
                       setCurrentMatchId(item.id);
                       modalRef.current.open();
-                      setIsModalVisible(true);
+                      setIsProfileModalVisible(true);
                     }}
                     onPress={() => {
                       dispatch(setMatch(item));

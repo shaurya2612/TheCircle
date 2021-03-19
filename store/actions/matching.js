@@ -296,7 +296,7 @@ export const sendMessageInAnonymousChatRoom = messages => {
       const attachedImage = messages[i].image;
 
       if (attachedImage) {
-        console.warn("image exists")
+        console.warn('image exists');
         const uploadUri =
           Platform.OS === 'ios'
             ? attachedImage.replace('file://', '')
@@ -399,7 +399,10 @@ export const skipThisFOF = (keepChats = false) => {
     //delete chats
     if (!keepChats) {
       const refString = uid < FOF.id ? uid + '@' + FOF.id : FOF.id + '@' + uid;
-      await db.ref('/messages').child(refString).remove();
+      await Promise.all([
+        db.ref('/messages').child(refString).remove(),
+        storage().ref('/messages').child(refString).delete(),
+      ]);
     }
 
     db.ref('/chatRooms').child(FOF.id).off();
