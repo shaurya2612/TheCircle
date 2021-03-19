@@ -3,6 +3,7 @@ import {setErrorMessage} from './error';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 
 export const SET_USER_MATCHING_STATUS = 'SET_USER_MATCHING_STATUS';
 export const SET_CHAT_ROOM = 'SET_CHAT_ROOM';
@@ -55,7 +56,10 @@ export const changeUserMatchingStatus = newStatus => {
         let viaFriendId = null; //Friend via which final fof is chosen
 
         //pick a random friend
-        const friendsSnapshot = await db.ref('/friends').child(uid).once('value'); //**** potentially heavy data downloaded ****
+        const friendsSnapshot = await db
+          .ref('/friends')
+          .child(uid)
+          .once('value'); //**** potentially heavy data downloaded ****
 
         if (!friendsSnapshot.exists()) {
           //user does not have friends yet
@@ -284,9 +288,27 @@ export const sendMessageInAnonymousChatRoom = messages => {
     const db = database();
     const {uid} = auth().currentUser;
     const refString = uid < FOF.id ? uid + '@' + FOF.id : FOF.id + '@' + uid;
+
+    let imageUrl = null;
     let promisesArr = [];
     for (var i = 0; i < messages.length; i++) {
       const messageId = messages[i]._id;
+      const attachedImage = messages[i].image;
+
+      if (attachedImage) {
+        console.warn("image exists")
+        const uploadUri =
+          Platform.OS === 'ios'
+            ? attachedImage.replace('file://', '')
+            : attachedImage;
+        const response = await fetch(uploadUri);
+        const blob = await response.blob();
+        await storage().ref(`/messages/${refString}/${messageId}`).put(blob);
+        imageUrl = await storage()
+          .ref(`/messages/${refString}/${messageId}`)
+          .getDownloadURL();
+      }
+
       promisesArr.push(
         db
           .ref('/messages')
@@ -296,6 +318,7 @@ export const sendMessageInAnonymousChatRoom = messages => {
             ...messages[i],
             _id: null,
             createdAt: database.ServerValue.TIMESTAMP,
+            image: imageUrl,
           }),
       );
     }

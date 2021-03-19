@@ -5,7 +5,7 @@ import {applyMiddleware, createStore} from 'redux';
 import allReducers from './store/reducers';
 import thunk from 'redux-thunk';
 import {NavigationContainer} from '@react-navigation/native';
-import {ActivityIndicator, StatusBar, View} from 'react-native';
+import {ActivityIndicator, Platform, StatusBar, View} from 'react-native';
 import AppNavigator from './navigation/AppNavigator';
 import Icon from 'react-native-vector-icons/Feather';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
@@ -18,10 +18,11 @@ FontAwesome5Icon.getStyledIconSet('solid').loadFont();
 export const store = createStore(allReducers, applyMiddleware(thunk));
 
 export default function App() {
-  
   return (
     <Fragment>
-      <StatusBar barStyle={'light-content'} />
+      <StatusBar
+        barStyle={Platform.OS === 'android' ? 'light-content' : 'dark-content'}
+      />
       <SafeAreaProvider>
         <Provider store={store}>
           <NavigationContainer>
