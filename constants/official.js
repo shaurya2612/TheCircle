@@ -480,7 +480,7 @@ export const termsOfUse = [
 
 export const privacyPolicy = [
   {
-    heading: '',
+    heading: 'Privacy Policy',
     text: (
       <Text>
         Geniushut built the Circle app as an Ad Supported app. This SERVICE is

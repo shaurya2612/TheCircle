@@ -31,7 +31,6 @@ const SettingsScreen = props => {
         props.navigation.navigate('FAQsScreen');
       },
     },
-    {title: 'Contact Us', onPress: () => {}},
     {
       title: 'Terms of Use',
       onPress: () => {
@@ -72,10 +71,17 @@ const SettingsScreen = props => {
               <FlatList
                 data={isTermsOfUseVisible ? termsOfUse : privacyPolicy}
                 contentContainerStyle={{overflow: 'scroll'}}
+                keyExtractor={(item, index) => {
+                  return index.toString();
+                }}
                 renderItem={({item}) => {
                   return (
                     <View style={{marginVertical: scale(10)}}>
-                      <Text style={{fontSize: scale(20)}}>{item.heading}</Text>
+                      {item.heading ? (
+                        <Text style={{fontSize: scale(20)}}>
+                          {item.heading}
+                        </Text>
+                      ) : null}
                       <View>{item.text}</View>
                     </View>
                   );
