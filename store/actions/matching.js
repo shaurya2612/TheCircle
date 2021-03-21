@@ -4,6 +4,7 @@ import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
+import {serverKey} from '../../firebase/config';
 
 export const SET_USER_MATCHING_STATUS = 'SET_USER_MATCHING_STATUS';
 export const SET_CHAT_ROOM = 'SET_CHAT_ROOM';
@@ -296,7 +297,6 @@ export const sendMessageInAnonymousChatRoom = messages => {
       const attachedImage = messages[i].image;
 
       if (attachedImage) {
-        console.warn('image exists');
         const uploadUri =
           Platform.OS === 'ios'
             ? attachedImage.replace('file://', '')
@@ -323,6 +323,32 @@ export const sendMessageInAnonymousChatRoom = messages => {
       );
     }
     await Promise.all(promisesArr);
+    let tokens = await firestore().collection('tokens').doc(FOF.id).get();
+    if (!tokens.exists) return;
+    tokens = tokens.data().tokens;
+    for (var i = 0; i < tokens.length; i++) {
+      const response = await fetch('https://fcm.googleapis.com/fcm/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `key=${serverKey}`,
+        },
+        body: JSON.stringify({
+          to: tokens[i],
+          notification: {
+            title: 'Your FOF just texted you!',
+            body: messages[0].text,
+            mutable_content: true,
+            sound: 'Tri-tone',
+          },
+          android: {
+            priority: 'high',
+          },
+          priority: 10,
+        }),
+      });
+      console.warn('res', response.body);
+    }
   };
 };
 

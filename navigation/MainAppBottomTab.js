@@ -16,6 +16,9 @@ import HomeStack from './HomeStack';
 import {useDispatch, useSelector} from 'react-redux';
 import {MatchesStack} from './MatchesStack';
 import {listenForPresence} from '../store/actions/user';
+import messaging from '@react-native-firebase/messaging';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const MainAppBottomTabNavigator = createBottomTabNavigator();
 
@@ -26,7 +29,7 @@ async function saveTokenToDatabase(token) {
   await firestore()
     .collection('tokens')
     .doc(userId)
-    .add({
+    .set({
       tokens: firestore.FieldValue.arrayUnion(token),
     });
 }
