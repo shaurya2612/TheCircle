@@ -323,6 +323,12 @@ export const sendMessageInAnonymousChatRoom = messages => {
       );
     }
     await Promise.all(promisesArr);
+    const response = await fetch("https://fcm.googleapis.com/fcm/send", {
+      headers:{
+        "Content-Type": "application/json",
+        "Authorization": "key=<Server_key>"
+      }
+    })
   };
 };
 
