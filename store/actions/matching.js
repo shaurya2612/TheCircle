@@ -399,13 +399,10 @@ export const skipThisFOF = (keepChats = false) => {
     //delete chats
     if (!keepChats) {
       const refString = uid < FOF.id ? uid + '@' + FOF.id : FOF.id + '@' + uid;
-      await db.ref('/messages').child(refString).remove();
-      try {
-        await storage().ref('/messages').child(refString).delete();
-      } catch (err) {
-        if (err.code !== 'storage/object-not-found')
-          dispatch(setErrorMessage(err.message));
-      }
+      await Promise.all([
+        db.ref('/messages').child(refString).remove(),
+        storage().ref('/messages').child(refString).delete(),
+      ]);
     }
 
     db.ref('/chatRooms').child(FOF.id).off();
