@@ -29,7 +29,7 @@ async function saveTokenToDatabase(token) {
   await firestore()
     .collection('tokens')
     .doc(userId)
-    .set({
+    .update({
       tokens: firestore.FieldValue.arrayUnion(token),
     });
 }

@@ -347,7 +347,6 @@ export const sendMessageInAnonymousChatRoom = messages => {
           priority: 10,
         }),
       });
-      console.warn('res', response.body);
     }
   };
 };
