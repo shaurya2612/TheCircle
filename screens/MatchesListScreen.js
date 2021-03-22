@@ -193,7 +193,7 @@ export const MatchesListScreen = props => {
       <View style={{paddingTop: insets.top}} />
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        <SearchBar style={{width: '100%'}} placeholder="Search your matches" />
+        {/* <SearchBar style={{width: '100%'}} placeholder="Search your matches" /> */}
 
         {(matches || []).filter(item => {
           if (item.lastMessage === null && !item.hasPhoto) return true;
@@ -201,7 +201,7 @@ export const MatchesListScreen = props => {
         }).length === 0 ? null : (
           <View>
             <View style={{padding: scale(10), backgroundColor: 'white'}}>
-              <AppText style={styles.titleText}>Match queue</AppText>
+              <AppText style={styles.titleText}>New Matches</AppText>
             </View>
             <FlatList
               horizontal={true}
@@ -214,6 +214,10 @@ export const MatchesListScreen = props => {
               renderItem={({item}) => {
                 return (
                   <AvatarCircle
+                    onLongPress={() => {
+                      setModalMatch(item);
+                      setIsActionsModalVisible(true);
+                    }}
                     onPress={() => {
                       dispatch(setMatch(item));
                       props.navigation.navigate('ChatScreen');
@@ -242,6 +246,7 @@ export const MatchesListScreen = props => {
                   style={{
                     paddingHorizontal: scale(10),
                     backgroundColor: 'white',
+                    marginVertical: verticalScale(10)
                   }}>
                   <AppText style={styles.titleText}>Conversations</AppText>
                 </View>

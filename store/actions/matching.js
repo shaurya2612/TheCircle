@@ -5,6 +5,7 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import {serverKey} from '../../firebase/config';
+import {sendNotification} from '../../firebase/utils';
 
 export const SET_USER_MATCHING_STATUS = 'SET_USER_MATCHING_STATUS';
 export const SET_CHAT_ROOM = 'SET_CHAT_ROOM';
@@ -139,7 +140,7 @@ export const changeUserMatchingStatus = newStatus => {
 
         if (foundFOF) {
           //make an anonymous chat room with the chosenFOF and change the matching status
-          console.log('trying to make anonymous chat room');
+
           //delete the doc of the selected FOF from all their friends' waiting lists
           await firestoreDb
             .collection('waitingUsers')
@@ -200,6 +201,11 @@ export const changeUserMatchingStatus = newStatus => {
             db.ref('/matchingStatus').child(uid).set(2),
             db.ref('/matchingStatus').child(chosenFOF.id).set(2),
           ]);
+          await sendNotification(
+            chosenFOF.id,
+            'We found someone!',
+            'Press to enter the chat room',
+          );
         } else {
           //push current user to waiting users
           await firestoreDb.collection(`waitingUsers`).doc(uid).set({
@@ -323,32 +329,11 @@ export const sendMessageInAnonymousChatRoom = messages => {
       );
     }
     await Promise.all(promisesArr);
-    let tokens = await firestore().collection('tokens').doc(FOF.id).get();
-    if (!tokens.exists) return;
-    tokens = tokens.data().tokens;
-    for (var i = 0; i < tokens.length; i++) {
-      const response = await fetch('https://fcm.googleapis.com/fcm/send', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `key=${serverKey}`,
-        },
-        body: JSON.stringify({
-          to: tokens[i],
-          notification: {
-            title: 'Your FOF just texted you!',
-            body: messages[0].text,
-            mutable_content: true,
-            sound: 'Tri-tone',
-          },
-          android: {
-            priority: 'high',
-          },
-          priority: 10,
-        }),
-      });
-      console.warn('res', response.body);
-    }
+    await sendNotification(
+      FOF.id,
+      'Your FOF just texted you 💞',
+      messages[0].text,
+    );
   };
 };
 
@@ -445,6 +430,17 @@ export const skipThisFOF = (keepChats = false) => {
       db.ref('/chatRooms').child(uid).remove(),
       db.ref('/viaFriend').child(uid).remove(),
     ]);
+
+    if (keepChats) {
+      await sendNotification(
+        FOF.id,
+        "BOOM! It's a perfect match! 😍",
+        'Press to check who it is!',
+      );
+    } else {
+      await sendNotification(FOF.id, 'Woops! 😳', 'Someone just skipped you');
+    }
+
     dispatch({type: REMOVE_CHAT_ROOM});
   };
 };

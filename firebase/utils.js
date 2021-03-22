@@ -3,6 +3,8 @@ import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import {Platform} from 'react-native';
+import {serverKey} from './config';
+import firestore from '@react-native-firebase/firestore';
 
 export const isUsernameValid = async username => {
   const db = database();
@@ -152,6 +154,11 @@ export const searchFriendsByNameOrUsername = async (
 export const sendFriendRequest = async receiverId => {
   const db = database();
   await db.ref('/requests').child(receiverId).push(auth().currentUser.uid);
+  await sendNotification(
+    receiverId,
+    'New friend request',
+    'Someone sent you a friend request',
+  );
 };
 
 export const fetchNameAgeUsernameDpById = async id => {
@@ -201,8 +208,13 @@ export const unmatch = async unmatchId => {
     db.ref('/matches').child(uid).child(unmatchId).remove(),
     db.ref('/matches').child(unmatchId).child(uid).remove(),
     db.ref('/messages').child(refString).remove(),
-    storage().ref('/messages').child(refString).delete(),
   ]);
+  try {
+    await storage().ref('/messages').child(refString).delete();
+  } catch (err) {
+    //Prevent unhandled promise rejection
+  }
+  await sendNotification(unmatchId, 'Jeez 😬', 'Someone just unmatched you');
 };
 
 export const setUserIsTyping = async (chatPartnerId, userIsTyping) => {
@@ -219,4 +231,35 @@ export const setUserIsTyping = async (chatPartnerId, userIsTyping) => {
       .remove();
     db.ref('/isTyping').child(refString).child(uid).set(true);
   } else db.ref('/isTyping').child(refString).child(uid).remove();
+};
+
+export const sendNotification = async (receiverId, title, body) => {
+  const tokensSnapshot = await firestore()
+    .collection('tokens')
+    .doc(receiverId)
+    .get();
+  const tokens = tokensSnapshot.data().tokens;
+
+  for (var i = 0; i < tokens.length; i++) {
+    await fetch('https://fcm.googleapis.com/fcm/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `key=${serverKey}`,
+      },
+      body: JSON.stringify({
+        to: tokens[i],
+        notification: {
+          title,
+          body,
+          mutable_content: true,
+          sound: 'Tri-tone',
+        },
+        android: {
+          priority: 'high',
+        },
+        priority: 10,
+      }),
+    });
+  }
 };

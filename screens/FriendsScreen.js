@@ -99,17 +99,11 @@ const FriendsScreen = () => {
                   style={{
                     paddingHorizontal: scale(10),
                     backgroundColor: "white",
-                    marginBottom: scale(10),
-                    marginTop: verticalScale(10),
+                    marginVertical: verticalScale(10),
                   }}
                 >
                   <AppText style={styles.titleText}>Friends</AppText>
                 </View>
-
-                <SearchBar
-                  style={{ width: "100%" }}
-                  placeholder="Search your friends"
-                />
               </View>
             );
           }}
