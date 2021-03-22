@@ -140,7 +140,7 @@ export const changeUserMatchingStatus = newStatus => {
 
         if (foundFOF) {
           //make an anonymous chat room with the chosenFOF and change the matching status
-          console.log('trying to make anonymous chat room');
+
           //delete the doc of the selected FOF from all their friends' waiting lists
           await firestoreDb
             .collection('waitingUsers')
@@ -201,6 +201,11 @@ export const changeUserMatchingStatus = newStatus => {
             db.ref('/matchingStatus').child(uid).set(2),
             db.ref('/matchingStatus').child(chosenFOF.id).set(2),
           ]);
+          await sendNotification(
+            chosenFOF.id,
+            'We found someone!',
+            'Press to enter the chat room',
+          );
         } else {
           //push current user to waiting users
           await firestoreDb.collection(`waitingUsers`).doc(uid).set({
@@ -326,7 +331,7 @@ export const sendMessageInAnonymousChatRoom = messages => {
     await Promise.all(promisesArr);
     await sendNotification(
       FOF.id,
-      'Your FOF just texted you',
+      'Your FOF just texted you 💞',
       messages[0].text,
     );
   };
@@ -425,6 +430,17 @@ export const skipThisFOF = (keepChats = false) => {
       db.ref('/chatRooms').child(uid).remove(),
       db.ref('/viaFriend').child(uid).remove(),
     ]);
+
+    if (keepChats) {
+      await sendNotification(
+        FOF.id,
+        "BOOM! It's a perfect match! 😍",
+        'Press to check who it is!',
+      );
+    } else {
+      await sendNotification(FOF.id, 'Woops! 😳', 'Someone just skipped you');
+    }
+
     dispatch({type: REMOVE_CHAT_ROOM});
   };
 };

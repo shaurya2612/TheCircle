@@ -201,7 +201,7 @@ export const MatchesListScreen = props => {
         }).length === 0 ? null : (
           <View>
             <View style={{padding: scale(10), backgroundColor: 'white'}}>
-              <AppText style={styles.titleText}>Match queue</AppText>
+              <AppText style={styles.titleText}>New Matches</AppText>
             </View>
             <FlatList
               horizontal={true}
@@ -214,6 +214,10 @@ export const MatchesListScreen = props => {
               renderItem={({item}) => {
                 return (
                   <AvatarCircle
+                    onLongPress={() => {
+                      setModalMatch(item);
+                      setIsActionsModalVisible(true);
+                    }}
                     onPress={() => {
                       dispatch(setMatch(item));
                       props.navigation.navigate('ChatScreen');
