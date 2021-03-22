@@ -9,7 +9,7 @@ import SearchFriendsScreen from '../screens/SearchFriendsScreen';
 import FriendsTopTab from './FriendsTopTab';
 import EditProfileScreen from '../screens/user/EditProfileScreen';
 import AvatarCircle from '../components/AvatarCircle';
-import {View} from 'react-native';
+import {Text, View} from 'react-native';
 import styles from '../styles';
 import CurrentUserProfileStack from './UserProfileStack';
 import HomeStack from './HomeStack';
@@ -69,7 +69,7 @@ const MainAppBottomTab = () => {
             <Icon
               name={'home'}
               color={focused ? color.primary : '#cccccc'}
-              size={verticalScale(25)}
+              size={scale(25)}
             />
           ),
         }}
@@ -82,7 +82,7 @@ const MainAppBottomTab = () => {
             <Icon
               name={'users'}
               color={focused ? color.primary : '#cccccc'}
-              size={verticalScale(25)}
+              size={scale(25)}
             />
           ),
         }}
@@ -96,7 +96,7 @@ const MainAppBottomTab = () => {
             <Icon
               name={'heart'}
               color={focused ? color.primary : '#cccccc'}
-              size={verticalScale(25)}
+              size={scale(25)}
             />
           ),
         }}
@@ -113,7 +113,7 @@ const MainAppBottomTab = () => {
                   borderWidth: scale(2),
                   borderColor: focused ? color.primary : 'white',
                 }}
-                size={verticalScale(30)}
+                size={scale(30)}
                 source={{
                   uri: dp,
                 }}
