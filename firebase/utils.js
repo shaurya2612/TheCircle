@@ -154,6 +154,11 @@ export const searchFriendsByNameOrUsername = async (
 export const sendFriendRequest = async receiverId => {
   const db = database();
   await db.ref('/requests').child(receiverId).push(auth().currentUser.uid);
+  await sendNotification(
+    receiverId,
+    'New friend request',
+    'Someone sent you a friend request',
+  );
 };
 
 export const fetchNameAgeUsernameDpById = async id => {
@@ -203,8 +208,13 @@ export const unmatch = async unmatchId => {
     db.ref('/matches').child(uid).child(unmatchId).remove(),
     db.ref('/matches').child(unmatchId).child(uid).remove(),
     db.ref('/messages').child(refString).remove(),
-    storage().ref('/messages').child(refString).delete(),
   ]);
+  try {
+    await storage().ref('/messages').child(refString).delete();
+  } catch (err) {
+    //Prevent unhandled promise rejection
+  }
+  await sendNotification(unmatchId, 'Jeez 😬', 'Someone just unmatched you');
 };
 
 export const setUserIsTyping = async (chatPartnerId, userIsTyping) => {
