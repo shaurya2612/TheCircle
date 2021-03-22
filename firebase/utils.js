@@ -3,6 +3,7 @@ import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import {Platform} from 'react-native';
+import { serverKey } from './config';
 
 export const isUsernameValid = async username => {
   const db = database();
@@ -219,4 +220,28 @@ export const setUserIsTyping = async (chatPartnerId, userIsTyping) => {
       .remove();
     db.ref('/isTyping').child(refString).child(uid).set(true);
   } else db.ref('/isTyping').child(refString).child(uid).remove();
+};
+
+export const sendNotification = async (to, title, body) => {
+  const response = await fetch('https://fcm.googleapis.com/fcm/send', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `key=${serverKey}`,
+    },
+    body: JSON.stringify({
+      to,
+      notification: {
+        title,
+        body,
+        mutable_content: true,
+        sound: 'Tri-tone',
+      },
+      android: {
+        priority: 'high',
+      },
+      priority: 10,
+    }),
+  });
+  console.warn("res", response.body)
 };
