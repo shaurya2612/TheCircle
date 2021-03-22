@@ -324,16 +324,11 @@ export const sendMessageInAnonymousChatRoom = messages => {
       );
     }
     await Promise.all(promisesArr);
-    let tokens = await firestore().collection('tokens').doc(FOF.id).get();
-    if (!tokens.exists) return;
-    tokens = tokens.data().tokens;
-    for (var i = 0; i < tokens.length; i++) {
-      await sendNotification(
-        tokens[i],
-        'Your FOF just texted you',
-        messages[0].text,
-      );
-    }
+    await sendNotification(
+      FOF.id,
+      'Your FOF just texted you',
+      messages[0].text,
+    );
   };
 };
 
