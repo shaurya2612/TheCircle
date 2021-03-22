@@ -21,6 +21,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   changeUserMatchingStatus,
   configureAnonymousChatRoom,
+  paginateMessagesInAnonymousChatRoomQuery,
   sendMessageInAnonymousChatRoom,
   skipThisFOF,
   startListeningForAnonymousChatRoom,
@@ -39,7 +40,13 @@ import ImageChatFooter from '../../components/chat/ImageChatFooter';
 
 const AnonymousChatScreen = props => {
   const matchingState = useSelector(state => state.matching);
-  const {FOF, viaFriend, messages, matchingStatus} = matchingState;
+  const {
+    FOF,
+    viaFriend,
+    messages,
+    matchingStatus,
+    canLoadEarlierMessages,
+  } = matchingState;
   const dispatch = useDispatch();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [areCueCardsVisible, setAreCueCardsVisible] = useState(false);
@@ -49,11 +56,11 @@ const AnonymousChatScreen = props => {
   const [attachedImage, setAttachedImage] = useState(null);
   const isFOFTyping = useSelector(state => state.matching.isFOFTyping);
   const [userIsAlreadyTyping, setUserIsAlreadyTyping] = useState(null);
-
   useEffect(() => {
     if (FOF === null) {
       dispatch(configureAnonymousChatRoom());
     } else {
+      dispatch(paginateMessagesInAnonymousChatRoomQuery());
       dispatch(startListeningForAnonymousChatRoom());
     }
   }, [FOF]);
@@ -195,6 +202,7 @@ const AnonymousChatScreen = props => {
           if (attachedImage) newMessages[0].image = attachedImage.uri;
           onSend(newMessages);
         }}
+        alwaysShowSend={attachedImage ? true : false}
         renderAvatar={null}
         isTyping={isFOFTyping}
         scrollToBottom
@@ -214,6 +222,10 @@ const AnonymousChatScreen = props => {
 
           setUserIsTyping(FOF.id, true);
           setUserIsAlreadyTyping(true);
+        }}
+        loadEarlier={canLoadEarlierMessages}
+        onLoadEarlier={() => {
+          dispatch(paginateMessagesInAnonymousChatRoomQuery());
         }}
         renderBubble={props => <Bubble {...props}></Bubble>}
         renderChatFooter={() => {
@@ -271,7 +283,7 @@ const AnonymousChatScreen = props => {
               Cancel: () => {},
             }}></Actions>
         )}
-        renderSend={props => <CustomSend {...props} iconColor="blue" />}
+        renderSend={props => <CustomSend {...props} />}
         renderInputToolbar={props => (
           <InputToolbar
             {...props}

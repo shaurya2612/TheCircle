@@ -14,6 +14,10 @@ export const ADD_MESSAGE_IN_CHAT_ROOM = 'ADD_MESSAGE_IN_CHAT_ROOM';
 export const SET_FOF_CUE_CARDS = 'SET_FOF_CUE_CARDS';
 export const SET_IS_FOF_ONLINE = 'SET_IS_FOF_ONLINE';
 export const SET_IS_FOF_TYPING = 'SET_IS_FOF_TYPING';
+export const SET_CAN_LOAD_EARLIER_MESSAGES_IN_ANONYMOUS_CHAT_ROOM =
+  'SET_CAN_LOAD_EARLIER_MESSAGES_IN_ANONYMOUS_CHAT_ROOM';
+export const ADD_EARLIER_MESSAGES_IN_ANONYMOUS_CHAT_ROOM =
+  'ADD_EARLIER_MESSAGES_IN_ANONYMOUS_CHAT_ROOM';
 
 export const listenForUserMatchingStatus = () => {
   return (dispatch, getState) => {
@@ -337,6 +341,51 @@ export const sendMessageInAnonymousChatRoom = messages => {
   };
 };
 
+export const paginateMessagesInAnonymousChatRoomQuery = () => {
+  return async (dispatch, getState) => {
+    const {FOF, messages} = getState().matching;
+    const db = database();
+    const {uid} = auth().currentUser;
+    const refString = uid < FOF.id ? uid + '@' + FOF.id : FOF.id + '@' + uid;
+
+    let dbQuery = db
+      .ref('/messages')
+      .child(refString)
+      .orderByChild('createdAt');
+
+    if (messages?.length > 0) {
+      dbQuery = dbQuery.endAt(messages[messages.length - 1].createdAt);
+    }
+
+    dbQuery.limitToLast(40).once('value', snapshot => {
+      let olderMessagesVals = [];
+
+      snapshot.forEach(child => {
+        olderMessagesVals.unshift({...child.val(), _id: child.key});
+      });
+
+      //All the chats have been fetched
+      if (olderMessagesVals.length < 40)
+        dispatch({
+          type: SET_CAN_LOAD_EARLIER_MESSAGES_IN_ANONYMOUS_CHAT_ROOM,
+          payload: false,
+        });
+      else
+        dispatch({
+          type: SET_CAN_LOAD_EARLIER_MESSAGES_IN_ANONYMOUS_CHAT_ROOM,
+          payload: true,
+        });
+
+      olderMessagesVals.shift();
+
+      dispatch({
+        type: ADD_EARLIER_MESSAGES_IN_ANONYMOUS_CHAT_ROOM,
+        payload: olderMessagesVals,
+      });
+    });
+  };
+};
+
 export const startListeningForAnonymousChatRoom = () => {
   return async (dispatch, getState) => {
     const matchingState = getState().matching;
@@ -362,7 +411,7 @@ export const startListeningForAnonymousChatRoom = () => {
     db.ref('/messages')
       .child(refString)
       .orderByChild('createdAt')
-      .limitToFirst(100)
+      .limitToLast(1)
       .on('child_added', snapshot => {
         if (!snapshot.exists()) return;
         dispatch({

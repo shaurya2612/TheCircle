@@ -1,14 +1,16 @@
-import { CLEAR_REDUX_STATE } from "../../utils";
+import {CLEAR_REDUX_STATE} from '../../utils';
 import {
+  ADD_EARLIER_MESSAGES_IN_ANONYMOUS_CHAT_ROOM,
   ADD_MESSAGE_IN_CHAT_ROOM,
   LISTEN_FOR_ANONYMOUS_CHAT_ROOM,
   REMOVE_CHAT_ROOM,
+  SET_CAN_LOAD_EARLIER_MESSAGES_IN_ANONYMOUS_CHAT_ROOM,
   SET_CHAT_ROOM,
   SET_FOF_CUE_CARDS,
   SET_IS_FOF_ONLINE,
   SET_IS_FOF_TYPING,
   SET_USER_MATCHING_STATUS,
-} from "../actions/matching";
+} from '../actions/matching';
 
 const initialState = {
   matchingStatus: null,
@@ -16,13 +18,14 @@ const initialState = {
   viaFriend: null,
   listeningForUserMatchingStatus: false,
   messages: null,
+  canLoadEarlierMessages: null,
   FOFCueCards: null,
   isFOFOnline: null,
   isFOFTyping: null,
 };
 
 export default (state = initialState, action) => {
-  const { type, payload } = action;
+  const {type, payload} = action;
 
   switch (type) {
     case SET_USER_MATCHING_STATUS:
@@ -37,6 +40,18 @@ export default (state = initialState, action) => {
         ...state,
         FOF: payload.FOF,
         viaFriend: payload.viaFriend,
+      };
+
+    case SET_CAN_LOAD_EARLIER_MESSAGES_IN_ANONYMOUS_CHAT_ROOM:
+      return {
+        ...state,
+        canLoadEarlierMessages: payload,
+      };
+
+    case ADD_EARLIER_MESSAGES_IN_ANONYMOUS_CHAT_ROOM:
+      return {
+        ...state,
+        messages: [...(state.messages || []), ...payload],
       };
 
     case SET_IS_FOF_ONLINE:
