@@ -283,7 +283,7 @@ const AnonymousChatScreen = props => {
               Cancel: () => {},
             }}></Actions>
         )}
-        renderSend={props => <CustomSend {...props} />}
+        renderSend={props => <CustomSend {...props} iconColor="white" />}
         renderInputToolbar={props => (
           <InputToolbar
             {...props}
