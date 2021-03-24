@@ -1,38 +1,38 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, {useEffect} from 'react';
+import {useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
   TouchableOpacity,
   View,
-} from "react-native";
-import ReactNativeModal from "react-native-modal";
-import { scale, verticalScale } from "react-native-size-matters";
-import AppText from "../components/AppText";
-import ModalCardView from "../components/ModalCardView";
-import FriendsListItem from "../components/FriendsListItem";
-import SearchBar from "../components/SearchBar";
-import styles from "../styles";
-import NameText from "../components/NameText";
-import { useDispatch, useSelector } from "react-redux";
-import { listenForFriends } from "../store/actions/user";
-import { unfriend } from "../firebase/utils";
-import colors from "../constants/colors";
+} from 'react-native';
+import ReactNativeModal from 'react-native-modal';
+import {scale, verticalScale} from 'react-native-size-matters';
+import AppText from '../components/AppText';
+import ModalCardView from '../components/ModalCardView';
+import FriendsListItem from '../components/FriendsListItem';
+import SearchBar from '../components/SearchBar';
+import styles from '../styles';
+import NameText from '../components/NameText';
+import {useDispatch, useSelector} from 'react-redux';
+import {listenForFriends, loadMoreFriends} from '../store/actions/user';
+import {unfriend} from '../firebase/utils';
+import colors from '../constants/colors';
 
 const dummyData = [
   {
-    name: "Dave",
+    name: 'Dave',
     dp:
-      "https://images.unsplash.com/photo-1599476912965-4be339dabe7e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80",
-    id: "dummyUid0",
-    username: "something",
+      'https://images.unsplash.com/photo-1599476912965-4be339dabe7e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80',
+    id: 'dummyUid0',
+    username: 'something',
   },
   {
-    name: "Dave",
+    name: 'Dave',
     dp:
-      "https://images.unsplash.com/photo-1599476912965-4be339dabe7e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80",
-    id: "dummyUid1",
-    username: "something",
+      'https://images.unsplash.com/photo-1599476912965-4be339dabe7e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80',
+    id: 'dummyUid1',
+    username: 'something',
   },
 ];
 
@@ -40,10 +40,7 @@ const FriendsScreen = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalUser, setModalUser] = useState(null);
 
-  const friends = useSelector((state) => state.user.friends);
-  const listeningForFriends = useSelector(
-    (state) => state.user.listeningForFriends
-  );
+  const {friends, canLoadMoreFriends, listeningForFriends} = useSelector(state => state.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -52,27 +49,26 @@ const FriendsScreen = () => {
 
   if (!listeningForFriends) {
     return (
-      <View style={{ ...styles.expandedCenterView, backgroundColor: "white" }}>
-        <ActivityIndicator color={colors.primary} size={"large"} />
+      <View style={{...styles.expandedCenterView, backgroundColor: 'white'}}>
+        <ActivityIndicator color={colors.primary} size={'large'} />
       </View>
     );
   }
 
   return (
-    <View style={{ ...styles.rootView, backgroundColor: "white" }}>
+    <View style={{...styles.rootView, backgroundColor: 'white'}}>
       <ReactNativeModal
-        style={{ justifyContent: "flex-end", margin: 0 }}
+        style={{justifyContent: 'flex-end', margin: 0}}
         onBackdropPress={() => setIsModalVisible(false)}
         onModalHide={() => {
           setModalUser(null);
         }}
         isVisible={isModalVisible}
         backdropTransitionInTiming={0}
-        backdropTransitionOutTiming={0}
-      >
+        backdropTransitionOutTiming={0}>
         <ModalCardView>
           <View>
-            <View style={{ justifyContent: "center", alignItems: "center" }}>
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
               <AppText style={styles.titleText}>Actions</AppText>
             </View>
             <TouchableOpacity
@@ -81,9 +77,8 @@ const FriendsScreen = () => {
                 await unfriend(modalUser.id);
                 setIsModalVisible(false);
               }}
-              style={{ padding: scale(10) }}
-            >
-              <NameText style={{ color: "#ff3217" }}>Unfriend</NameText>
+              style={{padding: scale(10)}}>
+              <NameText style={{color: '#ff3217'}}>Unfriend</NameText>
             </TouchableOpacity>
           </View>
         </ModalCardView>
@@ -91,6 +86,10 @@ const FriendsScreen = () => {
       {(friends || []).length > 0 ? (
         <FlatList
           data={friends}
+          // onEndReachedThreshold={0}
+          // onEndReached={() => {
+          //   if (canLoadMoreFriends) dispatch(loadMoreFriends(10));
+          // }}
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={() => {
             return (
@@ -98,16 +97,15 @@ const FriendsScreen = () => {
                 <View
                   style={{
                     paddingHorizontal: scale(10),
-                    backgroundColor: "white",
+                    backgroundColor: 'white',
                     marginVertical: verticalScale(10),
-                  }}
-                >
+                  }}>
                   <AppText style={styles.titleText}>Friends</AppText>
                 </View>
               </View>
             );
           }}
-          renderItem={({ item }) => {
+          renderItem={({item}) => {
             return (
               <FriendsListItem
                 onPress={() => {
@@ -117,7 +115,7 @@ const FriendsScreen = () => {
                 imageUri={item.dp}
                 name={item.name}
                 userId={item.id}
-                username={"@" + item.username}
+                username={'@' + item.username}
               />
             );
           }}

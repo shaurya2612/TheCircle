@@ -100,7 +100,9 @@ const ChatScreen = props => {
         onClosed={() => {
           setIsModalVisible(false);
         }}
-        onOpened={() => {Keyboard.dismiss()}}
+        onOpened={() => {
+          Keyboard.dismiss();
+        }}
         backdropOpacity={0}
         isVisible={isModalVisible}>
         <MatchProfileScreen matchId={match.id} />
@@ -234,7 +236,7 @@ const ChatScreen = props => {
                 backgroundColor: '#0078ff',
                 borderTopColor: 'black',
                 marginTop: 0,
-                overflow: "hidden"
+                overflow: 'hidden',
               }}
             />
           )}

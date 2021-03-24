@@ -36,6 +36,7 @@ export const SET_LISTENING_FOR_FRIENDS = 'SET_LISTENING_FOR_FRIENDS';
 export const REMOVE_UNSEEN = 'REMOVE_UNSEEN';
 export const SET_FETCHED_MATCH_PROFILE = 'SET_FETCHED_MATCH_PROFILE';
 export const SET_CURRENT_MATCH_PROFILE = 'SET_CURRENT_MATCH_PROFILE';
+export const SET_CAN_LOAD_MORE_FRIENDS = 'SET_CAN_LOAD_MORE_FRIENDS';
 
 export const setUserState = payload => {
   return {type: SET_USER_STATE, payload};
@@ -337,7 +338,7 @@ export const listenForRequests = numOfResults => {
   };
 };
 
-export const listenForFriends = numOfResults => {
+export const listenForFriends = () => {
   return async (dispatch, getState) => {
     try {
       const {listeningForFriends} = getState().user;
@@ -346,7 +347,7 @@ export const listenForFriends = numOfResults => {
       const db = database();
       const {uid} = auth().currentUser;
       const dbRef = db.ref('/friends').child(uid);
-      const dbQuery = dbRef.orderByKey().limitToFirst(numOfResults);
+      const dbQuery = dbRef.orderByKey();
 
       dbQuery.on('child_added', async snapshot => {
         if (!snapshot.exists()) return;
@@ -373,12 +374,12 @@ export const listenForFriends = numOfResults => {
           dp,
         };
         dispatch({type: ADD_FRIEND, payload: obj});
+        dispatch({type: SET_LISTENING_FOR_FRIENDS, payload: true});
       });
       dbQuery.on('child_removed', snapshot => {
         if (!snapshot.exists()) return;
         dispatch({type: REMOVE_FRIEND, payload: snapshot.key});
       });
-      dispatch({type: SET_LISTENING_FOR_FRIENDS, payload: true});
     } catch (err) {
       dispatch(setErrorMessage(err.message));
       const db = database();
@@ -539,14 +540,14 @@ export const logoutUser = () => {
       const uid = auth().currentUser.uid;
       const existingToken = await messaging().getToken();
 
-      //deleting fcm token 
+      //deleting fcm token
       await firestore()
         .collection('tokens')
         .doc(uid)
         .update({
           tokens: firestore.FieldValue.arrayRemove(existingToken),
         });
-        
+
       await auth().signOut();
 
       //detach all possible listeners

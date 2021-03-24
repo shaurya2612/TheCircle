@@ -1,4 +1,4 @@
-import { bdToAge, CLEAR_REDUX_STATE } from "../../utils";
+import {bdToAge, CLEAR_REDUX_STATE} from '../../utils';
 import {
   CLEAR_USER_STATE,
   UPDATE_ABOUT,
@@ -25,9 +25,10 @@ import {
   ADD_CUE_CARD,
   UPDATE_CUE_CARD,
   REMOVE_CUE_CARD,
-} from "../actions/user";
-import database from "@react-native-firebase/database";
-import storage from "@react-native-firebase/storage";
+  SET_CAN_LOAD_MORE_FRIENDS,
+} from '../actions/user';
+import database from '@react-native-firebase/database';
+import storage from '@react-native-firebase/storage';
 
 const initialState = {
   bd: null,
@@ -46,6 +47,7 @@ const initialState = {
   listeningForRequests: false,
   friends: null,
   listeningForFriends: false,
+  canLoadMoreFriends: true,
   matches: null,
   listeningForMatches: false,
   currentMatchProfile: null,
@@ -54,7 +56,7 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
-  let { type, payload } = action;
+  let {type, payload} = action;
   switch (type) {
     case SET_USER_STATE:
       return payload;
@@ -63,26 +65,26 @@ export default (state = initialState, action) => {
       return initialState;
 
     case SET_USER:
-      return { ...state, ...payload, age: bdToAge(payload.bd) };
+      return {...state, ...payload, age: bdToAge(payload.bd)};
 
     case SET_DP:
-      return { ...state, dp: payload };
+      return {...state, dp: payload};
 
     case SET_USER_PHOTOS:
-      return { ...state, userPhotos: payload, userPhotosUpdated: true };
+      return {...state, userPhotos: payload, userPhotosUpdated: true};
 
     case SET_USER_PROFILE:
-      return { ...state, profile: payload, profileUpdated: true };
+      return {...state, profile: payload, profileUpdated: true};
 
     case SET_CUE_CARDS:
-      return { ...state, cueCards: payload };
+      return {...state, cueCards: payload};
 
     case ADD_CUE_CARD:
-      return { ...state, cueCards: [...(state.cueCards || []), payload] };
+      return {...state, cueCards: [...(state.cueCards || []), payload]};
 
     case UPDATE_CUE_CARD:
       let updatedCueCards = state.cueCards;
-      updatedCueCards[payload.index]["ans"] = payload.newAns;
+      updatedCueCards[payload.index]['ans'] = payload.newAns;
       return {
         ...state,
         cueCards: updatedCueCards,
@@ -97,7 +99,7 @@ export default (state = initialState, action) => {
       };
 
     case UPDATE_ABOUT:
-      return { ...state, profile: { ...state.profile, about: payload } };
+      return {...state, profile: {...state.profile, about: payload}};
 
     case UPDATE_PROFILE_INFO:
       let updatedProfile = state.profile ? state.profile : {};
@@ -105,16 +107,16 @@ export default (state = initialState, action) => {
       //User cleared the action.key field in info
       if (payload === null) {
         if (updatedProfile?.info?.[action.key])
-          delete updatedProfile["info"][action.key];
+          delete updatedProfile['info'][action.key];
       } else {
-        if (!updatedProfile["info"]) updatedProfile["info"] = {};
-        updatedProfile["info"][action.key] = payload;
+        if (!updatedProfile['info']) updatedProfile['info'] = {};
+        updatedProfile['info'][action.key] = payload;
       }
 
-      return { ...state, profile: updatedProfile };
+      return {...state, profile: updatedProfile};
 
     case UPDATE_INTERESTED_IN:
-      return { ...state, interestedIn: payload };
+      return {...state, interestedIn: payload};
 
     case ADD_REQUEST:
       return {
@@ -126,7 +128,7 @@ export default (state = initialState, action) => {
     case REMOVE_REQUEST:
       return {
         ...state,
-        requests: (state.requests || []).filter((obj) => obj.id !== payload),
+        requests: (state.requests || []).filter(obj => obj.id !== payload),
         listeningForRequests: true,
       };
 
@@ -137,10 +139,16 @@ export default (state = initialState, action) => {
         listeningForFriends: true,
       };
 
+    case SET_CAN_LOAD_MORE_FRIENDS:
+      return {
+        ...state,
+        canLoadMoreFriends: payload,
+      };
+
     case REMOVE_FRIEND:
       return {
         ...state,
-        friends: (state.friends || []).filter((obj) => obj.id !== payload),
+        friends: (state.friends || []).filter(obj => obj.id !== payload),
         listeningForFriends: true,
       };
 
@@ -152,7 +160,7 @@ export default (state = initialState, action) => {
       };
 
     case UPDATE_MATCH:
-      let obj = (state.matches || []).filter((obj) => obj.id === payload.id)[0];
+      let obj = (state.matches || []).filter(obj => obj.id === payload.id)[0];
 
       //the match is already fetched and is on the screen
       if (obj)
@@ -168,7 +176,7 @@ export default (state = initialState, action) => {
                   : 1
                 : obj.unseen,
             },
-            ...(state.matches || []).filter((obj) => obj.id !== payload.id),
+            ...(state.matches || []).filter(obj => obj.id !== payload.id),
           ],
           listeningForMatches: true,
         };
@@ -178,12 +186,12 @@ export default (state = initialState, action) => {
           const db = database();
 
           let [name, dp] = await Promise.all([
-            db.ref("/users").child(payload.id).child("name").once("value"),
+            db.ref('/users').child(payload.id).child('name').once('value'),
 
             storage()
-              .ref("/profiles")
+              .ref('/profiles')
               .child(payload.id)
-              .child("0")
+              .child('0')
               .getDownloadURL(),
           ]);
           return {
@@ -216,7 +224,7 @@ export default (state = initialState, action) => {
     case REMOVE_UNSEEN:
       return {
         ...state,
-        matches: (state.matches || []).map((obj) => {
+        matches: (state.matches || []).map(obj => {
           if (obj.id === payload) {
             obj.unseen = null;
           }
@@ -227,7 +235,7 @@ export default (state = initialState, action) => {
     case REMOVE_MATCH:
       return {
         ...state,
-        matches: (state.matches || []).filter((obj) => obj.id !== payload),
+        matches: (state.matches || []).filter(obj => obj.id !== payload),
         listeningForMatches: true,
       };
 
