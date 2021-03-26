@@ -25,6 +25,7 @@ export const REMOVE_CUE_CARD = 'REMOVE_CUE_CARD';
 export const UPDATE_PROFILE_INFO = 'UPDATE_PROFILE_INFO';
 export const UPDATE_INTERESTED_IN = 'UPDATE_INTERESTED_IN';
 export const ADD_REQUEST = 'ADD_REQUEST';
+export const ADD_MULTIPLE_REQUESTS = 'ADD_MULTIPLE_REQUESTS';
 export const ADD_FRIEND = 'ADD_FRIEND';
 export const ADD_MATCH = 'ADD_MATCH';
 export const REMOVE_MATCH = 'REMOVE_MATCH';
@@ -37,6 +38,7 @@ export const REMOVE_UNSEEN = 'REMOVE_UNSEEN';
 export const SET_FETCHED_MATCH_PROFILE = 'SET_FETCHED_MATCH_PROFILE';
 export const SET_CURRENT_MATCH_PROFILE = 'SET_CURRENT_MATCH_PROFILE';
 export const SET_CAN_LOAD_MORE_FRIENDS = 'SET_CAN_LOAD_MORE_FRIENDS';
+export const SET_CAN_LOAD_MORE_REQUESTS = 'SET_CAN_LOAD_MORE_REQUESTS';
 
 export const setUserState = payload => {
   return {type: SET_USER_STATE, payload};
@@ -316,6 +318,40 @@ export const removeCueCard = (index, refreshFn) => {
   };
 };
 
+export const loadMoreRequests = numOfResults => {
+  return async (dispatch, getState) => {
+    console.warn('called');
+    const currentRequests = getState().user.requests;
+    const db = database();
+    const {uid} = auth().currentUser;
+    const numOfCurrentRequests = (currentRequests || []).length;
+
+    const dbQuery = db.ref('/requests').child(uid).orderByValue();
+    //If some requests are already shown
+    if (numOfCurrentRequests > 0) {
+      dbQuery.endAt(currentRequests[numOfCurrentRequests - 1].createdAt);
+    }
+    let requests = await dbQuery.limitToLast(numOfResults).once('value');
+    if (requests.numChildren() < numOfResults)
+      dispatch({type: SET_CAN_LOAD_MORE_REQUESTS, payload: false});
+    if (!requests.exists()) return;
+    requests = requests.val();
+    let requestsKeys = Object.keys(requests);
+    requestsKeys.pop();
+
+    let earlierRequests = await Promise.all(
+      requestsKeys.map(key => {
+        const tempFn = async () => {
+          const obj = await fetchNameAgeUsernameDpById(key);
+          return {...obj, createdAt: requests[key]};
+        };
+        return tempFn();
+      }),
+    );
+    dispatch({type: ADD_MULTIPLE_REQUESTS, payload: earlierRequests});
+  };
+};
+
 export const listenForRequests = numOfResults => {
   return async (dispatch, getState) => {
     const {listeningForRequests} = getState().user;
@@ -324,16 +360,41 @@ export const listenForRequests = numOfResults => {
     const db = database();
     const {uid} = auth().currentUser;
     const dbRef = db.ref('/requests').child(uid);
-    const dbQuery = dbRef.limitToFirst(numOfResults);
-    dbQuery.on('child_added', async snapshot => {
+    const dbQuery = dbRef.orderByValue();
+
+    let latestRequests = await dbQuery.limitToLast(numOfResults).once('value');
+    //If number of requests fetched is less than 10 then there are no more existing requests
+    if (latestRequests.numChildren() < numOfResults)
+      dispatch({type: SET_CAN_LOAD_MORE_REQUESTS, payload: false});
+    if (!latestRequests.exists()) return;
+    //Add the latest requests to the screen (except the most recent one as it will be added by the listener)
+    latestRequests = latestRequests.val();
+    let latestRequestsKeys = Object.keys(latestRequests);
+    latestRequestsKeys.pop();
+    latestRequestsKeys.reverse();
+    let requestsArr = await Promise.all(
+      latestRequestsKeys.map(key => {
+        const tempFn = async () => {
+          const obj = await fetchNameAgeUsernameDpById(key);
+          return {...obj, createdAt: latestRequests[key]};
+        };
+        return tempFn();
+      }),
+    );
+    dispatch({type: ADD_MULTIPLE_REQUESTS, payload: requestsArr});
+
+    dbQuery.limitToLast(1).on('child_added', async snapshot => {
+      console.warn("child added listener called")
       if (!snapshot.exists()) return;
-      let obj = await fetchNameAgeUsernameDpById(snapshot.val());
-      obj['keyInRequests'] = snapshot.key;
-      dispatch({type: ADD_REQUEST, payload: obj});
+      let obj = await fetchNameAgeUsernameDpById(snapshot.key);
+      dispatch({
+        type: ADD_REQUEST,
+        payload: {...obj, createdAt: snapshot.val()},
+      });
     });
     dbQuery.on('child_removed', snapshot => {
       if (!snapshot.exists()) return;
-      dispatch({type: REMOVE_REQUEST, payload: snapshot.val()});
+      dispatch({type: REMOVE_REQUEST, payload: snapshot.key});
     });
   };
 };
@@ -350,7 +411,9 @@ export const listenForFriends = () => {
       const dbQuery = dbRef.orderByKey();
 
       dbQuery.on('child_added', async snapshot => {
-        if (!snapshot.exists()) return;
+        if (!snapshot.exists()) {
+          return;
+        }
 
         let [name, username, dp] = await Promise.all([
           db.ref('/users').child(snapshot.key).child('name').once('value'),
@@ -380,6 +443,7 @@ export const listenForFriends = () => {
         if (!snapshot.exists()) return;
         dispatch({type: REMOVE_FRIEND, payload: snapshot.key});
       });
+      dispatch({type: SET_LISTENING_FOR_FRIENDS, payload: true});
     } catch (err) {
       dispatch(setErrorMessage(err.message));
       const db = database();
@@ -465,19 +529,19 @@ export const listenForMatches = numOfResults => {
   };
 };
 
-export const acceptRequest = (keyInRequests, friendId) => {
+export const acceptRequest = friendId => {
   return async (dispatch, getState) => {
     const {uid} = auth().currentUser;
     const db = database();
 
     const gender = await db.ref('/genders').child(friendId).once('value');
-    await db.ref('/friends').child(uid).child(friendId).set(gender.val());
+    db.ref('/friends').child(uid).child(friendId).set(gender.val());
 
     //add user in the friends list of accepted friend
     const userState = getState().user;
-    await db.ref('/friends').child(friendId).child(uid).set(userState.gender);
+    db.ref('/friends').child(friendId).child(uid).set(userState.gender);
 
-    await db.ref('/requests').child(uid).child(keyInRequests).remove();
+    db.ref('/requests').child(uid).child(friendId).remove();
   };
 };
 

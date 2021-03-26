@@ -153,7 +153,12 @@ export const searchFriendsByNameOrUsername = async (
 
 export const sendFriendRequest = async receiverId => {
   const db = database();
-  await db.ref('/requests').child(receiverId).push(auth().currentUser.uid);
+  const {uid} = auth().currentUser;
+  await db
+    .ref('/requests')
+    .child(receiverId)
+    .child(uid)
+    .set(database.ServerValue.TIMESTAMP);
   await sendNotification(
     receiverId,
     'New friend request',
@@ -183,10 +188,10 @@ export const fetchNameAgeUsernameDpById = async id => {
   };
 };
 
-export const declineRequest = async keyInRequests => {
+export const declineRequest = async rejectedUserId => {
   const {uid} = auth().currentUser;
   const db = database();
-  await db.ref('/requests').child(uid).child(keyInRequests).remove();
+  await db.ref('/requests').child(uid).child(rejectedUserId).remove();
 };
 
 export const unfriend = async unfriendId => {

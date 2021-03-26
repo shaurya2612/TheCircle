@@ -1,5 +1,5 @@
-import React from "react";
-import { useState } from "react";
+import React from 'react';
+import {useState} from 'react';
 import {
   ActivityIndicator,
   ImageBackground,
@@ -7,19 +7,19 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   View,
-} from "react-native";
-import * as Animatable from "react-native-animatable";
-import { scale, verticalScale } from "react-native-size-matters";
-import { useDispatch } from "react-redux";
-import colors from "../constants/colors";
-import { declineRequest, sendFriendRequest } from "../firebase/utils";
-import { setErrorMessage } from "../store/actions/error";
-import { acceptRequest } from "../store/actions/user";
-import styles from "../styles";
-import AppText from "./AppText";
-import SmallStatBox from "./homeStatCard/SmallStatBox";
-import IconCircle from "./IconCircle";
-import StartMatchingButton from "./StartMatchingButton";
+} from 'react-native';
+import * as Animatable from 'react-native-animatable';
+import {scale, verticalScale} from 'react-native-size-matters';
+import {useDispatch} from 'react-redux';
+import colors from '../constants/colors';
+import {declineRequest, sendFriendRequest} from '../firebase/utils';
+import {setErrorMessage} from '../store/actions/error';
+import {acceptRequest} from '../store/actions/user';
+import styles from '../styles';
+import AppText from './AppText';
+import SmallStatBox from './homeStatCard/SmallStatBox';
+import IconCircle from './IconCircle';
+import StartMatchingButton from './StartMatchingButton';
 
 const FriendCard = ({
   imageUri,
@@ -28,13 +28,12 @@ const FriendCard = ({
   username,
   age,
   userId,
-  keyInRequests,
   ...props
 }) => {
   const dispatch = useDispatch();
   const renderContent = () => {
     switch (type) {
-      case "add":
+      case 'add':
         return (
           <StartMatchingButton
             onPress={async () => {
@@ -43,33 +42,31 @@ const FriendCard = ({
             title="Add Friend"
           />
         );
-      case "loading":
-        return <ActivityIndicator color={colors.primary} size={"large"} />;
-      case "isFriend":
+      case 'loading':
+        return <ActivityIndicator color={colors.primary} size={'large'} />;
+      case 'isFriend':
         return <StartMatchingButton disabled={true} title="Friends" />;
-      case "sentRequest":
+      case 'sentRequest':
         return <StartMatchingButton disabled={true} title="Pending" />;
-      case "inRequests":
+      case 'inRequests':
         return (
           <View
             style={{
-              width: "100%",
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-            }}
-          >
+              width: '100%',
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+            }}>
             <TouchableOpacity
               onPress={async () => {
                 try {
-                  dispatch(acceptRequest(keyInRequests, userId));
+                  dispatch(acceptRequest(userId));
                 } catch (err) {
                   dispatch(setErrorMessage(err.message));
                 }
-              }}
-            >
+              }}>
               <IconCircle
                 size={verticalScale(60)}
-                style={{ backgroundColor: "green", borderColor: "white" }}
+                style={{backgroundColor: 'green', borderColor: 'white'}}
                 iconColor="white"
                 iconName="check"
                 label="Accept"
@@ -78,15 +75,14 @@ const FriendCard = ({
             <TouchableOpacity
               onPress={async () => {
                 try {
-                  await declineRequest(keyInRequests);
+                  await declineRequest(userId);
                 } catch (err) {
                   dispatch(setErrorMessage(err.message));
                 }
-              }}
-            >
+              }}>
               <IconCircle
                 size={verticalScale(60)}
-                style={{ backgroundColor: "red", borderColor: "white" }}
+                style={{backgroundColor: 'red', borderColor: 'white'}}
                 iconColor="white"
                 iconName="times"
                 label="Decline"
@@ -106,10 +102,9 @@ const FriendCard = ({
         ...styles.homeStatCardView,
         ...styles.elevation_small,
         ...props.style,
-        borderWidth: scale(type === "inRequests" ? 0 : 1),
+        borderWidth: scale(type === 'inRequests' ? 0 : 1),
         elevation: 5,
-      }}
-    >
+      }}>
       <ImageBackground
         source={{
           uri: imageUri,
@@ -118,23 +113,21 @@ const FriendCard = ({
           ...styles.homeStatCardImageBackground,
           ...styles.elevation_small,
         }}
-        imageStyle={{ resizeMode: "cover" }}
-      ></ImageBackground>
+        imageStyle={{resizeMode: 'cover'}}></ImageBackground>
 
       <AppText
         style={{
           ...styles.titleText,
-          textAlign: "center",
+          textAlign: 'center',
           marginTop: verticalScale(20),
-        }}
-      >
-        <AppText style={{ ...styles.nameText, color: "white" }}>
+        }}>
+        <AppText style={{...styles.nameText, color: 'white'}}>
           {age ? `(${age})  ` : null}
         </AppText>
 
         {name}
 
-        <AppText style={{ ...styles.nameText, color: "grey" }}>
+        <AppText style={{...styles.nameText, color: 'grey'}}>
           {age ? `  (${age})` : null}
         </AppText>
       </AppText>
@@ -143,14 +136,13 @@ const FriendCard = ({
         <AppText
           style={{
             fontSize: scale(15),
-            textAlign: "center",
-            color: "grey",
-          }}
-        >
+            textAlign: 'center',
+            color: 'grey',
+          }}>
           {username}
         </AppText>
       ) : null}
-      <View style={{ flexDirection: "row", marginTop: verticalScale(10) }}>
+      <View style={{flexDirection: 'row', marginTop: verticalScale(10)}}>
         {renderContent()}
       </View>
     </Animatable.View>

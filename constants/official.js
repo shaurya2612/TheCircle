@@ -15,7 +15,7 @@ export const faqs = [
   },
   {
     question:
-      'I liked the person I am talking to. How should I get to know   their identity?',
+      'I liked the person I am talking to. How should I get to know their identity?',
     answer:
       'If you like the person you are talking to and want to know them further press the 3 dots on the top and click on the like button. If both of you have liked each other your identities will be revealed. Your chat will be moved to the matches section (heart button).',
   },

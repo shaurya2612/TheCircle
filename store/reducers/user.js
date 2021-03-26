@@ -26,6 +26,8 @@ import {
   UPDATE_CUE_CARD,
   REMOVE_CUE_CARD,
   SET_CAN_LOAD_MORE_FRIENDS,
+  SET_CAN_LOAD_MORE_REQUESTS,
+  ADD_MULTIPLE_REQUESTS,
 } from '../actions/user';
 import database from '@react-native-firebase/database';
 import storage from '@react-native-firebase/storage';
@@ -45,6 +47,7 @@ const initialState = {
   cueCards: null,
   requests: null,
   listeningForRequests: false,
+  canLoadMoreRequests: true,
   friends: null,
   listeningForFriends: false,
   canLoadMoreFriends: true,
@@ -123,6 +126,19 @@ export default (state = initialState, action) => {
         ...state,
         requests: [...(state.requests || []), payload],
         listeningForRequests: true,
+      };
+
+    case ADD_MULTIPLE_REQUESTS:
+      return {
+        ...state,
+        requests: [...(state.requests || []), ...payload],
+        listeningForRequests: true,
+      };
+
+    case SET_CAN_LOAD_MORE_REQUESTS:
+      return {
+        ...state,
+        canLoadMoreRequests: payload,
       };
 
     case REMOVE_REQUEST:

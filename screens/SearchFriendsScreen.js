@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -6,33 +6,33 @@ import {
   TouchableWithoutFeedback,
   View,
   Image,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { scale, verticalScale } from "react-native-size-matters";
-import Icon from "react-native-vector-icons/Feather";
-import AppText from "../components/AppText";
-import FriendCard from "../components/FriendCard";
-import SearchBar from "../components/SearchBar";
-import styles from "../styles";
-import FormButton from "../components/FormButton";
+} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {scale, verticalScale} from 'react-native-size-matters';
+import Icon from 'react-native-vector-icons/Feather';
+import AppText from '../components/AppText';
+import FriendCard from '../components/FriendCard';
+import SearchBar from '../components/SearchBar';
+import styles from '../styles';
+import FormButton from '../components/FormButton';
 import {
   searchFriendByUsername,
   searchFriendsByNameOrUsername,
-} from "../firebase/utils";
-import { useDispatch, useSelector } from "react-redux";
-import { setSearchingForFriends } from "../store/actions/loading";
-import { setErrorMessage } from "../store/actions/error";
-import FriendsListItem from "../components/FriendsListItem";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import ReactNativeModal from "react-native-modal";
+} from '../firebase/utils';
+import {useDispatch, useSelector} from 'react-redux';
+import {setSearchingForFriends} from '../store/actions/loading';
+import {setErrorMessage} from '../store/actions/error';
+import FriendsListItem from '../components/FriendsListItem';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import ReactNativeModal from 'react-native-modal';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 
 const SearchFriendsScreen = () => {
-  const loadingState = useSelector((state) => state.loading);
+  const loadingState = useSelector(state => state.loading);
   const searchingForFriends = loadingState.searchingForFriends;
   const [friends, setFriends] = useState(null);
-  const [nameOrUsername, setNameOrUsername] = useState("");
+  const [nameOrUsername, setNameOrUsername] = useState('');
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalUser, setModalUser] = useState(null);
@@ -50,30 +50,28 @@ const SearchFriendsScreen = () => {
       //listen for change in relation with current Modal User
 
       //Checking if modal user is my friend
-      db.ref("/friends")
+      db.ref('/friends')
         .child(auth().currentUser.uid)
         .child(modalUser.id)
-        .on("value", (snapshot) => {
+        .on('value', snapshot => {
           if (snapshot.exists()) setIsFriend(true);
           else setIsFriend(false);
         });
 
       //Checking if modal user is in my requests (could be done on the client side)
-      db.ref("/requests")
+      db.ref('/requests')
         .child(auth().currentUser.uid)
-        .orderByValue()
-        .equalTo(modalUser.id)
-        .on("value", (snapshot) => {
+        .child(modalUser.id)
+        .on('value', snapshot => {
           if (snapshot.exists()) setInRequests(true);
           else setInRequests(false);
         });
 
       //Checking if I sent a request to modal user
-      db.ref("/requests")
+      db.ref('/requests')
         .child(modalUser.id)
-        .orderByValue()
-        .equalTo(auth().currentUser.uid)
-        .on("value", (snapshot) => {
+        .child(auth().currentUser.uid)
+        .on('value', snapshot => {
           if (snapshot.exists()) setSentRequest(true);
           else setSentRequest(false);
         });
@@ -86,18 +84,15 @@ const SearchFriendsScreen = () => {
     const db = database();
 
     //Close all listening connections
-    db.ref("/friends")
-      .child(auth().currentUser.uid)
-      .child(modalUser.id)
-      .off();
+    db.ref('/friends').child(auth().currentUser.uid).child(modalUser.id).off();
 
-    db.ref("/requests")
+    db.ref('/requests')
       .child(auth().currentUser.uid)
       .orderByValue()
       .equalTo(modalUser.id)
       .off();
 
-    db.ref("/requests")
+    db.ref('/requests')
       .child(modalUser.id)
       .orderByValue()
       .equalTo(auth().currentUser.uid)
@@ -125,7 +120,7 @@ const SearchFriendsScreen = () => {
       dispatch(setSearchingForFriends(true));
       let friends = await searchFriendsByNameOrUsername(
         nameOrUsername.trim(),
-        10
+        10,
       );
       setFriends(friends);
       dispatch(setSearchingForFriends(false));
@@ -138,16 +133,16 @@ const SearchFriendsScreen = () => {
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
+      'keyboardDidShow',
       () => {
         setIsKeyboardVisible(true); // or some other action
-      }
+      },
     );
     const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
+      'keyboardDidHide',
       () => {
         setIsKeyboardVisible(false); // or some other action
-      }
+      },
     );
 
     return () => {
@@ -156,30 +151,29 @@ const SearchFriendsScreen = () => {
     };
   }, []);
   return (
-    <View style={{ ...styles.rootView, backgroundColor: "white" }}>
+    <View style={{...styles.rootView, backgroundColor: 'white'}}>
       <ReactNativeModal
-        style={{ justifyContent: "center", alignItems: "center", margin: 0 }}
+        style={{justifyContent: 'center', alignItems: 'center', margin: 0}}
         onBackdropPress={() => setIsModalVisible(false)}
         isVisible={isModalVisible}
         backdropTransitionInTiming={0}
-        backdropTransitionOutTiming={0}
-      >
+        backdropTransitionOutTiming={0}>
         <FriendCard
           imageUri={modalUser?.dp}
           userId={modalUser?.id}
           name={modalUser?.name}
-          username={"@" + modalUser?.username}
+          username={'@' + modalUser?.username}
           age={modalUser?.age}
           type={
             checkingStatus
-              ? "loading"
+              ? 'loading'
               : isFriend
-              ? "isFriend"
+              ? 'isFriend'
               : sentRequest
-              ? "sentRequest"
+              ? 'sentRequest'
               : inRequests
-              ? "inRequests"
-              : "add"
+              ? 'inRequests'
+              : 'add'
           }
         />
       </ReactNativeModal>
@@ -187,11 +181,10 @@ const SearchFriendsScreen = () => {
       <View
         style={{
           paddingHorizontal: scale(10),
-          backgroundColor: "white",
+          backgroundColor: 'white',
           marginBottom: verticalScale(10),
           marginTop: verticalScale(10),
-        }}
-      >
+        }}>
         <AppText style={styles.titleText}>Search Users</AppText>
       </View>
 
@@ -200,7 +193,7 @@ const SearchFriendsScreen = () => {
           searchFriendHandler();
         }}
         value={nameOrUsername}
-        onChangeText={(newUsername) => {
+        onChangeText={newUsername => {
           setNameOrUsername(newUsername);
         }}
         placeholder="Name or username"
@@ -208,23 +201,22 @@ const SearchFriendsScreen = () => {
 
       <View
         style={{
-          width: "100%",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+          width: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
         <FormButton
           onPress={() => {
             searchFriendHandler();
             Keyboard.dismiss();
           }}
-          style={{ width: "70%" }}
+          style={{width: '70%'}}
           title="Search"
         />
       </View>
 
-      <View style={{ ...styles.rootView, paddingTop: scale(20) }}>
-        {!isKeyboardVisible && nameOrUsername.trim() !== "" ? (
+      <View style={{...styles.rootView, paddingTop: scale(20)}}>
+        {!isKeyboardVisible && nameOrUsername.trim() !== '' ? (
           searchingForFriends ? (
             <View style={styles.expandedCenterView}>
               <ActivityIndicator size="large" color="black" />
@@ -232,20 +224,19 @@ const SearchFriendsScreen = () => {
           ) : friends !== null ? (
             <FlatList
               data={friends}
-              renderItem={({ item }) => (
+              renderItem={({item}) => (
                 <View>
                   <View
                     style={{
-                      width: "100%",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
+                      width: '100%',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
                     <FriendsListItem
                       imageUri={item.dp}
                       userId={item.id}
                       name={item.name}
-                      username={"@" + item.username}
+                      username={'@' + item.username}
                       age={item.age}
                       onPress={() => {
                         setModalUser(item);
@@ -262,13 +253,13 @@ const SearchFriendsScreen = () => {
               <View style={styles.centerView}>
                 <AppText style={styles.titleText}>Oops !</AppText>
                 <Image
-                  source={require("../assets/stumble.png")}
-                  style={{ resizeMode: "contain" }}
+                  source={require('../assets/stumble.png')}
+                  style={{resizeMode: 'contain'}}
                 />
-                <AppText style={{ ...styles.nameText, textAlign: "center" }}>
+                <AppText style={{...styles.nameText, textAlign: 'center'}}>
                   No matching results
                 </AppText>
-                <AppText style={{ ...styles.labelText, textAlign: "center" }}>
+                <AppText style={{...styles.labelText, textAlign: 'center'}}>
                   Please check your search or try again later.
                 </AppText>
               </View>
@@ -277,11 +268,10 @@ const SearchFriendsScreen = () => {
         ) : (
           //When keyboard is visible or searchBar is empty
           <TouchableWithoutFeedback
-            style={{ ...styles.rootView, backgroundColor: "blue" }}
+            style={{...styles.rootView, backgroundColor: 'blue'}}
             onPress={() => {
               Keyboard.dismiss();
-            }}
-          >
+            }}>
             <View />
           </TouchableWithoutFeedback>
         )}
