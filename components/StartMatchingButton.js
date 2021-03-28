@@ -1,7 +1,8 @@
-import React from "react";
-import { Button, Text, TouchableOpacity } from "react-native";
-import { moderateScale, scale } from "react-native-size-matters";
-import styles from "../styles";
+import React from 'react';
+import {Button, Text, TouchableOpacity} from 'react-native';
+import {moderateScale, scale} from 'react-native-size-matters';
+import colors from '../constants/colors';
+import styles from '../styles';
 
 export const StartMatchingButton = ({title, ...props}) => {
   return (
@@ -10,16 +11,18 @@ export const StartMatchingButton = ({title, ...props}) => {
       onPress={props.onPress}
       style={
         props.disabled
-          ? { ...styles.disabledSelectionButton, ...props.style }
-          : { ...styles.startMatchingButton, ...props.style }
-      }
-    >
+          ? {...styles.disabledSelectionButton, ...props.style}
+          : {
+              ...styles.startMatchingButton,
+              ...styles.elevation_medium,
+              ...props.style,
+            }
+      }>
       <Text
         style={{
           fontSize: scale(22, 0.4),
-          color: props.disabled ? "#666666" : "white",
-        }}
-      >
+          color: props.disabled ? '#cccccc' : colors.accent,
+        }}>
         {title}
       </Text>
     </TouchableOpacity>
