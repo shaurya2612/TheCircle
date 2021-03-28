@@ -20,7 +20,7 @@ const HomeStatCard = ({onPressImage}) => {
   const {name, dp, username} = userState;
   const [areEditOptionsVisible, setAreEditOptionsVisible] = useState(true);
   return (
-    <View style={styles.homeStatCardView}>
+    <View style={{...styles.homeStatCardView, ...styles.elevation_medium}}>
       <TouchableWithoutFeedback onPressIn={onPressImage}>
         <ImageBackground
           source={{

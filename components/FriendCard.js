@@ -100,10 +100,12 @@ const FriendCard = ({
       animation="bounceIn"
       style={{
         ...styles.homeStatCardView,
-        ...styles.elevation_small,
+        ...styles.elevation_medium,
         ...props.style,
         borderWidth: scale(type === 'inRequests' ? 0 : 1),
         elevation: 5,
+        minWidth: '70%',
+        maxWidth: '80%',
       }}>
       <ImageBackground
         source={{
