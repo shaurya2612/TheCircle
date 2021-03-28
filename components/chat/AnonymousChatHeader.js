@@ -51,7 +51,7 @@ const AnonymousChatHeader = ({
       ) : null}
       <CustomHeader
         style={{
-          backgroundColor: "white",
+          backgroundColor: 'white',
           overflow: 'visible',
           ...styles.elevation_small,
         }}>
@@ -74,7 +74,7 @@ const AnonymousChatHeader = ({
                 flexWrap: 'nowrap',
                 overflow: 'scroll',
                 maxWidth: '70%',
-                flexDirection: 'row',
+                // flexDirection: 'row',
                 ...styles.centerView,
               }}>
               <AppText
@@ -85,7 +85,17 @@ const AnonymousChatHeader = ({
                 }}>
                 {`${FOF.nonBinary ?? FOF.gender}, ${FOF.age}`}
               </AppText>
-
+              {online ? (
+                <View
+                  style={{
+                    alignSelf: 'flex-start',
+                    marginHorizontal: scale(10),
+                  }}>
+                  <AppText style={{color: 'black', fontSize: scale(10)}}>
+                    online
+                  </AppText>
+                </View>
+              ) : null}
               {/* {online ? (
                 <FontAwesome5Icon name={'circle'} solid color={'green'} />
               ) : null} */}

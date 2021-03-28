@@ -18,6 +18,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {listenForFriends, loadMoreFriends} from '../store/actions/user';
 import {unfriend} from '../firebase/utils';
 import colors from '../constants/colors';
+import LinearGradient from 'react-native-linear-gradient';
 
 const dummyData = [
   {
@@ -91,20 +92,19 @@ const FriendsScreen = () => {
           //   if (canLoadMoreFriends) dispatch(loadMoreFriends(10));
           // }}
           showsVerticalScrollIndicator={false}
-          ListHeaderComponent={() => {
-            return (
-              <View>
-                <View
-                  style={{
-                    paddingHorizontal: scale(10),
-                    backgroundColor: 'white',
-                    marginVertical: verticalScale(10),
-                  }}>
-                  <AppText style={styles.titleText}>Friends</AppText>
-                </View>
-              </View>
-            );
-          }}
+          // ListHeaderComponent={() => {
+          //   return (
+          //     <View colors={[colors.primary, colors.accent]}>
+          //       <View
+          //         style={{
+          //           paddingHorizontal: scale(10),
+          //           marginVertical: verticalScale(10),
+          //         }}>
+          //         <AppText style={{...styles.titleText, color:"white"}}>Friends</AppText>
+          //       </View>
+          //     </View>
+          //   );
+          // }}
           renderItem={({item}) => {
             return (
               <FriendsListItem
