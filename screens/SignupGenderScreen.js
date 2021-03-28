@@ -10,7 +10,7 @@ import styles from '../styles';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import SelectionButton from '../components/SelectionButton';
 import Modal from 'react-native-modal';
-import {moderateScale, verticalScale} from 'react-native-size-matters';
+import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
 import ModalCardView from '../components/ModalCardView';
 import {useDispatch, useSelector} from 'react-redux';
 import {setSignupFormData} from '../store/actions/signupForm';
@@ -95,7 +95,7 @@ const SignupGenderScreen = props => {
       <Modal
         isVisible={isModalVisible}
         backdropTransitionOutTiming={0}
-        style={{margin: 0}}>
+        style={{marginHorizontal: scale(10)}}>
         <SafeAreaView style={styles.modalCardView}>
           <ModalCardView>
             <FormTextInput
