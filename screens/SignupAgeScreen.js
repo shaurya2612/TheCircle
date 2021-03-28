@@ -170,7 +170,7 @@ const SignupAgeScreen = props => {
 
             <View style={{...styles.expandedCenterView, flex: 2}}>
               <FormTextInput
-                ref={yearTextInputRef}
+                // ref={yearTextInputRef}
                 placeholder="YYYY"
                 textAlign={'center'}
                 letterSpacing={scale(6)}
@@ -204,7 +204,7 @@ const SignupAgeScreen = props => {
         <View style={styles.formButtonView}>
           <FormButton
             disabled={isButtonDisabled}
-            title="CONTINUE"
+            title="Continue"
             onPress={() => {
               Keyboard.dismiss();
               props.navigation.navigate('SignupUsernameScreen');
