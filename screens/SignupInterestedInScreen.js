@@ -1,23 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { Keyboard, StyleSheet, View } from "react-native";
-import AppText from "../components/AppText";
-import FormButton from "../components/FormButton";
-import FormTextInput from "../components/FormTextInput";
-import Spacer from "../components/Spacer";
-import StackHeader from "../components/StackHeader";
-import styles from "../styles";
-import { SafeAreaView } from "react-native-safe-area-context";
-import SelectionButton from "../components/SelectionButton";
-import Modal from "react-native-modal";
-import { moderateScale, verticalScale } from "react-native-size-matters";
-import ModalCardView from "../components/ModalCardView";
-import { useDispatch, useSelector } from "react-redux";
-import { setSignupFormData } from "../store/actions/signupForm";
-import ProgressLine from "../components/ProgressLine";
+import React, {useEffect, useState} from 'react';
+import {Keyboard, StyleSheet, View} from 'react-native';
+import AppText from '../components/AppText';
+import FormButton from '../components/FormButton';
+import FormTextInput from '../components/FormTextInput';
+import Spacer from '../components/Spacer';
+import StackHeader from '../components/StackHeader';
+import styles from '../styles';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import SelectionButton from '../components/SelectionButton';
+import Modal from 'react-native-modal';
+import {moderateScale, verticalScale} from 'react-native-size-matters';
+import ModalCardView from '../components/ModalCardView';
+import {useDispatch, useSelector} from 'react-redux';
+import {setSignupFormData} from '../store/actions/signupForm';
+import ProgressLine from '../components/ProgressLine';
+import colors from '../constants/colors';
 
-const SignupInterestedInScreen = (props) => {
-  const signupFormData = useSelector((state) => state.signupForm);
-  const { interestedIn } = signupFormData;
+const SignupInterestedInScreen = props => {
+  const signupFormData = useSelector(state => state.signupForm);
+  const {interestedIn} = signupFormData;
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -26,44 +27,47 @@ const SignupInterestedInScreen = (props) => {
   }, [interestedIn]);
 
   return (
-    <SafeAreaView style={styles.rootView}>
+    <SafeAreaView style={{...styles.rootView, backgroundColor: colors.accent}}>
       <ProgressLine
         style={{
-          width: "85.8%",
-          backgroundColor: "black",
+          width: '85.8%',
+          backgroundColor: 'white',
           height: verticalScale(5),
         }}
       />
-      <StackHeader navigation={props.navigation} />
+      <StackHeader backIconColor="white" navigation={props.navigation} />
 
       <View style={styles.expandedCenterView}>
         <View style={styles.titleView}>
-          <AppText style={styles.titleText}>Show me</AppText>
+          <AppText style={{...styles.titleText, color: 'white'}}>
+            Show me
+          </AppText>
         </View>
 
         <View
           style={{
-            width: "80%",
-          }}
-        >
+            width: '80%',
+          }}>
           <SelectionButton
             onPress={() => {
               dispatch(
-                setSignupFormData({ ...signupFormData, interestedIn: "Male" })
+                setSignupFormData({...signupFormData, interestedIn: 'Male'}),
               );
             }}
-            disabledStyle={interestedIn === "Male" ? false : true}
+            disabledStyle={interestedIn === 'Male' ? true : false}
             style={localStyles.selectionButton}
+            textColor="white"
             title="Men"
           />
           <SelectionButton
             onPress={() => {
               dispatch(
-                setSignupFormData({ ...signupFormData, interestedIn: "Female" })
+                setSignupFormData({...signupFormData, interestedIn: 'Female'}),
               );
             }}
-            disabledStyle={interestedIn === "Female" ? false : true}
+            disabledStyle={interestedIn === 'Female' ? true : false}
             style={localStyles.selectionButton}
+            textColor="white"
             title="Women"
           />
           <SelectionButton
@@ -71,12 +75,13 @@ const SignupInterestedInScreen = (props) => {
               dispatch(
                 setSignupFormData({
                   ...signupFormData,
-                  interestedIn: "Everyone",
-                })
+                  interestedIn: 'Everyone',
+                }),
               );
             }}
-            disabledStyle={interestedIn === "Everyone" ? false : true}
+            disabledStyle={interestedIn === 'Everyone' ? true : false}
             style={localStyles.selectionButton}
+            textColor="white"
             title="Everyone"
           />
         </View>
@@ -84,12 +89,13 @@ const SignupInterestedInScreen = (props) => {
 
       <View style={styles.formButtonView}>
         <FormButton
-          title={"CONTINUE"}
+          title={'Continue'}
           disabled={isButtonDisabled ? true : false}
           autoCorrect={false}
+          textColor={colors.accent}
           onPress={() => {
             Keyboard.dismiss();
-            props.navigation.navigate("SignupUserPhotos");
+            props.navigation.navigate('SignupUserPhotos');
           }}
         />
       </View>
@@ -99,10 +105,10 @@ const SignupInterestedInScreen = (props) => {
 };
 
 const localStyles = StyleSheet.create({
-  selectionButton: { marginVertical: verticalScale(5) },
+  selectionButton: {marginVertical: verticalScale(5)},
   modalContainer: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: 'center',
     padding: moderateScale(10, 0.4),
   },
 });

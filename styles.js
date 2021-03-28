@@ -83,8 +83,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: moderateScale(20, 0.4),
-    borderWidth: moderateScale(2, 0.4),
-    borderColor: colors.primary,
+    // borderWidth: moderateScale(2, 0.4),
+    // borderColor: colors.primary,
   },
   disabledSelectionButton: {
     paddingHorizontal: scale(30),
