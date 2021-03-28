@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { TextInput } from "react-native";
-import styles from "../styles";
+import React, {useState} from 'react';
+import {TextInput} from 'react-native';
+import colors from '../constants/colors';
+import styles from '../styles';
 
-const FormTextInput = (props) => {
+const FormTextInput = props => {
   const [isSelected, setIsSelected] = useState(false);
   return (
     <TextInput
-    {...props}
-    
+      {...props}
       onFocus={
         props.onFocus
           ? props.onFocus
@@ -22,10 +22,21 @@ const FormTextInput = (props) => {
               setIsSelected(false);
             }
       }
-      selectionColor={"black"}
-      style={isSelected?{...styles.selectedFormTextInput, ...props.style}:{...styles.formTextInput, ...props.style}}
+      selectionColor={'black'}
+      style={
+        isSelected
+          ? {
+              ...styles.selectedFormTextInput,
+              ...props.style,
+              borderColor: props.selectedBorderColor
+                ? props.selectedBorderColor
+                : colors.primary,
+            }
+          : {...styles.formTextInput, ...props.style}
+      }
+      selectionColor={props.selectionColor ?? 'black'}
       onChangeText={props.onChangeText}
-      placeholderTextColor = {"#cccccc"}
+      placeholderTextColor={'#cccccc'}
     />
   );
 };
