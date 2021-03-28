@@ -1,8 +1,8 @@
 export default {
-    primary: "black",
-    accent: "white",
+    primary: "#FC5C7D",
+    accent: "#6A82FB",
     gradient: "blue",
-    appText: "black"
+    appText: "black",
 }
 
 // F5134A - Rishi Pink

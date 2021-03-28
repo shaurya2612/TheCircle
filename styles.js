@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(5),
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: colors.primary,
+    backgroundColor: "white",
     borderRadius: moderateScale(20, 0.4),
   },
   formButtonView: {
