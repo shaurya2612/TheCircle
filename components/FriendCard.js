@@ -17,6 +17,7 @@ import {setErrorMessage} from '../store/actions/error';
 import {acceptRequest} from '../store/actions/user';
 import styles from '../styles';
 import AppText from './AppText';
+import FormButton from './FormButton';
 import SmallStatBox from './homeStatCard/SmallStatBox';
 import IconCircle from './IconCircle';
 import StartMatchingButton from './StartMatchingButton';
@@ -35,10 +36,11 @@ const FriendCard = ({
     switch (type) {
       case 'add':
         return (
-          <StartMatchingButton
+          <FormButton
             onPress={async () => {
               await sendFriendRequest(userId);
             }}
+            textColor= {colors.accent}
             title="Add Friend"
           />
         );

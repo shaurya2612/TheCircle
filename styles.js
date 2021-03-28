@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerView: {
-    height: verticalScale(60),
+    height: verticalScale(50),
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -83,11 +83,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: moderateScale(20, 0.4),
-    // borderWidth: moderateScale(2, 0.4),
-    // borderColor: colors.primary,
+    borderWidth: moderateScale(2, 0.4),
+    borderColor: 'rgba(255, 255, 255, 0)',
   },
   disabledSelectionButton: {
-    paddingHorizontal: scale(30),
+    paddingHorizontal: scale(20),
     paddingVertical: verticalScale(5),
     justifyContent: 'center',
     alignItems: 'center',
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     borderColor: colors.accent,
     borderRadius: scale(40),
     flexWrap:"nowrap",
-    width:"100%"
+    // width:"100%"
   },
   nameText: {fontSize: scale(17)},
   lastMessageText: {fontSize: scale(12), color: 'grey'},

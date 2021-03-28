@@ -9,6 +9,7 @@ const CustomComposer = (props) => {
       {...props}
       textInputStyle={{
         ...styles.chatComposerText,
+        ...styles.elevation_small,
         backgroundColor: "white",
         borderRadius: scale(25),
         paddingHorizontal: scale(10),

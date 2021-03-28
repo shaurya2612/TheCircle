@@ -112,7 +112,7 @@ const AnonymousChatScreen = props => {
               label={userLikes ? 'Unlike' : 'Like'}
               labelStyle={{color: 'white'}}
               solid={userLikes}
-              iconColor={userLikes ? 'red' : colors.primary}
+              iconColor={userLikes ? 'red' : "black"}
               iconName="heart"
             />
           </TouchableOpacity>
@@ -126,6 +126,7 @@ const AnonymousChatScreen = props => {
             <IconCircle
               style={{borderColor: 'white'}}
               label={'Skip'}
+              iconColor={"black"}
               labelStyle={{color: 'white'}}
               iconName="forward"
             />
@@ -227,7 +228,15 @@ const AnonymousChatScreen = props => {
         onLoadEarlier={() => {
           dispatch(paginateMessagesInAnonymousChatRoomQuery());
         }}
-        renderBubble={props => <Bubble {...props}></Bubble>}
+        renderBubble={props => (
+          <Bubble
+            wrapperStyle={{
+              right: {
+                backgroundColor: colors.primary,
+              },
+            }}
+            {...props}></Bubble>
+        )}
         renderChatFooter={() => {
           return (
             <View>
@@ -264,8 +273,8 @@ const AnonymousChatScreen = props => {
         renderActions={props => (
           <Actions
             {...props}
-            iconTextStyle={{color: 'white'}}
-            wrapperStyle={{borderColor: 'white'}}
+            iconTextStyle={{color: '#cccccc'}}
+            wrapperStyle={{borderColor: '#cccccc'}}
             options={{
               'Send Image': props => {
                 launchImageLibrary(
@@ -283,14 +292,15 @@ const AnonymousChatScreen = props => {
               Cancel: () => {},
             }}></Actions>
         )}
-        renderSend={props => <CustomSend {...props} iconColor="white" />}
+        renderSend={props => <CustomSend {...props} iconColor={colors.primary} />}
         renderInputToolbar={props => (
           <InputToolbar
             {...props}
             containerStyle={{
-              backgroundColor: '#0078ff',
-              borderTopColor: 'black',
+              backgroundColor: 'white',
+              // borderTopColor: 'black',
               marginTop: 0,
+              paddingTop: scale(2),
               overflow: 'hidden',
             }}
           />
