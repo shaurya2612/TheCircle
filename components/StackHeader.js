@@ -8,7 +8,7 @@ const StackHeader = (props) => (
     <Icon
       name={"arrow-left"}
       size={scale(30)}
-      color={"black"}
+      color={props.backIconColor??"black"}
       onPress={() => {
         props.navigation.goBack();
       }}
