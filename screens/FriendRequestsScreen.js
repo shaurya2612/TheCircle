@@ -19,37 +19,22 @@ const data = [
 
 const FriendRequestsScreen = () => {
   const dispatch = useDispatch();
-  const requests = useSelector(state => state.user.requests);
-  const canLoadMoreRequests = useSelector(
-    state => state.user.canLoadMoreRequests,
-  );
+  let requests = useSelector(state => state.user.requests);
 
   useEffect(() => {
-    dispatch(listenForRequests(5));
-    console.warn('can load more requests', canLoadMoreRequests);
+    dispatch(listenForRequests());
   }, []);
-
-  useEffect(() => {
-    console.log(requests);
-  }, [requests]);
 
   return (
     <View style={{...styles.rootView, backgroundColor: 'white'}}>
       <View style={{...styles.rootView}}>
         {(requests || []).length > 0 ? (
           <FlatList
-            data={(requests || []).reverse()}
-            // onEndReachedThreshold={0}
-            // onEndReached={() => {
-            //   if (canLoadMoreRequests) {
-            //     console.warn('can load');
-            //     dispatch(loadMoreRequests(10));
-            //   }
-            // }}
+            data={(requests || [])}
             ListHeaderComponent={() => {
               return (
                 <View
-                  style={{
+                  style={{  
                     paddingHorizontal: scale(10),
                     backgroundColor: 'white',
                     marginBottom: scale(50),

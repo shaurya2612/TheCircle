@@ -124,7 +124,7 @@ export default (state = initialState, action) => {
     case ADD_REQUEST:
       return {
         ...state,
-        requests: [...(state.requests || []), payload],
+        requests: [payload, ...(state.requests || [])],
         listeningForRequests: true,
       };
 

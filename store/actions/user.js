@@ -318,41 +318,7 @@ export const removeCueCard = (index, refreshFn) => {
   };
 };
 
-export const loadMoreRequests = numOfResults => {
-  return async (dispatch, getState) => {
-    console.warn('called');
-    const currentRequests = getState().user.requests;
-    const db = database();
-    const {uid} = auth().currentUser;
-    const numOfCurrentRequests = (currentRequests || []).length;
-
-    const dbQuery = db.ref('/requests').child(uid).orderByValue();
-    //If some requests are already shown
-    if (numOfCurrentRequests > 0) {
-      dbQuery.endAt(currentRequests[numOfCurrentRequests - 1].createdAt);
-    }
-    let requests = await dbQuery.limitToLast(numOfResults).once('value');
-    if (requests.numChildren() < numOfResults)
-      dispatch({type: SET_CAN_LOAD_MORE_REQUESTS, payload: false});
-    if (!requests.exists()) return;
-    requests = requests.val();
-    let requestsKeys = Object.keys(requests);
-    requestsKeys.pop();
-
-    let earlierRequests = await Promise.all(
-      requestsKeys.map(key => {
-        const tempFn = async () => {
-          const obj = await fetchNameAgeUsernameDpById(key);
-          return {...obj, createdAt: requests[key]};
-        };
-        return tempFn();
-      }),
-    );
-    dispatch({type: ADD_MULTIPLE_REQUESTS, payload: earlierRequests});
-  };
-};
-
-export const listenForRequests = numOfResults => {
+export const listenForRequests = () => {
   return async (dispatch, getState) => {
     const {listeningForRequests} = getState().user;
     if (listeningForRequests) return; //listener is already on --> end the function
@@ -361,32 +327,10 @@ export const listenForRequests = numOfResults => {
     const {uid} = auth().currentUser;
     const dbRef = db.ref('/requests').child(uid);
     const dbQuery = dbRef.orderByValue();
-
-    let latestRequests = await dbQuery.limitToLast(numOfResults).once('value');
-    //If number of requests fetched is less than 10 then there are no more existing requests
-    if (latestRequests.numChildren() < numOfResults)
-      dispatch({type: SET_CAN_LOAD_MORE_REQUESTS, payload: false});
-    if (!latestRequests.exists()) return;
-    //Add the latest requests to the screen (except the most recent one as it will be added by the listener)
-    latestRequests = latestRequests.val();
-    let latestRequestsKeys = Object.keys(latestRequests);
-    latestRequestsKeys.pop();
-    latestRequestsKeys.reverse();
-    let requestsArr = await Promise.all(
-      latestRequestsKeys.map(key => {
-        const tempFn = async () => {
-          const obj = await fetchNameAgeUsernameDpById(key);
-          return {...obj, createdAt: latestRequests[key]};
-        };
-        return tempFn();
-      }),
-    );
-    dispatch({type: ADD_MULTIPLE_REQUESTS, payload: requestsArr});
-
-    dbQuery.limitToLast(1).on('child_added', async snapshot => {
-      console.warn("child added listener called")
+    dbQuery.on('child_added', async snapshot => {
       if (!snapshot.exists()) return;
       let obj = await fetchNameAgeUsernameDpById(snapshot.key);
+      console.log(obj);
       dispatch({
         type: ADD_REQUEST,
         payload: {...obj, createdAt: snapshot.val()},
