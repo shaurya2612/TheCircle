@@ -9,6 +9,7 @@ import {
   SET_FOF_CUE_CARDS,
   SET_IS_FOF_ONLINE,
   SET_IS_FOF_TYPING,
+  SET_LISTENING_FOR_ANONYMOUS_CHAT_ROOM,
   SET_USER_MATCHING_STATUS,
 } from '../actions/matching';
 
@@ -19,6 +20,7 @@ const initialState = {
   listeningForUserMatchingStatus: false,
   messages: null,
   canLoadEarlierMessages: null,
+  listeningForAnonymousChatRoom: false,
   FOFCueCards: null,
   isFOFOnline: null,
   isFOFTyping: null,
@@ -76,6 +78,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         messages: [payload, ...(state.messages || [])],
+      };
+
+    case SET_LISTENING_FOR_ANONYMOUS_CHAT_ROOM:
+      return {
+        ...state,
+        listeningForAnonymousChatRoom: payload,
       };
 
     case REMOVE_CHAT_ROOM:

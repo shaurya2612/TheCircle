@@ -57,13 +57,18 @@ const AnonymousChatScreen = props => {
   const [replying, setReplying] = useState(false); //Render chat list footer and reply property in new message accordingly
   const [attachedImage, setAttachedImage] = useState(null);
   const isFOFTyping = useSelector(state => state.matching.isFOFTyping);
+  const listeningForAnonymousChatRoom = useSelector(
+    state => state.matching.listeningForAnonymousChatRoom,
+  );
   const [userIsAlreadyTyping, setUserIsAlreadyTyping] = useState(null);
   useEffect(() => {
     if (FOF === null) {
       dispatch(configureAnonymousChatRoom());
     } else {
-      dispatch(paginateMessagesInAnonymousChatRoomQuery());
-      dispatch(startListeningForAnonymousChatRoom());
+      if (!listeningForAnonymousChatRoom) {
+        dispatch(paginateMessagesInAnonymousChatRoomQuery());
+        dispatch(startListeningForAnonymousChatRoom());
+      }
     }
   }, [FOF]);
 

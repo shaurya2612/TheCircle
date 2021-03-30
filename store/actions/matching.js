@@ -18,6 +18,8 @@ export const SET_CAN_LOAD_EARLIER_MESSAGES_IN_ANONYMOUS_CHAT_ROOM =
   'SET_CAN_LOAD_EARLIER_MESSAGES_IN_ANONYMOUS_CHAT_ROOM';
 export const ADD_EARLIER_MESSAGES_IN_ANONYMOUS_CHAT_ROOM =
   'ADD_EARLIER_MESSAGES_IN_ANONYMOUS_CHAT_ROOM';
+export const SET_LISTENING_FOR_ANONYMOUS_CHAT_ROOM =
+  'SET_LISTENING_FOR_ANONYMOUS_CHAT_ROOM';
 
 export const listenForUserMatchingStatus = () => {
   return (dispatch, getState) => {
@@ -438,6 +440,8 @@ export const startListeningForAnonymousChatRoom = () => {
           dispatch({type: SET_IS_FOF_TYPING, payload: true});
         } else dispatch({type: SET_IS_FOF_TYPING, payload: false});
       });
+
+    dispatch({type: SET_LISTENING_FOR_ANONYMOUS_CHAT_ROOM, payload: true})  
   };
 };
 
