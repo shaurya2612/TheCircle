@@ -119,7 +119,7 @@ const SettingsScreen = props => {
                 style={{
                   backgroundColor: 'white',
                   marginVertical: verticalScale(5),
-                  ...styles.elevation_small,
+                  
                 }}
                 fontStyle={item.fontStyle || {}}
                 onPress={item.onPress}
@@ -133,7 +133,7 @@ const SettingsScreen = props => {
               backgroundColor: 'white',
               marginVertical: verticalScale(5),
               ...styles.centerView,
-              ...styles.elevation_small,
+              ...styles.elevation_small
             }}
             fontStyle={{color: 'red'}}
             onPress={() => {
