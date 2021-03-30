@@ -76,7 +76,7 @@ const UserScreen = props => {
               flexDirection: 'row',
               alignItems: 'center',
             }}>
-            <AppText style={styles.titleText}>Your Profile</AppText>
+            {/* <AppText style={styles.titleText}>Your Profile</AppText> */}
           </View>
           <View style={{width: scale(35)}}>
             <Icon
@@ -106,7 +106,7 @@ const UserScreen = props => {
                 padding: scale(5),
                 borderRadius: scale(30),
                 borderWidth: scale(1),
-                borderColor: colors.primary,
+                borderColor: 'black',
               }}>
               <Icon size={scale(15)} color="black" name="edit-2" />
             </View>
