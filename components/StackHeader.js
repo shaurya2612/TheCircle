@@ -7,7 +7,7 @@ const StackHeader = (props) => (
   <CustomHeader>
     <Icon
       name={"arrow-left"}
-      size={scale(30)}
+      size={scale(25)}
       color={props.backIconColor??"black"}
       onPress={() => {
         props.navigation.goBack();

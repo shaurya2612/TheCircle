@@ -12,6 +12,7 @@ import {AutoDragSortableView, DragSortableView} from 'react-native-drag-sort';
 import {
   moderateScale,
   moderateVerticalScale,
+  scale,
   verticalScale,
 } from 'react-native-size-matters';
 import Icon from 'react-native-vector-icons/Feather';
@@ -27,12 +28,12 @@ import {launchImageLibrary} from 'react-native-image-picker';
 
 const {height, width} = Dimensions.get('window');
 const parentWidth = width;
-const childrenWidth = width / 3 - 2 * moderateScale(7, 0.4);
-const childrenHeight = height / 6;
-const marginChildrenTop = moderateVerticalScale(7, 0.4);
-const marginChildrenBottom = moderateVerticalScale(7, 0.4);
-const marginChildrenLeft = moderateScale(7, 0.4);
-const marginChildrenRight = moderateScale(7, 0.4);
+const childrenWidth = width / 3 - 2 * scale(7) - 0.001;
+const childrenHeight = height / 5;
+const marginChildrenTop = verticalScale(7);
+const marginChildrenBottom = verticalScale(7);
+const marginChildrenLeft = scale(7);
+const marginChildrenRight = scale(7);
 
 export const EditUserPhotoGrid = forwardRef(({onDragStart, onDragEnd}, ref) => {
   const userState = useSelector(state => state.user);
@@ -178,7 +179,7 @@ const localStyles = StyleSheet.create({
   item_children: {
     width: childrenWidth,
     height: childrenHeight,
-    backgroundColor: '#f0ffff',
+    backgroundColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: moderateScale(4, 0.4),

@@ -50,7 +50,7 @@ export const IconCircle = ({
         <Icon
           name={iconNames[iconType] ?? iconName}
           size={iconSize ?? verticalScale(30)}
-          color={iconColor ?? colors.primary}
+          color={iconColor ?? "black"}
           solid={solid}
         />
       </View>
