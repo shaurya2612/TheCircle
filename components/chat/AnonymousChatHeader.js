@@ -1,6 +1,6 @@
 import LinearGradient from 'react-native-linear-gradient';
 import React from 'react';
-import {Keyboard, TouchableOpacity, View} from 'react-native';
+import {Keyboard, Platform, TouchableOpacity, View} from 'react-native';
 import {scale} from 'react-native-size-matters';
 import Icon from 'react-native-vector-icons/Feather';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
@@ -53,7 +53,9 @@ const AnonymousChatHeader = ({
         style={{
           backgroundColor: 'white',
           overflow: 'visible',
-          ...styles.elevation_small,
+          ...(Platform.OS === 'android'
+            ? styles.elevation_small
+            : {borderBottomWidth: scale(0.5), borderColor: 'grey'}),
         }}>
         <View
           style={{

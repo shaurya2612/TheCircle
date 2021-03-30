@@ -177,17 +177,6 @@ const SearchFriendsScreen = () => {
           }
         />
       </ReactNativeModal>
-
-      <View
-        style={{
-          paddingHorizontal: scale(10),
-          backgroundColor: 'white',
-          marginBottom: verticalScale(10),
-          marginTop: verticalScale(10),
-        }}>
-        <AppText style={styles.titleText}>Search Users</AppText>
-      </View>
-
       <SearchBar
         onSubmitEditing={() => {
           searchFriendHandler();

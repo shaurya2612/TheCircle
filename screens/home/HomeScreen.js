@@ -89,9 +89,11 @@ const HomeScreen = props => {
       return <AnonymousChatScreen />;
     else
       return (
-        <View style={styles.expandedCenterView}>
-          <ActivityIndicator size="large" color={colors.primary} />
-        </View>
+        <LinearGradient
+          colors={[colors.primary, colors.accent]}
+          style={styles.expandedCenterView}>
+          <ActivityIndicator size="large" color={'white'} />
+        </LinearGradient>
       );
   };
 

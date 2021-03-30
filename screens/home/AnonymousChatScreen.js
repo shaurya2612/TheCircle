@@ -37,6 +37,7 @@ import {setUserIsTyping} from '../../firebase/utils';
 import auth from '@react-native-firebase/auth';
 import {launchImageLibrary} from 'react-native-image-picker';
 import ImageChatFooter from '../../components/chat/ImageChatFooter';
+import LinearGradient from 'react-native-linear-gradient';
 
 const AnonymousChatScreen = props => {
   const matchingState = useSelector(state => state.matching);
@@ -73,9 +74,13 @@ const AnonymousChatScreen = props => {
   };
   if (FOF === null) {
     return (
-      <View style={styles.expandedCenterView}>
-        <AppText>Loading Chat Room</AppText>
-      </View>
+      <LinearGradient
+        colors={[colors.primary, colors.accent]}
+        style={styles.expandedCenterView}>
+        <AppText style={{color: 'white', ...styles.nameText}}>
+          Loading Chat Room...
+        </AppText>
+      </LinearGradient>
     );
   }
 
@@ -112,7 +117,7 @@ const AnonymousChatScreen = props => {
               label={userLikes ? 'Unlike' : 'Like'}
               labelStyle={{color: 'white'}}
               solid={userLikes}
-              iconColor={userLikes ? 'red' : "black"}
+              iconColor={userLikes ? 'red' : 'black'}
               iconName="heart"
             />
           </TouchableOpacity>
@@ -126,7 +131,7 @@ const AnonymousChatScreen = props => {
             <IconCircle
               style={{borderColor: 'white'}}
               label={'Skip'}
-              iconColor={"black"}
+              iconColor={'black'}
               labelStyle={{color: 'white'}}
               iconName="forward"
             />
@@ -292,7 +297,9 @@ const AnonymousChatScreen = props => {
               Cancel: () => {},
             }}></Actions>
         )}
-        renderSend={props => <CustomSend {...props} iconColor={colors.primary} />}
+        renderSend={props => (
+          <CustomSend {...props} iconColor={colors.primary} />
+        )}
         renderInputToolbar={props => (
           <InputToolbar
             {...props}
@@ -301,6 +308,7 @@ const AnonymousChatScreen = props => {
               // borderTopColor: 'black',
               marginTop: 0,
               paddingTop: scale(2),
+              paddingBottom: scale(5),
               overflow: 'hidden',
             }}
           />

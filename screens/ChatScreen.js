@@ -171,7 +171,15 @@ const ChatScreen = props => {
             setUserIsTyping(match.id, true);
             setUserIsAlreadyTyping(true);
           }}
-          renderBubble={props => <Bubble {...props}></Bubble>}
+          renderBubble={props => (
+            <Bubble
+              wrapperStyle={{
+                right: {
+                  backgroundColor: colors.primary,
+                },
+              }}
+              {...props}></Bubble>
+          )}
           loadEarlier={canLoadEarlierMessages}
           onLoadEarlier={() => {
             dispatch(paginateMessagesQuery());
@@ -209,8 +217,8 @@ const ChatScreen = props => {
           renderActions={props => (
             <Actions
               {...props}
-              iconTextStyle={{color: 'white'}}
-              wrapperStyle={{borderColor: 'white'}}
+              iconTextStyle={{color: '#cccccc'}}
+              wrapperStyle={{borderColor: '#cccccc'}}
               options={{
                 'Send Image': props => {
                   launchImageLibrary(
@@ -228,14 +236,18 @@ const ChatScreen = props => {
                 Cancel: () => {},
               }}></Actions>
           )}
-          renderSend={props => <CustomSend {...props} iconColor="white" />}
+          renderSend={props => (
+            <CustomSend {...props} iconColor={colors.primary} />
+          )}
           renderInputToolbar={props => (
             <InputToolbar
               {...props}
               containerStyle={{
-                backgroundColor: '#0078ff',
-                borderTopColor: 'black',
+                backgroundColor: 'white',
+                // borderTopColor: 'black',
                 marginTop: 0,
+                paddingTop: scale(2),
+                paddingBottom: scale(5),
                 overflow: 'hidden',
               }}
             />
