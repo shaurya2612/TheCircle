@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, View} from 'react-native';
+import {Button, Text, TouchableOpacity, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {verticalScale} from 'react-native-size-matters';
 import AppText from '../components/AppText';
@@ -12,6 +12,7 @@ import {loginUser} from '../store/actions/user';
 import {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
+import colors from '../constants/colors';
 
 const LoginScreen = props => {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -19,7 +20,7 @@ const LoginScreen = props => {
   const dispatch = useDispatch();
   return (
     <LinearGradient
-      colors={['#FC5C7D', '#6A82FB']}
+      colors={[colors.primary, colors.accent]}
       style={{...styles.rootView}}>
       <SafeAreaView style={styles.expandedCenterView}>
         <Animatable.View
@@ -51,14 +52,22 @@ const LoginScreen = props => {
             }}
             title={'Login'}
           />
-          <SelectionButton
+          {/* <SelectionButton
             title={'Sign me up !'}
             onPress={() => {
               props.navigation.navigate('PhoneAuthScreen');
             }}
-          />
-          <View style={{position:"absolute", top:"95%"}}>
-            <AppText style={{margin: verticalScale(5), color:"white"}}>New here? Sign me up</AppText>
+          /> */}
+          <View
+            style={{position: 'absolute', top: '95%', flexDirection: 'row'}}>
+            <Text style={{color: 'white'}}>New here? </Text>
+            <Text
+              style={{textDecorationLine: 'underline', color: 'white'}}
+              onPress={() => {
+                props.navigation.navigate('PhoneAuthScreen');
+              }}>
+              Sign Up
+            </Text>
           </View>
         </Animatable.View>
       </SafeAreaView>

@@ -28,6 +28,7 @@ import {
   updateCueCard,
 } from "../../store/actions/user";
 import styles from "../../styles";
+import colors from "../../constants/colors";
 
 const UserCueCardsScreen = ({ ...props }) => {
   const cueCards = useSelector((state) => state.user.cueCards);
@@ -200,7 +201,7 @@ const UserCueCardsScreen = ({ ...props }) => {
 
   return (
     <CustomSafeAreaView style={styles.rootView}>
-      <CustomHeader style={{ height: verticalScale(40) }}>
+      <CustomHeader style={{ backgroundColor:colors.accent }}>
         <TouchableOpacity
           onPress={() => {
             props.navigation.goBack();

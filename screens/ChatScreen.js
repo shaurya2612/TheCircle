@@ -46,7 +46,6 @@ import CueCardsScreen from './CueCardsScreen';
 import ReactNativeModal from 'react-native-modal';
 import {setUserIsTyping} from '../firebase/utils';
 import auth from '@react-native-firebase/auth';
-// import * as ImagePicker from "expo-image-picker";
 import ImageChatFooter from '../components/chat/ImageChatFooter';
 import {launchImageLibrary} from 'react-native-image-picker';
 
