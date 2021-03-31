@@ -22,6 +22,7 @@ import {
   clearSignupFormData,
   setSignupFormData,
 } from '../store/actions/signupForm';
+import auth from '@react-native-firebase/auth';
 import styles from '../styles';
 
 const PhoneAuthScreen = props => {
@@ -104,9 +105,9 @@ const PhoneAuthScreen = props => {
           <FormButton
             disabled={isButtonDisabled}
             title={'Continue'}
-            onPress={() => {
+            onPress={async () => {
               Keyboard.dismiss();
-              props.navigation.navigate('SignupNameScreen');
+              props.navigation.navigate('PhoneVerificationScreen');
             }}
           />
         </View>

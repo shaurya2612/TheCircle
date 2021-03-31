@@ -52,7 +52,7 @@ export const signupUser = () => {
       const db = database();
 
       //Setting array for tokens (notifications)
-      //having null instead of array throws error in update 
+      //having null instead of array throws error in update
       await firestore().collection('tokens').doc(uid).set({tokens: []});
 
       if (!isUsernameValid(username))
@@ -70,7 +70,7 @@ export const signupUser = () => {
       await db.ref('/users').child(uid).set({
         name,
         bd: bdInInt,
-        phone: phoneNumber,
+        phone: '+91' + phoneNumber,
       });
 
       // object in usernames

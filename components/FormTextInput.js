@@ -22,7 +22,6 @@ const FormTextInput = props => {
               setIsSelected(false);
             }
       }
-      selectionColor={'black'}
       style={
         isSelected
           ? {
@@ -37,7 +36,6 @@ const FormTextInput = props => {
       selectionColor={props.selectionColor ?? 'black'}
       onChangeText={props.onChangeText}
       placeholderTextColor={'#cccccc'}
-      ref={props.ref ?? null}
     />
   );
 };
