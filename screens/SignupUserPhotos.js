@@ -23,6 +23,7 @@ import ProgressLine from '../components/ProgressLine';
 import SignupUserPhotoGrid from '../components/SignupUserPhotoGrid';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../constants/colors';
+import CustomSafeAreaView from '../components/CustomSafeAreaView';
 
 const SignupUserPhotos = props => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
@@ -41,10 +42,10 @@ const SignupUserPhotos = props => {
   }, [signupUserPhotos]);
 
   return (
-    <SafeAreaView style={styles.rootView}>
-      <LinearGradient
-        colors={[colors.primary, colors.accent]}
-        style={styles.rootView}>
+    <LinearGradient
+      colors={[colors.primary, colors.accent]}
+      style={styles.rootView}>
+      <CustomSafeAreaView style={styles.rootView}>
         <ProgressLine
           style={{
             width: '100%',
@@ -78,8 +79,8 @@ const SignupUserPhotos = props => {
           />
         </View>
         <Spacer height={80} />
-      </LinearGradient>
-    </SafeAreaView>
+      </CustomSafeAreaView>
+    </LinearGradient>
   );
 };
 
