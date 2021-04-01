@@ -22,9 +22,6 @@ import FormButton from '../components/FormButton';
 import Spacer from '../components/Spacer';
 
 const PhoneVerificationScreen = props => {
-  const [verificationState, setVerificationState] = useState(null);
-  const [correctCode, setCorrectCode] = useState(null);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const textInputRef1 = useRef();
   const textInputRef2 = useRef();
   const textInputRef3 = useRef();
@@ -41,38 +38,28 @@ const PhoneVerificationScreen = props => {
   const {phoneNumber} = useSelector(state => state.signupForm);
   const dispatch = useDispatch();
 
-  const listenForVerificationState = async () => {
-    let confirm = await auth()
-      .verifyPhoneNumber('+91' + phoneNumber)
-      .on('state_changed', phoneAuthSnapshot => {
-        if (phoneAuthSnapshot.state === 'error') {
-          dispatch(setErrorMessage(phoneAuthSnapshot.error.message));
-          props.navigation.navigate('PhoneAuthScreen');
-        }
-        setVerificationState(phoneAuthSnapshot.state);
-      });
-    setCorrectCode(confirm.code);
-  };
-
-  const confirmCode = () => {
+  async function signInWithPhoneNumber() {
     try {
-      const verificationCodeString =
-        Object.values(verificationCode).join('').length !== 6;
-      if (verificationCodeString === correctCode) return true;
-      else return false;
-    } catch (error) {
-      dispatch(setErrorMessage('Invalid code.'));
+      const confirmation = await auth().signInWithPhoneNumber(
+        '+91' + phoneNumber,
+      );
+      setConfirm(confirmation);
+    } catch (err) {
+      dispatch(setErrorMessage(err.message));
     }
-  };
+  }
+
+  async function confirmCode() {
+    try {
+      await confirm.confirm(code);
+    } catch (error) {
+      dispatch(setErrorMessage('Invalid Code.'))
+    }
+  }
 
   useEffect(() => {
-    listenForVerificationState();
+    signInWithPhoneNumber();
   }, []);
-
-  useEffect(() => {
-    if (verificationState === 'verified')
-      props.navigation.navigate('SignupNameScreen');
-  }, [verificationState]);
 
   return (
     <TouchableWithoutFeedback
@@ -82,13 +69,6 @@ const PhoneVerificationScreen = props => {
       style={styles.rootView}>
       <SafeAreaView
         style={{...styles.rootView, backgroundColor: colors.primary}}>
-        <ProgressLine
-          style={{
-            width: '14.3%',
-            backgroundColor: 'white',
-            height: verticalScale(5),
-          }}
-        />
         <StackHeader backIconColor={'white'} navigation={props.navigation} />
         <View style={styles.expandedCenterView}>
           <View style={styles.titleView}>
@@ -226,11 +206,9 @@ const PhoneVerificationScreen = props => {
           <FormButton
             disabled={Object.values(verificationCode).join('').length !== 6}
             title={'Continue'}
-            onPress={() => {
+            onPress={async () => {
               Keyboard.dismiss();
-              const isCorrectCode = confirmCode();
-              if (isCorrectCode) props.navigation.navigate('SignupNameScreen');
-              else dispatch()              
+              await confirmCode()
             }}
           />
         </View>

@@ -23,19 +23,20 @@ const AuthStack = () => {
       headerMode="none"
       // initialRouteName={"SignupUserPhotos"}
     >
-      <AuthStackNavigator.Screen name="LoginScreen" component={LoginScreen} />
-      <AuthStackNavigator.Screen
+      {/* <AuthStackNavigator.Screen name="LoginScreen" component={LoginScreen} /> */}
+      {/* <AuthStackNavigator.Screen
         name="PhoneAuthScreen"
         component={PhoneAuthScreen}
         options={TransitionPresets.ModalSlideFromBottomIOS}
-      />
-      <AuthStackNavigator.Screen
+      /> */}
+      {/* <AuthStackNavigator.Screen
         name="PhoneVerificationScreen"
         component={PhoneVerificationScreen}
-      />
+      /> */}
       <AuthStackNavigator.Screen
         name="SignupNameScreen"
         component={SignupNameScreen}
+        options={TransitionPresets.ModalSlideFromBottomIOS}
       />
       <AuthStackNavigator.Screen
         name="SignupAgeScreen"

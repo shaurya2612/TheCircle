@@ -53,13 +53,6 @@ const PhoneAuthScreen = props => {
       style={styles.rootView}>
       <SafeAreaView
         style={{...styles.rootView, backgroundColor: colors.primary}}>
-        <ProgressLine
-          style={{
-            width: '14.3%',
-            backgroundColor: 'white',
-            height: verticalScale(5),
-          }}
-        />
         <CustomHeader>
           <Icon
             name={'x'}

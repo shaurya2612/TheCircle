@@ -13,6 +13,7 @@ import {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../constants/colors';
+import StartMatchingButton from '../components/StartMatchingButton'
 
 const LoginScreen = props => {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -22,7 +23,7 @@ const LoginScreen = props => {
     <LinearGradient
       colors={[colors.primary, colors.accent]}
       style={{...styles.rootView}}>
-      <SafeAreaView style={styles.expandedCenterView}>
+      <SafeAreaView style={styles.rootView}>
         <Animatable.View
           style={{...styles.expandedCenterView, width: '100%'}}
           animation={'slideInUp'}>
@@ -46,11 +47,11 @@ const LoginScreen = props => {
             style={{marginBottom: verticalScale(30)}}
             placeholder="Password"
           />
-          <FormButton
+          <StartMatchingButton
             onPress={() => {
-              dispatch(loginUser(phoneNumber, password));
+              props.navigation.navigate('PhoneAuthScreen')
             }}
-            title={'Login'}
+            title={'Sign In via Phone'}
           />
           {/* <SelectionButton
             title={'Sign me up !'}
@@ -60,13 +61,13 @@ const LoginScreen = props => {
           /> */}
           <View
             style={{position: 'absolute', top: '95%', flexDirection: 'row'}}>
-            <Text style={{color: 'white'}}>New here? </Text>
+            <Text style={{color: 'white'}}>Take a look at our </Text>
             <Text
               style={{textDecorationLine: 'underline', color: 'white'}}
               onPress={() => {
                 props.navigation.navigate('PhoneAuthScreen');
               }}>
-              Sign Up
+              Privacy Policy
             </Text>
           </View>
         </Animatable.View>

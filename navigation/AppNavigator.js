@@ -16,6 +16,7 @@ import {
 } from "../store/actions/user";
 import { stopAppLoading } from "../store/actions/loading";
 import auth from '@react-native-firebase/auth';
+import { PhoneAuthStack } from "./PhoneAuthStack";
 
 const AppNavigator = () => {
   const userState = useSelector((state) => state.user);
@@ -58,7 +59,7 @@ const AppNavigator = () => {
         <ErrorScreen />
       </ReactNativeModal>
 
-      {isAuthenticated ? <MainAppBottomTab /> : <AuthStack />}
+      {isAuthenticated ? <MainAppBottomTab /> : <PhoneAuthStack />}
     </View>
   );
 };
