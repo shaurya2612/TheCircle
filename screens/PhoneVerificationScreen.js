@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Keyboard,
   Text,
@@ -23,9 +23,21 @@ import Spacer from '../components/Spacer';
 
 const PhoneVerificationScreen = props => {
   const [verificationState, setVerificationState] = useState(null);
-  const [confirm, setConfirm] = useState(null);
+  const [correctCode, setCorrectCode] = useState(null);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-
+  const textInputRef1 = useRef();
+  const textInputRef2 = useRef();
+  const textInputRef3 = useRef();
+  const textInputRef4 = useRef();
+  const textInputRef5 = useRef();
+  const [verificationCode, setVerificationCode] = useState({
+    0: null,
+    1: null,
+    2: null,
+    3: null,
+    4: null,
+    5: null,
+  });
   const {phoneNumber} = useSelector(state => state.signupForm);
   const dispatch = useDispatch();
 
@@ -35,14 +47,26 @@ const PhoneVerificationScreen = props => {
       .on('state_changed', phoneAuthSnapshot => {
         if (phoneAuthSnapshot.state === 'error') {
           dispatch(setErrorMessage(phoneAuthSnapshot.error.message));
+          props.navigation.navigate('PhoneAuthScreen');
         }
         setVerificationState(phoneAuthSnapshot.state);
       });
-    setConfirm(confirm);
+    setCorrectCode(confirm.code);
+  };
+
+  const confirmCode = () => {
+    try {
+      const verificationCodeString =
+        Object.values(verificationCode).join('').length !== 6;
+      if (verificationCodeString === correctCode) return true;
+      else return false;
+    } catch (error) {
+      dispatch(setErrorMessage('Invalid code.'));
+    }
   };
 
   useEffect(() => {
-    // listenForVerificationState();
+    listenForVerificationState();
   }, []);
 
   useEffect(() => {
@@ -90,8 +114,16 @@ const PhoneVerificationScreen = props => {
               }}
               selectionColor={'white'}
               keyboardType={'number-pad'}
+              maxLength={1}
+              onChangeText={text => {
+                setVerificationCode({...verificationCode, 0: text});
+                if (text.length === 1) {
+                  textInputRef1.current.focus();
+                }
+              }}
             />
             <TextInput
+              ref={textInputRef1}
               style={{
                 ...styles.selectedFormTextInput,
                 borderColor: 'white',
@@ -102,8 +134,16 @@ const PhoneVerificationScreen = props => {
               }}
               selectionColor={'white'}
               keyboardType={'number-pad'}
+              maxLength={1}
+              onChangeText={text => {
+                setVerificationCode({...verificationCode, 1: text});
+                if (text.length === 1) {
+                  textInputRef2.current.focus();
+                }
+              }}
             />
             <TextInput
+              ref={textInputRef2}
               style={{
                 ...styles.selectedFormTextInput,
                 borderColor: 'white',
@@ -114,8 +154,16 @@ const PhoneVerificationScreen = props => {
               }}
               selectionColor={'white'}
               keyboardType={'number-pad'}
+              maxLength={1}
+              onChangeText={text => {
+                setVerificationCode({...verificationCode, 2: text});
+                if (text.length === 1) {
+                  textInputRef3.current.focus();
+                }
+              }}
             />
             <TextInput
+              ref={textInputRef3}
               style={{
                 ...styles.selectedFormTextInput,
                 borderColor: 'white',
@@ -126,8 +174,16 @@ const PhoneVerificationScreen = props => {
               }}
               selectionColor={'white'}
               keyboardType={'number-pad'}
+              maxLength={1}
+              onChangeText={text => {
+                setVerificationCode({...verificationCode, 3: text});
+                if (text.length === 1) {
+                  textInputRef4.current.focus();
+                }
+              }}
             />
             <TextInput
+              ref={textInputRef4}
               style={{
                 ...styles.selectedFormTextInput,
                 borderColor: 'white',
@@ -138,8 +194,16 @@ const PhoneVerificationScreen = props => {
               }}
               selectionColor={'white'}
               keyboardType={'number-pad'}
+              maxLength={1}
+              onChangeText={text => {
+                setVerificationCode({...verificationCode, 4: text});
+                if (text.length === 1) {
+                  textInputRef5.current.focus();
+                }
+              }}
             />
             <TextInput
+              ref={textInputRef5}
               style={{
                 ...styles.selectedFormTextInput,
                 borderColor: 'white',
@@ -150,17 +214,23 @@ const PhoneVerificationScreen = props => {
               }}
               selectionColor={'white'}
               keyboardType={'number-pad'}
+              maxLength={1}
+              onChangeText={text => {
+                setVerificationCode({...verificationCode, 5: text});
+              }}
             />
           </View>
         </View>
 
         <View style={styles.formButtonView}>
           <FormButton
-            disabled={isButtonDisabled}
+            disabled={Object.values(verificationCode).join('').length !== 6}
             title={'Continue'}
-            onPress={async () => {
+            onPress={() => {
               Keyboard.dismiss();
-              props.navigation.navigate('SignupNameScreen');
+              const isCorrectCode = confirmCode();
+              if (isCorrectCode) props.navigation.navigate('SignupNameScreen');
+              else dispatch()              
             }}
           />
         </View>
