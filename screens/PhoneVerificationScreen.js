@@ -27,6 +27,7 @@ const PhoneVerificationScreen = props => {
   const textInputRef3 = useRef();
   const textInputRef4 = useRef();
   const textInputRef5 = useRef();
+  const [confirm, setConfirm] = useState(null);
   const [verificationCode, setVerificationCode] = useState({
     0: null,
     1: null,
@@ -53,7 +54,7 @@ const PhoneVerificationScreen = props => {
     try {
       await confirm.confirm(code);
     } catch (error) {
-      dispatch(setErrorMessage('Invalid Code.'))
+      dispatch(setErrorMessage('Invalid Code.'));
     }
   }
 
@@ -208,7 +209,7 @@ const PhoneVerificationScreen = props => {
             title={'Continue'}
             onPress={async () => {
               Keyboard.dismiss();
-              await confirmCode()
+              await confirmCode();
             }}
           />
         </View>

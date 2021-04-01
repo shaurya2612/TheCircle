@@ -57,7 +57,7 @@ const SignupNameScreen = props => {
           height: verticalScale(5),
         }}
       />
-      <StackHeader backIconColor={'white'} navigation={props.navigation} />
+      <View style={{height: verticalScale(50)}} />
 
       <View style={styles.expandedCenterView}>
         <View style={styles.titleView}>
