@@ -54,7 +54,7 @@ const PhoneVerificationScreen = props => {
     try {
       await confirm.confirm(code);
     } catch (error) {
-      dispatch(setErrorMessage('Invalid Code.'));
+      dispatch(setErrorMessage(error.message));
     }
   }
 

@@ -38,7 +38,7 @@ export const signupUser = () => {
       interestedIn,
       nonBinary,
     } = getState().signupForm;
-
+    const userState = getState().user;
     try {
       //Firebase auth state will change
 
@@ -83,6 +83,7 @@ export const signupUser = () => {
       await db.ref('/matchingStatus').child(uid).set(0);
 
       dispatch(clearSignupFormData());
+      dispatch(setUserState({...userState, isProfileCompleted: true}));
     } catch (err) {
       dispatch(setErrorMessage(err.message));
       const uid = auth()?.currentUser?.uid;

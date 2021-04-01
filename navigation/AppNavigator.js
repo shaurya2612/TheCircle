@@ -14,7 +14,7 @@ import {
   fetchUserData,
   setUserState,
 } from '../store/actions/user';
-import {stopAppLoading} from '../store/actions/loading';
+import {startAppLoading, stopAppLoading} from '../store/actions/loading';
 import auth from '@react-native-firebase/auth';
 import {PhoneAuthStack} from './PhoneAuthStack';
 import database from '@react-native-firebase/database';
@@ -31,6 +31,7 @@ const AppNavigator = () => {
   useEffect(() => {
     auth().onAuthStateChanged(async user => {
       if (user) {
+        dispatch(startAppLoading());
         dispatch(setUserState({...userState, isAuthenticated: true}));
         const name = await database()
           .ref('/users/' + user.uid)
@@ -39,6 +40,7 @@ const AppNavigator = () => {
         if (name.exists()) {
           dispatch(setUserState({...userState, isProfileCompleted: true}));
         }
+        dispatch(startAppLoading());
       } else dispatch(clearUserState());
       if (initialAppLoading) {
         //turn off loading which is on as soon as app is opened

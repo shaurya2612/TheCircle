@@ -122,7 +122,7 @@ const SignupUsernameScreen = props => {
           disabled={isButtonDisabled || fetchingUsername}
           onPress={() => {
             Keyboard.dismiss();
-            props.navigation.navigate('SignupPasswordScreen');
+            props.navigation.navigate('SignupGenderScreen');
           }}
         />
       </View>

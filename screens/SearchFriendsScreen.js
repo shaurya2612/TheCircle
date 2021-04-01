@@ -187,7 +187,6 @@ const SearchFriendsScreen = () => {
         }}
         placeholder="Name or username"
       />
-
       <View
         style={{
           width: '100%',

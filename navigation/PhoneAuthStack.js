@@ -10,9 +10,7 @@ const PhoneAuthStackNavigator = createStackNavigator();
 
 export const PhoneAuthStack = () => {
   return (
-    <PhoneAuthStackNavigator.Navigator
-      headerMode="none"
-      initialRouteName="LoginScreen">
+    <PhoneAuthStackNavigator.Navigator headerMode="none">
       <PhoneAuthStackNavigator.Screen
         name="LoginScreen"
         component={LoginScreen}
