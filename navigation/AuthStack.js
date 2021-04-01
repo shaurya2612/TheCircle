@@ -7,7 +7,6 @@ import PhoneAuthScreen from '../screens/PhoneAuthScreen';
 import SignupNameScreen from '../screens/SignupNameScreen';
 import SignupAgeScreen from '../screens/SignupAgeScreen';
 import SignupUsernameScreen from '../screens/SignupUsernameScreen';
-import SignupPasswordScreen from '../screens/SignupPasswordScreen';
 import SignupGenderScreen from '../screens/SignupGenderScreen';
 import SignupUserPhotos from '../screens/SignupUserPhotos';
 import SignupInterestedInScreen from '../screens/SignupInterestedInScreen';
@@ -20,19 +19,7 @@ const AuthStack = () => {
   return (
     <AuthStackNavigator.Navigator
       screenOptions={TransitionPresets.SlideFromRightIOS}
-      headerMode="none"
-      // initialRouteName={"SignupUserPhotos"}
-    >
-      {/* <AuthStackNavigator.Screen name="LoginScreen" component={LoginScreen} /> */}
-      {/* <AuthStackNavigator.Screen
-        name="PhoneAuthScreen"
-        component={PhoneAuthScreen}
-        options={TransitionPresets.ModalSlideFromBottomIOS}
-      /> */}
-      {/* <AuthStackNavigator.Screen
-        name="PhoneVerificationScreen"
-        component={PhoneVerificationScreen}
-      /> */}
+      headerMode="none">
       <AuthStackNavigator.Screen
         name="SignupNameScreen"
         component={SignupNameScreen}
@@ -45,10 +32,6 @@ const AuthStack = () => {
       <AuthStackNavigator.Screen
         name="SignupUsernameScreen"
         component={SignupUsernameScreen}
-      />
-      <AuthStackNavigator.Screen
-        name="SignupPasswordScreen"
-        component={SignupPasswordScreen}
       />
       <AuthStackNavigator.Screen
         name="SignupGenderScreen"

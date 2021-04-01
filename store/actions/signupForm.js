@@ -40,12 +40,6 @@ export const signupUser = () => {
     } = getState().signupForm;
 
     try {
-      //Create user
-      await auth().createUserWithEmailAndPassword(
-        phoneNumber + '@theCircle.com',
-        password,
-      );
-
       //Firebase auth state will change
 
       const {uid} = auth().currentUser;
@@ -70,7 +64,6 @@ export const signupUser = () => {
       await db.ref('/users').child(uid).set({
         name,
         bd: bdInInt,
-        phone: '+91' + phoneNumber,
       });
 
       // object in usernames
