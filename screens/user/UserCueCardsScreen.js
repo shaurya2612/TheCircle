@@ -201,7 +201,7 @@ const UserCueCardsScreen = ({ ...props }) => {
 
   return (
     <CustomSafeAreaView style={styles.rootView}>
-      <CustomHeader style={{ backgroundColor:colors.accent }}>
+      <CustomHeader style={{ backgroundColor:'white' }}>
         <TouchableOpacity
           onPress={() => {
             props.navigation.goBack();

@@ -24,7 +24,6 @@ import {EditInfoBar} from '../../components/EditInfoBar';
 import EditUserPhotoGrid from '../../components/EditUserPhotoGrid';
 import NameText from '../../components/NameText';
 import colors from '../../constants/colors';
-import {startAppLoading, stopAppLoading} from '../../store/actions/loading';
 import {
   fetchUserPhotos,
   fetchUserProfile,

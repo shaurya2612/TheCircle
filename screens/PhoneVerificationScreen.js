@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
+  ActivityIndicator,
   Keyboard,
   Text,
   TextInput,
@@ -28,6 +29,7 @@ const PhoneVerificationScreen = props => {
   const textInputRef4 = useRef();
   const textInputRef5 = useRef();
   const [confirm, setConfirm] = useState(null);
+  const [codeSent, setCodeSent] = useState(false);
   const [verificationCode, setVerificationCode] = useState({
     0: null,
     1: null,
@@ -41,19 +43,25 @@ const PhoneVerificationScreen = props => {
 
   async function signInWithPhoneNumber() {
     try {
+      setCodeSent(false);
       const confirmation = await auth().signInWithPhoneNumber(
         '+91' + phoneNumber,
       );
       setConfirm(confirmation);
+      setCodeSent(true);
     } catch (err) {
       dispatch(setErrorMessage(err.message));
+      props.navigation.navigate('PhoneAuthScreen');
     }
   }
 
   async function confirmCode() {
     try {
+      const code = Object.values(verificationCode).join('');
+      console.warn(code);
       await confirm.confirm(code);
     } catch (error) {
+      console.warn('os');
       dispatch(setErrorMessage(error.message));
     }
   }
@@ -61,6 +69,15 @@ const PhoneVerificationScreen = props => {
   useEffect(() => {
     signInWithPhoneNumber();
   }, []);
+
+  if (!codeSent)
+    return (
+      <CustomSafeAreaView
+        style={{...styles.expandedCenterView, backgroundColor: 'white'}}>
+        <ActivityIndicator size="large" color={colors.primary} />
+        <AppText>Sending a code to {'+91' + phoneNumber}</AppText>
+      </CustomSafeAreaView>
+    );
 
   return (
     <TouchableWithoutFeedback

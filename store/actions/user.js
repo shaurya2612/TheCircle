@@ -523,22 +523,6 @@ export const fetchMatchProfile = matchId => {
   };
 };
 
-export const loginUser = (phoneNumber, password) => {
-  return async dispatch => {
-    dispatch(startAppLoading());
-    try {
-      await auth()
-        .signInWithEmailAndPassword(`${phoneNumber}@theCircle.com`, password)
-        .catch(err => {
-          throw {message: 'Invalid Credentials'};
-        });
-    } catch (err) {
-      dispatch(setErrorMessage('Invalid Credentials'));
-    }
-    dispatch(stopAppLoading());
-  };
-};
-
 export const logoutUser = () => {
   return async (dispatch, getState) => {
     const matchingState = getState().matching;

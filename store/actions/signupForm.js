@@ -62,7 +62,7 @@ export const signupUser = () => {
         `${birthDate.mm}/${birthDate.dd}/${birthDate.yyyy}`,
       ).getTime();
       await db.ref('/users').child(uid).set({
-        name,
+        name: name.trim(),
         bd: bdInInt,
       });
 
