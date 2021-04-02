@@ -22,6 +22,7 @@ import database from '@react-native-firebase/database';
 const AppNavigator = () => {
   const userState = useSelector(state => state.user);
   const {isAuthenticated, isProfileCompleted} = userState;
+  const [initialAppLoading, setInitialAppLoading] = useState(true);
   const loadingState = useSelector(state => state.loading);
   const {appLoading} = loadingState;
   const {errorMessage} = useSelector(state => state.error);
@@ -39,8 +40,8 @@ const AppNavigator = () => {
   useEffect(() => {
     //Check whether user profile is completed or not
     const fn = async () => {
+      dispatch(startAppLoading());
       if (isAuthenticated) {
-        dispatch(startAppLoading());
         const name = await database()
           .ref('/users/' + auth().currentUser.uid)
           .child('name')
@@ -48,11 +49,14 @@ const AppNavigator = () => {
         if (name.exists())
           dispatch(setUserState({...userState, isProfileCompleted: true}));
         else dispatch(setUserState({...userState, isProfileCompleted: false}));
-        dispatch(stopAppLoading());
       }
+      if (initialAppLoading) setInitialAppLoading(false);
+      dispatch(stopAppLoading());
     };
     fn();
   }, [isAuthenticated]);
+
+  if (initialAppLoading) return <LoadingScreen />;
 
   return (
     <View style={styles.rootView}>
