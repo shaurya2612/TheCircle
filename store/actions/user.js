@@ -542,7 +542,7 @@ export const logoutUser = () => {
 
       await auth().signOut();
 
-      //detach all possible listeners
+      //detach all possible matching status listeners
       db.ref('/matchingStatus').child(uid).off();
 
       //Stop chat room listeners
@@ -551,11 +551,17 @@ export const logoutUser = () => {
         db.ref('/matchingStatus').child(FOF.id).off();
       }
 
+      //Stop listening for user's presence
+      db.ref('.info/connected').off();
+
       //Stop listening to requests
       db.ref('/requests').child(uid).off();
 
       //Stop listening to friends
       db.ref('/friends').child(uid).off();
+
+      //Stop listening for matches
+      db.ref('/matches').child(uid).off();
 
       dispatch({type: CLEAR_REDUX_STATE});
     } catch (err) {

@@ -8,50 +8,30 @@ import FormTextInput from '../components/FormTextInput';
 import SelectionButton from '../components/SelectionButton';
 import * as Animatable from 'react-native-animatable';
 import styles from '../styles';
-import {loginUser} from '../store/actions/user';
-import {useState} from 'react';
-import {useDispatch} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../constants/colors';
-import StartMatchingButton from '../components/StartMatchingButton'
+import StartMatchingButton from '../components/StartMatchingButton';
 
 const LoginScreen = props => {
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [password, setPassword] = useState('');
-  const dispatch = useDispatch();
   return (
     <LinearGradient
       colors={[colors.primary, colors.accent]}
-      style={{...styles.rootView}}>
+      style={styles.rootView}>
       <SafeAreaView style={styles.rootView}>
         <Animatable.View
-          style={{...styles.expandedCenterView, width: '100%'}}
+          style={styles.expandedCenterView}
           animation={'slideInUp'}>
-          <View style={styles.titleView}>
+          <View style={{justifyContent: 'center'}}>
             <AppText style={{...styles.titleText, color: 'white'}}>
-              Login
+              The Circle
             </AppText>
           </View>
-          <FormTextInput
-            keyboardType={'number-pad'}
-            onChangeText={text => {
-              setPhoneNumber(text);
-            }}
-            placeholder="Mobile Number"
-          />
-          <FormTextInput
-            onChangeText={text => {
-              setPassword(text);
-            }}
-            secureTextEntry={true}
-            style={{marginBottom: verticalScale(30)}}
-            placeholder="Password"
-          />
+          <View style={{height: '20%'}} />
           <StartMatchingButton
             onPress={() => {
-              props.navigation.navigate('PhoneAuthScreen')
+              props.navigation.navigate('PhoneAuthScreen');
             }}
-            title={'Sign In via Phone'}
+            title={'Sign in via phone'}
           />
           {/* <SelectionButton
             title={'Sign me up !'}
