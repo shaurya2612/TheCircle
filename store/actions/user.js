@@ -547,10 +547,29 @@ export const logoutUser = () => {
 
       //Stop chat room listeners
       if (matchingState.FOF !== null) {
+        let FOF = matchingState.FOF;
+
         db.ref('/chatRooms').child(FOF.id).off();
         db.ref('/matchingStatus').child(FOF.id).off();
+        const refString =
+          uid < FOF.id ? uid + '@' + FOF.id : FOF.id + '@' + uid;
+        db.ref('/messages').child(refString).off();
+        db.ref('/isOnline').child(FOF.id).off();
+        db.ref('/isTyping').child(FOF.id).off();
       }
 
+      //Stop match chat listeners
+      const chatState = getState().chat;
+      const {match} = chatState;
+
+      if (match) {
+        const refString =
+          uid < match.id ? uid + '@' + match.id : match.id + '@' + uid;
+        db.ref('/messages').child(refString).off();
+        db.ref('/isOnline').child(match.id).off();
+        db.ref('/isTyping').child(refString).child(match.id).off();
+      }
+      
       //Stop listening for user's presence
       db.ref('.info/connected').off();
 

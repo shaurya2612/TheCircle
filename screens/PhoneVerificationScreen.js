@@ -75,7 +75,9 @@ const PhoneVerificationScreen = props => {
       <CustomSafeAreaView
         style={{...styles.expandedCenterView, backgroundColor: 'white'}}>
         <ActivityIndicator size="large" color={colors.primary} />
-        <AppText>Sending a code to {'+91' + phoneNumber}</AppText>
+        <View style={{position: 'absolute', top: "60%"}}>
+          <AppText style={styles.nameText}>Sending a code to {'+91' + phoneNumber}</AppText>
+        </View>
       </CustomSafeAreaView>
     );
 

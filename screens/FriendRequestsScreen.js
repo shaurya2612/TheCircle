@@ -31,6 +31,19 @@ const FriendRequestsScreen = () => {
         {(requests || []).length > 0 ? (
           <FlatList
             data={requests || []}
+            ListHeaderComponent={() => {
+              return (
+                <View
+                  style={{
+                    paddingHorizontal: scale(10),
+                    backgroundColor: 'white',
+                    marginBottom: scale(50),
+                    marginTop: verticalScale(10),
+                  }}>
+                  <AppText style={styles.titleText}>Requests</AppText>
+                </View>
+              );
+            }}
             renderItem={({item}) => (
               <View
                 style={{
