@@ -1,5 +1,8 @@
 import {
+  declineRequest,
   fetchNameAgeUsernameDpById,
+  unfriend,
+  unmatch,
   uploadUserPhotos,
 } from '../../firebase/utils';
 import {bdToAge, CLEAR_REDUX_STATE} from '../../utils';
@@ -10,6 +13,8 @@ import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import messaging from '@react-native-firebase/messaging';
+import {skipThisFOF} from './matching';
+import {Alert} from 'react-native';
 
 export const SET_USER_STATE = 'SET_USER_STATE';
 export const CLEAR_USER_STATE = 'CLEAR_USER_STATE';
@@ -73,6 +78,10 @@ export const fetchUser = () => {
         db.ref('/genders').child(uid).once('value'),
         db.ref('/interestedIn').child(uid).once('value'),
       ]);
+      if (!userObjSnapshot.exists()) {
+        dispatch(logoutUser());
+        dispatch(setErrorMessage('An error has occured'));
+      }
       const obj = {
         ...userObjSnapshot.val(),
         gender: genderSnapshot.val(),
@@ -329,11 +338,41 @@ export const listenForRequests = () => {
     const dbQuery = dbRef.orderByValue();
     dbQuery.on('child_added', async snapshot => {
       if (!snapshot.exists()) return;
-      let obj = await fetchNameAgeUsernameDpById(snapshot.key);
-      console.log(obj);
+      const name = await db
+        .ref('/users')
+        .child(snapshot.key)
+        .child('name')
+        .once('value');
+      if (!name.exists()) {
+        declineRequest(snapshot.key);
+        return;
+      }
+
+      const [bd, username, dp] = await Promise.all([
+        db.ref('/users').child(snapshot.key).child('bd').once('value'),
+        db
+          .ref('/usernames')
+          .orderByValue()
+          .equalTo(snapshot.key)
+          .limitToFirst(1)
+          .once('value'),
+        storage()
+          .ref('/profiles')
+          .child(snapshot.key)
+          .child('0')
+          .getDownloadURL(),
+      ]);
+      let obj = {
+        id: snapshot.key,
+        name: name.val(),
+        age: bdToAge(bd.val()),
+        username: Object.keys(username.val())[0],
+        dp,
+        createdAt: snapshot.val(),
+      };
       dispatch({
         type: ADD_REQUEST,
-        payload: {...obj, createdAt: snapshot.val()},
+        payload: obj,
       });
     });
     dbQuery.on('child_removed', snapshot => {
@@ -479,6 +518,10 @@ export const acceptRequest = friendId => {
     const db = database();
 
     const gender = await db.ref('/genders').child(friendId).once('value');
+    if (!gender.exists()) {
+      //User is deleted
+      return;
+    }
     db.ref('/friends').child(uid).child(friendId).set(gender.val());
 
     //add user in the friends list of accepted friend
@@ -569,7 +612,7 @@ export const logoutUser = () => {
         db.ref('/isOnline').child(match.id).off();
         db.ref('/isTyping').child(refString).child(match.id).off();
       }
-      
+
       //Stop listening for user's presence
       db.ref('.info/connected').off();
 
@@ -587,5 +630,135 @@ export const logoutUser = () => {
       dispatch(setErrorMessage(err));
     }
     dispatch(stopAppLoading());
+  };
+};
+
+export const deleteUser = () => {
+  return async (dispatch, getState) => {
+    const matchingState = getState().matching;
+    dispatch(startAppLoading());
+    try {
+      const db = database();
+      const uid = auth().currentUser.uid;
+      const existingToken = await messaging().getToken();
+
+      //deleting fcm token
+      await firestore()
+        .collection('tokens')
+        .doc(uid)
+        .update({
+          tokens: firestore.FieldValue.arrayRemove(existingToken),
+        });
+
+      // await auth().signOut();
+
+      //detach all possible matching status listeners
+      db.ref('/matchingStatus').child(uid).off();
+
+      //Stop chat room listeners
+      if (matchingState.FOF !== null) {
+        let FOF = matchingState.FOF;
+
+        db.ref('/chatRooms').child(FOF.id).off();
+        db.ref('/matchingStatus').child(FOF.id).off();
+        const refString =
+          uid < FOF.id ? uid + '@' + FOF.id : FOF.id + '@' + uid;
+        db.ref('/messages').child(refString).off();
+        db.ref('/isOnline').child(FOF.id).off();
+        db.ref('/isTyping').child(FOF.id).off();
+        dispatch(skipThisFOF());
+      }
+
+      //Stop match chat listeners
+      const chatState = getState().chat;
+      const {match} = chatState;
+
+      if (match) {
+        const refString =
+          uid < match.id ? uid + '@' + match.id : match.id + '@' + uid;
+        db.ref('/messages').child(refString).off();
+        db.ref('/isOnline').child(match.id).off();
+        db.ref('/isTyping').child(refString).child(match.id).off();
+      }
+
+      //Stop listening for user's presence
+      db.ref('.info/connected').off();
+
+      //Stop listening to requests
+      db.ref('/requests').child(uid).off();
+
+      //Stop listening to friends
+      db.ref('/friends').child(uid).off();
+
+      //Stop listening for matches
+      db.ref('/matches').child(uid).off();
+
+      //delete main nodes
+      db.ref('/users').child(uid).remove();
+      db.ref('/genders').child(uid).remove();
+      db.ref('/interestedIn').child(uid).remove();
+      db.ref('/profiles').child(uid).remove();
+      db.ref('/isOnline').child(uid).remove();
+      let username = await db
+        .ref('/usernames')
+        .orderByValue()
+        .equalTo(uid)
+        .once('value');
+      username = Object.keys(username.val())[0];
+      db.ref('/usernames').child(username).remove();
+      db.ref('/matchingStatus').child(uid).remove();
+      storage().ref(`/profiles`).child(uid).delete();
+
+      //delete requests
+      const requests = await db.ref('/requests').child(uid).once('value');
+      if (requests.exists()) {
+        const requestKeys = Object.keys(requests.val());
+        for (var i = 0; i < requestKeys.length; i++) {
+          try {
+            //reject request
+            declineRequest(requestKeys[i]);
+          } catch (err) {
+            //handled so loop doesn't break
+          }
+        }
+      }
+
+      //delete friends
+      const friends = await db.ref('/friends').child(uid).once('value');
+      if (friends.exists()) {
+        const friendKeys = Object.keys(friends.val());
+
+        for (var i = 0; i < friendKeys.length; i++) {
+          try {
+            //unfriend
+            unfriend(friendKeys[i]);
+          } catch (err) {
+            //handled so loop doesn't break
+          }
+        }
+      }
+
+      //delete matches
+      const matches = await db.ref('/matches').child(uid).once('value');
+      if (matches.exists()) {
+        const matchKeys = Object.keys(matches.val());
+        for (var i = 0; i < matchKeys.length; i++) {
+          try {
+            //unmatch
+            unmatch(matchKeys[i]);
+          } catch (err) {
+            //handled so loop doesn't break
+          }
+        }
+      }
+
+      await auth().signOut();
+
+      dispatch({type: CLEAR_REDUX_STATE});
+    } catch (err) {
+      dispatch(setErrorMessage(err));
+    }
+    dispatch(stopAppLoading());
+    Alert.alert('Your account was deleted');
   };
 };

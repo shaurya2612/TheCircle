@@ -219,7 +219,6 @@ export const unmatch = async unmatchId => {
   } catch (err) {
     //Prevent unhandled promise rejection
   }
-  await sendNotification(unmatchId, 'Jeez 😬', 'Someone just unmatched you');
 };
 
 export const setUserIsTyping = async (chatPartnerId, userIsTyping) => {

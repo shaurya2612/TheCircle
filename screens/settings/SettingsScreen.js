@@ -18,7 +18,7 @@ import FormButton from '../../components/FormButton';
 import OptionView from '../../components/OptionView';
 import SelectionButton from '../../components/SelectionButton';
 import StackHeader from '../../components/StackHeader';
-import {logoutUser} from '../../store/actions/user';
+import {deleteUser, logoutUser} from '../../store/actions/user';
 import styles from '../../styles';
 import ModalCardView from '../../components/ModalCardView';
 import {privacyPolicy, termsOfUse} from '../../constants/official';
@@ -149,7 +149,7 @@ const SettingsScreen = props => {
             }}
             fontStyle={{color: 'white'}}
             onPress={() => {
-              dispatch(logoutUser());
+              dispatch(deleteUser());
             }}
           />
           {/* <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
