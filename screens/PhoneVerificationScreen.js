@@ -75,8 +75,10 @@ const PhoneVerificationScreen = props => {
       <CustomSafeAreaView
         style={{...styles.expandedCenterView, backgroundColor: 'white'}}>
         <ActivityIndicator size="large" color={colors.primary} />
-        <View style={{position: 'absolute', top: "60%"}}>
-          <AppText style={styles.nameText}>Sending a code to {'+91' + phoneNumber}</AppText>
+        <View style={{position: 'absolute', top: '60%'}}>
+          <AppText style={styles.nameText}>
+            Sending a code to {'+91' + phoneNumber}
+          </AppText>
         </View>
       </CustomSafeAreaView>
     );
@@ -96,6 +98,16 @@ const PhoneVerificationScreen = props => {
               Enter the verification code sent to {`+91 ${phoneNumber}`}
             </AppText>
           </View>
+          <AppText style={{color: 'white', fontSize: scale(20)}}>
+            Did not receive a code?{' '}
+            <Text
+              style={{textDecorationLine: 'underline'}}
+              onPress={async () => {
+                await signInWithPhoneNumber();
+              }}>
+              Resend
+            </Text>
+          </AppText>
           <View
             style={{
               flexDirection: 'row',

@@ -175,6 +175,10 @@ const SettingsScreen = props => {
                     width: '90%',
                     ...styles.expandedCenterView,
                   }}>
+                  <AppText>
+                    Please enter the verification code sent to{' '}
+                    {auth().currentUser.phoneNumber}
+                  </AppText>
                   <View
                     style={{
                       flexDirection: 'row',
