@@ -707,7 +707,10 @@ export const deleteUser = () => {
       username = Object.keys(username.val())[0];
       db.ref('/usernames').child(username).remove();
       db.ref('/matchingStatus').child(uid).remove();
-      storage().ref(`/profiles`).child(uid).delete();
+      const storageList = await storage().ref(`/profiles`).child(uid).listAll();
+      storageList.items.forEach(item => {
+        item.delete();
+      });
 
       //delete requests
       const requests = await db.ref('/requests').child(uid).once('value');
@@ -752,7 +755,7 @@ export const deleteUser = () => {
         }
       }
 
-      await auth().signOut();
+      await auth().currentUser.delete();
 
       dispatch({type: CLEAR_REDUX_STATE});
     } catch (err) {
