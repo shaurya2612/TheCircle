@@ -145,15 +145,17 @@ const SettingsScreen = props => {
           isVisible={isVerificationCodeInputVisible}>
           <View style={styles.centerView}>
             <ModalCardView>
-              <View style={{height: scale(20), flexDirection: 'row-reverse'}}>
-                <Icon
-                  name={'x'}
-                  onPress={() => {
-                    setIsVerificationCodeInputVisible(false);
-                  }}
-                  size={scale(20)}
-                />
-              </View>
+              {!sendingCode ? (
+                <View style={{height: scale(20), flexDirection: 'row-reverse'}}>
+                  <Icon
+                    name={'x'}
+                    onPress={() => {
+                      setIsVerificationCodeInputVisible(false);
+                    }}
+                    size={scale(20)}
+                  />
+                </View>
+              ) : null}
               {sendingCode ? (
                 <View
                   style={{
