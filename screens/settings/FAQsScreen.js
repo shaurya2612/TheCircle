@@ -74,13 +74,13 @@ const FAQsScreen = props => {
                 paddingHorizontal: scale(10)
               }}>
               <View>
-                <Text
+                <AppText
                   style={{
                     fontSize: scale(18),
                     color: 'white',
                   }}>
                   {item.question}
-                </Text>
+                </AppText>
               </View>
             </View>
 
