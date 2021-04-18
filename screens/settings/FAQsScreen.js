@@ -1,5 +1,5 @@
 import React from 'react';
-import {FlatList, TouchableOpacity, View} from 'react-native';
+import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import {scale, verticalScale} from 'react-native-size-matters';
 import Icon from 'react-native-vector-icons/Feather';
 import AppText from '../../components/AppText';
@@ -71,17 +71,16 @@ const FAQsScreen = props => {
               style={{
                 backgroundColor: 'black',
                 paddingVertical: scale(20),
-                paddingHorizontal: scale(10),
+                paddingHorizontal: scale(10)
               }}>
               <View>
-                <AppText
+                <Text
                   style={{
                     fontSize: scale(18),
                     color: 'white',
-                    fontWeight: 'bold',
                   }}>
                   {item.question}
-                </AppText>
+                </Text>
               </View>
             </View>
 

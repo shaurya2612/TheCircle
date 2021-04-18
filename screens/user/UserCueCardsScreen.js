@@ -123,7 +123,7 @@ const UserCueCardsScreen = ({ ...props }) => {
                       style={{
                         fontSize: scale(18),
                         color: "white",
-                        fontWeight: "bold",
+                        // fontWeight: "bold",
                       }}
                     >
                       {questions[item.qid]}
@@ -300,7 +300,7 @@ const UserCueCardsScreen = ({ ...props }) => {
                   style={{
                     fontSize: scale(18),
                     color: "white",
-                    fontWeight: "bold",
+                    // fontWeight: "bold",
                   }}
                 >
                   {editingQuestion?.text}
@@ -477,7 +477,7 @@ const UserCueCardsScreen = ({ ...props }) => {
                       style={{
                         fontSize: scale(18),
                         color: "white",
-                        fontWeight: "bold",
+                        // fontWeight: "bold",
                       }}
                     >
                       {selectedQuestion?.text}

@@ -90,7 +90,7 @@ const CueCardsScreen = ({ matchMode, FOFMode, onPressX, ...props }) => {
                     style={{
                       fontSize: scale(18),
                       color: "white",
-                      fontWeight: "bold",
+                      // fontWeight: "bold",
                     }}
                   >
                     {questions[item.qid]}

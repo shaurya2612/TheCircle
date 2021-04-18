@@ -1,3 +1,4 @@
+// Do not repeat keys...
 export default {
   1: "Talk to me about",
   2: "My worst fear is",
