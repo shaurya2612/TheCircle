@@ -99,7 +99,7 @@ const EditProfileScreen = props => {
 
     //About has been changed
     if (about !== comparisonText) {
-      dispatch(updateAbout(about));
+      dispatch(updateAbout(about.trim()));
     }
     /////////////////////////////////////
 
@@ -160,7 +160,7 @@ const EditProfileScreen = props => {
                   backgroundColor: 'white',
                   marginHorizontal: scale(10),
                   borderRadius: scale(20),
-                  padding: scale(10),
+                  paddingHorizontal: scale(10),
                   marginBottom: verticalScale(50),
                 }}>
                 <TextInput

@@ -82,9 +82,9 @@ const UserScreen = props => {
             <Icon
               style={{marginHorizontal: scale(5)}}
               onPress={() => {
-                setIsProfileVisible(true);
+                props.navigation.navigate('EditProfileScreen');
               }}
-              name="eye"
+              name="edit"
               size={scale(25)}
             />
           </View>
@@ -92,7 +92,7 @@ const UserScreen = props => {
         <View style={styles.expandedCenterView}>
           <TouchableOpacity
             onPress={() => {
-              props.navigation.navigate('EditProfileScreen');
+              setIsProfileVisible(true);
             }}>
             <AvatarCircle disabled size={scale(110)} source={{uri: dp}} />
             <View
