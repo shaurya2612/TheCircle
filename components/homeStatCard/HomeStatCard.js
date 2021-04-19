@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
+import LinearGradient from 'react-native-linear-gradient';
 import {scale, verticalScale} from 'react-native-size-matters';
 import Icon from 'react-native-vector-icons/Feather';
 import {useSelector} from 'react-redux';
@@ -22,7 +23,13 @@ const HomeStatCard = ({onPressImage, friends, matches}) => {
   const [areEditOptionsVisible, setAreEditOptionsVisible] = useState(true);
   return (
     <View>
-      <View style={{...styles.homeStatCardView, ...styles.elevation_medium}}>
+      <View
+        style={{
+          ...styles.homeStatCardView,
+          ...styles.elevation_medium,
+          borderBottomLeftRadius: 0,
+          borderBottomRightRadius: 0,
+        }}>
         <TouchableWithoutFeedback onPressIn={onPressImage}>
           <ImageBackground
             source={{
@@ -92,7 +99,7 @@ const HomeStatCard = ({onPressImage, friends, matches}) => {
             flex: 1,
             backgroundColor: '#3490dc',
             borderRightWidth: scale(0.5),
-            borderColor: "grey",
+            borderColor: 'grey',
             ...styles.centerView,
           }}>
           <View style={{height: '100%', paddingVertical: scale(10)}}>
@@ -158,11 +165,11 @@ const HomeStatCard = ({onPressImage, friends, matches}) => {
                 alignSelf: 'center',
                 marginTop: scale(5),
               }}>
-              {friends == 0
+              {matches == 0
                 ? '- -'
-                : friends < 10
-                ? '0' + friends.toString()
-                : friends}
+                : matches < 10
+                ? '0' + matches.toString()
+                : matches}
             </AppText>
           </View>
         </View>

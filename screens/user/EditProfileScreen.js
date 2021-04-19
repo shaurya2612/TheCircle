@@ -99,7 +99,7 @@ const EditProfileScreen = props => {
 
     //About has been changed
     if (about !== comparisonText) {
-      dispatch(updateAbout(about.trim()));
+      dispatch(updateAbout(about ? about.trim() : null));
     }
     /////////////////////////////////////
 

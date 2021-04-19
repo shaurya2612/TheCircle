@@ -730,6 +730,7 @@ export const deleteUser = () => {
       db.ref('/users').child(uid).remove();
       db.ref('/genders').child(uid).remove();
       db.ref('/interestedIn').child(uid).remove();
+      db.ref('/stats').child(uid).remove();
       db.ref('/profiles').child(uid).remove();
       db.ref('/isOnline').child(uid).remove();
       let username = await db
