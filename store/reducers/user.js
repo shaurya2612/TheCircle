@@ -28,6 +28,7 @@ import {
   SET_CAN_LOAD_MORE_FRIENDS,
   SET_CAN_LOAD_MORE_REQUESTS,
   ADD_MULTIPLE_REQUESTS,
+  SET_USER_STATS,
 } from '../actions/user';
 import database from '@react-native-firebase/database';
 import storage from '@react-native-firebase/storage';
@@ -38,6 +39,7 @@ const initialState = {
   dp: null,
   name: null,
   phone: null,
+  stats: null,
   userPhotos: null,
   userPhotosUpdated: false,
   profile: null,
@@ -56,7 +58,7 @@ const initialState = {
   currentMatchProfile: null,
   fetchedMatchProfile: false,
   isAuthenticated: false,
-  isProfileCompleted: false
+  isProfileCompleted: false,
 };
 
 export default (state = initialState, action) => {
@@ -70,6 +72,9 @@ export default (state = initialState, action) => {
 
     case SET_USER:
       return {...state, ...payload, age: bdToAge(payload.bd)};
+
+    case SET_USER_STATS:
+      return {...state, stats: payload};
 
     case SET_DP:
       return {...state, dp: payload};

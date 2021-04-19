@@ -23,6 +23,7 @@ export const SET_USER_PROFILE = 'SET_USER_PROFILE';
 export const UPDATE_ABOUT = 'UPDATE_ABOUT';
 export const SET_DP = 'SET_DP';
 export const SET_USER = 'SET_USER';
+export const SET_USER_STATS = 'SET_USER_STATS';
 export const SET_CUE_CARDS = 'SET_CUE_CARDS';
 export const ADD_CUE_CARD = 'ADD_CUE_CARD';
 export const UPDATE_CUE_CARD = 'UPDATE_CUE_CARD';
@@ -97,6 +98,18 @@ export const fetchUser = () => {
     } catch (err) {
       dispatch(setErrorMessage(err.message));
     }
+  };
+};
+
+export const listenForUserStats = () => {
+  return async (dispatch, getState) => {
+    const db = database();
+    const uid = auth().currentUser.uid;
+    db.ref('/stats')
+      .child(uid)
+      .on('value', snapshot => {
+        dispatch({type: SET_USER_STATS, payload: snapshot.val()});
+      });
   };
 };
 
@@ -629,6 +642,9 @@ export const logoutUser = () => {
         db.ref('/isOnline').child(match.id).off();
         db.ref('/isTyping').child(refString).child(match.id).off();
       }
+
+      //Stop listening for stats
+      db.ref('/stats').child(uid).off();
 
       //Stop listening for user's presence
       db.ref('.info/connected').off();

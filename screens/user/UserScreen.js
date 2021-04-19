@@ -95,7 +95,8 @@ const UserScreen = props => {
               setIsProfileVisible(true);
             }}>
             <AvatarCircle disabled size={scale(110)} source={{uri: dp}} />
-            <View
+            {/* Icon on image  */}
+            {/* <View
               style={{
                 position: 'absolute',
                 backgroundColor: 'white',
@@ -109,7 +110,7 @@ const UserScreen = props => {
                 borderColor: 'black',
               }}>
               <Icon size={scale(15)} color="black" name="edit-2" />
-            </View>
+            </View> */}
           </TouchableOpacity>
           <View style={{marginBottom: scale(20)}}>
             <AppText style={styles.titleText}>

@@ -15,7 +15,7 @@ import styles from '../../styles';
 import AppText from '../AppText';
 import SmallStatBox from './SmallStatBox';
 
-const HomeStatCard = ({onPressImage}) => {
+const HomeStatCard = ({onPressImage, friends, matches}) => {
   const userState = useSelector(state => state.user);
   const {name, dp, username} = userState;
   const [areEditOptionsVisible, setAreEditOptionsVisible] = useState(true);
@@ -52,11 +52,11 @@ const HomeStatCard = ({onPressImage}) => {
           marginTop: verticalScale(10),
           ...styles.centerView,
         }}>
-        <SmallStatBox statName="Friends" statNumber="145" />
+        <SmallStatBox statName="Friends" statNumber={friends} />
         <SmallStatBox
           style={{borderLeftWidth: scale(1)}}
           statName="Matches"
-          statNumber="286"
+          statNumber={matches}
         />
         {/* <SmallStatBox statName="Matches" statNumber="137" /> */}
       </View>

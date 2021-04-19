@@ -16,7 +16,7 @@ import StartMatchingButton from '../../components/StartMatchingButton';
 import CustomSafeAreaView from '../../components/CustomSafeAreaView';
 import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchUser} from '../../store/actions/user';
+import {fetchUser, listenForUserStats} from '../../store/actions/user';
 import {
   changeUserMatchingStatus,
   listenForUserMatchingStatus,
@@ -31,7 +31,7 @@ const HomeScreen = props => {
   const userState = useSelector(state => state.user);
   const loadingState = useSelector(state => state.loading);
   const matchingState = useSelector(state => state.matching);
-  const {dp} = userState;
+  const {dp, stats} = userState;
   const {signingUp} = loadingState;
   const {matchingStatus} = matchingState;
   const dispatch = useDispatch();
@@ -40,6 +40,7 @@ const HomeScreen = props => {
     if (!signingUp) {
       dispatch(fetchUser());
       dispatch(listenForUserMatchingStatus());
+      dispatch(listenForUserStats());
     }
   }, [signingUp]);
 
@@ -64,7 +65,7 @@ const HomeScreen = props => {
                 ...styles.expandedCenterView,
               }}>
               <Animatable.View animation={'fadeInUp'}>
-                <HomeStatCard />
+                <HomeStatCard friends={stats?.friends} matches={stats?.matches} />
               </Animatable.View>
             </View>
             <Animatable.View

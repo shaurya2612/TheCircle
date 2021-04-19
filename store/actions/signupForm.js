@@ -82,6 +82,8 @@ export const signupUser = () => {
       //matching status
       await db.ref('/matchingStatus').child(uid).set(0);
 
+      await db.ref('/stats').child(uid).set({friends: 0, matches: 0});
+
       dispatch(clearSignupFormData());
       dispatch(setUserState({...userState, isProfileCompleted: true}));
     } catch (err) {
