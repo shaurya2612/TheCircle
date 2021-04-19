@@ -529,6 +529,23 @@ export const acceptRequest = friendId => {
     db.ref('/friends').child(friendId).child(uid).set(userState.gender);
 
     db.ref('/requests').child(uid).child(friendId).remove();
+
+    //update user friends stat
+    const userFriendsStatRef = db.ref('/stats').child(uid).child('friends');
+    userFriendsStatRef.transaction(currentFriends => {
+      if (currentFriends == null) return 1;
+      return currentFriends + 1;
+    });
+
+    //update friends friend stat
+    const friendFriendsStatRef = db
+      .ref('/stats')
+      .child(friendId)
+      .child('friends');
+    friendFriendsStatRef.transaction(currentFriends => {
+      if (currentFriends == null) return 1;
+      return currentFriends + 1;
+    });
   };
 };
 

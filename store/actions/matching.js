@@ -441,7 +441,7 @@ export const startListeningForAnonymousChatRoom = () => {
         } else dispatch({type: SET_IS_FOF_TYPING, payload: false});
       });
 
-    dispatch({type: SET_LISTENING_FOR_ANONYMOUS_CHAT_ROOM, payload: true})  
+    dispatch({type: SET_LISTENING_FOR_ANONYMOUS_CHAT_ROOM, payload: true});
   };
 };
 
@@ -532,6 +532,21 @@ export const addFOFToMatches = () => {
           lastMessage: lastMessage ?? null,
         }),
     ]);
+
+    //update user matches stat
+    const userMatchesStatRef = db.ref('/stats').child(uid).child('matches');
+    userMatchesStatRef.transaction(currentMatches => {
+      if (currentMatches == null) return 1;
+      return currentMatches + 1;
+    });
+
+    //update match matches stat
+    const matchMatchesStatRef = db.ref('/stats').child(FOF.id).child('matches');
+    matchMatchesStatRef.transaction(currentMatches => {
+      if (currentMatches == null) return 1;
+      return currentMatches + 1;
+    });
+
     dispatch(skipThisFOF(true));
   };
 };

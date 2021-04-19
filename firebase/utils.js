@@ -202,6 +202,23 @@ export const unfriend = async unfriendId => {
     db.ref('/friends').child(uid).child(unfriendId).remove(),
     db.ref('/friends').child(unfriendId).child(uid).remove(),
   ]);
+
+  //update user friends stat
+  const userFriendsStatRef = db.ref('/stats').child(uid).child('friends');
+  userFriendsStatRef.transaction(currentFriends => {
+    if (currentFriends == null) return;
+    return currentFriends - 1;
+  });
+
+  //update friends friend stat
+  const friendFriendsStatRef = db
+    .ref('/stats')
+    .child(unfriendId)
+    .child('friends');
+  friendFriendsStatRef.transaction(currentFriends => {
+    if (currentFriends == null) return;
+    return currentFriends - 1;
+  });
 };
 
 export const unmatch = async unmatchId => {
@@ -219,6 +236,23 @@ export const unmatch = async unmatchId => {
   } catch (err) {
     //Prevent unhandled promise rejection
   }
+
+  //update user matches stat
+  const userMatchesStatRef = db.ref('/stats').child(uid).child('matches');
+  userMatchesStatRef.transaction(currentMatches => {
+    if (currentMatches == null) return;
+    return currentMatches - 1;
+  });
+
+  //update match matches stat
+  const matchMatchesStatRef = db
+    .ref('/stats')
+    .child(unmatchId)
+    .child('matches');
+  matchMatchesStatRef.transaction(currentMatches => {
+    if (currentMatches == null) return;
+    return currentMatches - 1;
+  });
 };
 
 export const setUserIsTyping = async (chatPartnerId, userIsTyping) => {
