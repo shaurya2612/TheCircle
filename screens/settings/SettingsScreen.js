@@ -74,6 +74,29 @@ const SettingsScreen = props => {
   const textInputRef5 = useRef();
   const dispatch = useDispatch();
 
+  // Handle confirm code button press
+  async function confirmCode() {
+    if (!confirm) {
+      setErrorMessage('An error has occured. Please try again');
+      return;
+    }
+    try {
+      console.log(confirm.verificationId);
+      const credential = auth.PhoneAuthProvider.credential(
+        confirm.verificationId,
+        Object.values(verificationCode).join(''),
+      );
+      await auth().currentUser.reauthenticateWithCredential(credential);
+      dispatch(deleteUser());
+    } catch (error) {
+      if (error.code == 'auth/invalid-verification-code') {
+        console.log('Invalid code.');
+      } else {
+        console.log(error.message);
+      }
+    }
+  }
+
   return (
     <View style={{...styles.rootView, backgroundColor: 'white'}}>
       <CustomSafeAreaView style={{flex: 1}}>
@@ -131,11 +154,27 @@ const SettingsScreen = props => {
           onModalShow={async () => {
             try {
               setSendingCode(true);
-              var confirmFn = await auth().signInWithPhoneNumber(
+
+              var confirmFn = await auth().verifyPhoneNumber(
                 auth().currentUser.phoneNumber,
-                false,
               );
               setSendingCode(false);
+              // confirmFn.on('state_changed', phoneAuthSnapshot => {
+              //   if (phoneAuthSnapshot.error) {
+              //     dispatch(
+              //       setErrorMessage(
+              //         'Error sending code for verification.\n Please try again later',
+              //       ),
+              //     );
+              //     return;
+              //   }
+              //   if (phoneAuthSnapshot.state === 'sent') {
+              //     setSendingCode(false);
+              //   }
+              //   // if (phoneAuthSnapshot.state === 'verified') {
+              //   //   dispatch(deleteUser());
+              //   // }
+              // });
             } catch (err) {
               dispatch(setErrorMessage(err.message));
               setIsVerificationCodeInputVisible(false);
@@ -309,14 +348,7 @@ const SettingsScreen = props => {
                       Object.values(verificationCode).join('').length < 6
                     }
                     onPress={async () => {
-                      try {
-                        await confirm.confirm(
-                          Object.values(verificationCode).join(''),
-                        );
-                        dispatch(deleteUser());
-                      } catch (err) {
-                        dispatch(setErrorMessage(err.message));
-                      }
+                      await confirmCode();
                     }}
                   />
                 </View>
