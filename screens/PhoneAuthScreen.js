@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
   Button,
+  ImageBackground,
   Keyboard,
   Text,
   TouchableWithoutFeedback,
@@ -24,6 +25,7 @@ import {
 } from '../store/actions/signupForm';
 import auth from '@react-native-firebase/auth';
 import styles from '../styles';
+import CustomSafeAreaView from '../components/CustomSafeAreaView';
 
 const PhoneAuthScreen = props => {
   const signupFormData = useSelector(state => state.signupForm);
@@ -53,58 +55,60 @@ const PhoneAuthScreen = props => {
       style={styles.rootView}>
       <SafeAreaView
         style={{...styles.rootView, backgroundColor: colors.primary}}>
-        <CustomHeader>
-          <Icon
-            name={'x'}
-            size={35}
-            color={'white'}
-            onPress={() => {
-              dispatch(clearSignupFormData());
-              props.navigation.goBack();
-            }}
-          />
-        </CustomHeader>
-        <View style={styles.expandedCenterView}>
-          <View style={styles.titleView}>
-            <AppText style={{...styles.titleText, color: 'white'}}>
-              Enter your phone number
-            </AppText>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              paddingHorizontal: scale(70),
-            }}>
-            <CountryCodeInput />
-            <FormTextInput
-              placeholder={'Phone Number'}
-              selectedBorderColor="white"
-              style={{fontSize: moderateScale(20, 0.4), color: 'white'}}
-              selectionColor={'white'}
-              keyboardType={'number-pad'}
-              onChangeText={text => {
-                dispatch(
-                  setSignupFormData({...signupFormData, phoneNumber: text}),
-                );
+        <View style={{...styles.rootView, backgroundColor: colors.primary}}>
+          <CustomHeader>
+            <Icon
+              name={'x'}
+              size={35}
+              color={'white'}
+              onPress={() => {
+                dispatch(clearSignupFormData());
+                props.navigation.goBack();
               }}
-              maxLength={10}
+            />
+          </CustomHeader>
+          <View style={styles.expandedCenterView}>
+            <View style={styles.titleView}>
+              <AppText style={{...styles.titleText, color: 'white'}}>
+                Enter your phone number
+              </AppText>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingHorizontal: scale(70),
+              }}>
+              <CountryCodeInput />
+              <FormTextInput
+                placeholder={'Phone Number'}
+                selectedBorderColor="white"
+                style={{fontSize: moderateScale(20, 0.4), color: 'white'}}
+                selectionColor={'white'}
+                keyboardType={'number-pad'}
+                onChangeText={text => {
+                  dispatch(
+                    setSignupFormData({...signupFormData, phoneNumber: text}),
+                  );
+                }}
+                maxLength={10}
+              />
+            </View>
+          </View>
+
+          <View style={styles.formButtonView}>
+            <FormButton
+              disabled={isButtonDisabled}
+              title={'Continue'}
+              onPress={async () => {
+                Keyboard.dismiss();
+                props.navigation.navigate('PhoneVerificationScreen');
+              }}
             />
           </View>
+          <Spacer height={80} />
         </View>
-
-        <View style={styles.formButtonView}>
-          <FormButton
-            disabled={isButtonDisabled}
-            title={'Continue'}
-            onPress={async () => {
-              Keyboard.dismiss();
-              props.navigation.navigate('PhoneVerificationScreen');
-            }}
-          />
-        </View>
-        <Spacer height={80} />
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );

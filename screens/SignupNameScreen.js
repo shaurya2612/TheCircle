@@ -50,53 +50,55 @@ const SignupNameScreen = props => {
 
   return (
     <SafeAreaView style={{...styles.rootView, backgroundColor: colors.accent}}>
-      <ProgressLine
-        style={{
-          width: '28.6%',
-          backgroundColor: 'white',
-          height: verticalScale(5),
-        }}
-      />
-      <View style={{height: verticalScale(50)}} />
+      <View style={{...styles.rootView}}>
+        <ProgressLine
+          style={{
+            width: '28.6%',
+            backgroundColor: 'white',
+            height: verticalScale(5),
+          }}
+        />
+        <View style={{height: verticalScale(50)}} />
 
-      <View style={styles.expandedCenterView}>
-        <View style={styles.titleView}>
-          <AppText style={{...styles.titleText, color: 'white'}}>
-            Enter your first name
-          </AppText>
+        <View style={styles.expandedCenterView}>
+          <View style={styles.titleView}>
+            <AppText style={{...styles.titleText, color: 'white'}}>
+              Enter your first name
+            </AppText>
+          </View>
+          <FormTextInput
+            value={firstName}
+            selectedBorderColor="white"
+            style={{fontSize: moderateScale(20, 0.4), color: 'white'}}
+            selectionColor={'white'}
+            onChangeText={text => {
+              dispatch(setSignupFormData({...signupFormData, name: text}));
+            }}
+          />
+          {isErrShown ? (
+            <Animatable.View
+              style={{flexDirection: 'row', justifyContent: 'flex-start'}}
+              animation={'fadeInLeft'}
+              duration={500}>
+              <AppText>Please enter a valid name</AppText>
+            </Animatable.View>
+          ) : null}
         </View>
-        <FormTextInput
-          value={firstName}
-          selectedBorderColor="white"
-          style={{fontSize: moderateScale(20, 0.4), color: 'white'}}
-          selectionColor={'white'}
-          onChangeText={text => {
-            dispatch(setSignupFormData({...signupFormData, name: text}));
-          }}
-        />
-        {isErrShown ? (
-          <Animatable.View
-            style={{flexDirection: 'row', justifyContent: 'flex-start'}}
-            animation={'fadeInLeft'}
-            duration={500}>
-            <AppText>Please enter a valid name</AppText>
-          </Animatable.View>
-        ) : null}
-      </View>
 
-      <View style={styles.formButtonView}>
-        <FormButton
-          title={'Continue'}
-          textColor={colors.accent}
-          disabled={isButtonDisabled}
-          autoCorrect={false}
-          onPress={() => {
-            Keyboard.dismiss();
-            props.navigation.navigate('SignupAgeScreen');
-          }}
-        />
+        <View style={styles.formButtonView}>
+          <FormButton
+            title={'Continue'}
+            textColor={colors.accent}
+            disabled={isButtonDisabled}
+            autoCorrect={false}
+            onPress={() => {
+              Keyboard.dismiss();
+              props.navigation.navigate('SignupAgeScreen');
+            }}
+          />
+        </View>
+        <Spacer height={80} />
       </View>
-      <Spacer height={80} />
     </SafeAreaView>
   );
 };

@@ -1,5 +1,11 @@
 import React from 'react';
-import {Button, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Button,
+  ImageBackground,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {verticalScale} from 'react-native-size-matters';
 import AppText from '../components/AppText';
