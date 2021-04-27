@@ -120,7 +120,7 @@ export const MatchesListScreen = props => {
   const scrollViewRef = createRef();
   const modalRef = createRef();
   const insets = useSafeAreaInsets();
-
+  // console.warn(JSON.stringify(matches));
   useEffect(() => {
     dispatch(listenForMatches(20));
   }, []);
@@ -140,6 +140,25 @@ export const MatchesListScreen = props => {
       modalRef.current.close();
     }
   };
+
+  if (!matches?.length) {
+    return (
+      <View style={{...styles.rootView, backgroundColor: 'white'}}>
+        <View
+          style={{
+            paddingHorizontal: scale(10),
+            backgroundColor: 'white',
+            marginVertical: verticalScale(10),
+          }}>
+          <AppText style={styles.titleText}>Conversations</AppText>
+        </View>
+        <View style={{...styles.expandedCenterView, backgroundColor: 'white'}}>
+          <Icon name="inbox" size={scale(80)} color="grey" />
+          <AppText>No conversations yet</AppText>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={{...styles.rootView, backgroundColor: 'white'}}>
@@ -246,7 +265,7 @@ export const MatchesListScreen = props => {
                   style={{
                     paddingHorizontal: scale(10),
                     backgroundColor: 'white',
-                    marginVertical: verticalScale(10)
+                    marginVertical: verticalScale(10),
                   }}>
                   <AppText style={styles.titleText}>Conversations</AppText>
                 </View>
