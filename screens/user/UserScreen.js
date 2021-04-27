@@ -55,6 +55,9 @@ const UserScreen = props => {
         backdropOpacity={0}
         isVisible={isProfileVisible}>
         <UserProfileScreen
+          onPressX={() => {
+            setIsProfileVisible(false);
+          }}
           scrollViewRef={scrollViewRef}
           onScroll={handleOnScroll}
         />
