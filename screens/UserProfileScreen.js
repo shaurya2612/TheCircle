@@ -139,7 +139,12 @@ export const UserProfileScreen = ({scrollViewRef, onScroll, onPressX}) => {
                     alignItems: 'flex-end',
                     ...styles.elevation_small,
                   }}>
-                  <Icon style={{marginHorizontal:scale(2)}} onPress={onPressX} name={'x'} size={scale(20)} />
+                  <Icon
+                    style={{marginHorizontal: scale(2)}}
+                    onPress={onPressX}
+                    name={'x'}
+                    size={scale(20)}
+                  />
                 </View>
 
                 {photoTabs()}
@@ -186,18 +191,28 @@ export const UserProfileScreen = ({scrollViewRef, onScroll, onPressX}) => {
             {/* Name and age */}
             <View
               style={{
-                height: verticalScale(50),
+                height: verticalScale(55),
                 flexDirection: 'row',
-                justifyContent: 'space-between',
                 alignItems: 'center',
                 padding: scale(2),
-                borderTopWidth: scale(0.5),
-                // backgroundColor: 'blue',
-                // ...styles.elevation_medium
-                // marginVertical: scale(5),
+                borderTopWidth: scale(0.2),
+                borderColor: "grey"
               }}>
-              <AppText style={styles.titleText}>{name}</AppText>
-              <AppText style={styles.titleText}>{age}</AppText>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}>
+                <AppText>
+                  <AppText
+                    style={{
+                      ...styles.titleText,
+                      fontWeight: 'bold',
+                    }}>{`${name}`}</AppText>
+                  <View style={{width: scale(5)}} />
+                  <AppText style={{fontSize: scale(20)}}>{age}</AppText>
+                </AppText>
+              </View>
             </View>
 
             {/* Custom Border */}
@@ -216,7 +231,7 @@ export const UserProfileScreen = ({scrollViewRef, onScroll, onPressX}) => {
                 overflow: 'scroll',
               }}>
               {profile ? (
-                <View style={{width:"100%"}}>
+                <View style={{width: '100%'}}>
                   {profile.about ? (
                     <View>
                       <View
