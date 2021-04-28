@@ -32,7 +32,12 @@ import NameText from '../components/NameText';
 import InfoPill from '../components/InfoPill';
 import {infoIconColors} from '../constants/infoIconsConfig';
 
-export const UserProfileScreen = ({scrollViewRef, onScroll, onPressX}) => {
+export const UserProfileScreen = ({
+  scrollViewRef,
+  onScroll,
+  onPressX,
+  onEditIconPress,
+}) => {
   const insets = useSafeAreaInsets();
   let {height, width} = Dimensions.get('window');
   height -= insets.top + insets.bottom;
@@ -114,6 +119,7 @@ export const UserProfileScreen = ({scrollViewRef, onScroll, onPressX}) => {
   };
 
   const generateInfoPills = () => {
+    console.warn(profile.info);
     let arr = [];
     const infoKeys = Object.keys(profile.info);
     const n = infoKeys.length;
@@ -220,6 +226,34 @@ export const UserProfileScreen = ({scrollViewRef, onScroll, onPressX}) => {
                 borderBottomWidth: scale(0.2),
                 borderColor: '#cccccc',
               }}>
+              {onEditIconPress ? (
+                <TouchableWithoutFeedback
+                  onPress={onEditIconPress}
+                  style={{
+                    ...styles.centerView,
+                    position: 'absolute',
+                    height: scale(50),
+                    width: scale(50),
+                    borderRadius: scale(100),
+                    left: '85%',
+                    bottom: '60%',
+                  }}>
+                  <LinearGradient
+                    colors={[colors.primary, colors.accent]}
+                    style={{
+                      ...styles.centerView,
+                      position: 'absolute',
+                      height: scale(50),
+                      width: scale(50),
+                      borderRadius: scale(100),
+                      left: '85%',
+                      bottom: '60%',
+                    }}
+                    >
+                    <Icon name="edit" color="white" size={scale(20)} />
+                  </LinearGradient>
+                </TouchableWithoutFeedback>
+              ) : null}
               <View
                 style={{
                   flexDirection: 'row',
@@ -238,7 +272,7 @@ export const UserProfileScreen = ({scrollViewRef, onScroll, onPressX}) => {
             </View>
 
             {/* New Info Circles */}
-            {!profile?.about ? null : (
+            {Object.keys(profile.info || {}).length > 0 ? (
               <View
                 style={{
                   paddingHorizontal: scale(7.5),
@@ -248,7 +282,7 @@ export const UserProfileScreen = ({scrollViewRef, onScroll, onPressX}) => {
                 }}>
                 {generateInfoPills()}
               </View>
-            )}
+            ) : null}
 
             {/* info page */}
             <View

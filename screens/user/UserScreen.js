@@ -58,6 +58,9 @@ const UserScreen = props => {
           onPressX={() => {
             setIsProfileVisible(false);
           }}
+          onEditIconPress={() => {
+            props.navigation.navigate('EditProfileScreen');
+          }}
           scrollViewRef={scrollViewRef}
           onScroll={handleOnScroll}
         />

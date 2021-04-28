@@ -12,23 +12,23 @@ export const infoIconNames = {
 
 export const infoIconColors = {
   Zodiac: {
-    backgroundColor: colors.primary,
+    backgroundColor: "#6232A8",
     contentColor: 'white',
   },
   Drinks: {
-    backgroundColor: colors.primary,
+    backgroundColor: "#FF773D",
     contentColor: 'white',
   },
   Smokes: {
-    backgroundColor: colors.primary,
+    backgroundColor: "#FABC3C",
     contentColor: 'white',
   },
   'Looking For': {
-    backgroundColor: colors.primary,
+    backgroundColor: "#F22F11",
     contentColor: 'white',
   },
   Political: {
-    backgroundColor: colors.primary,
+    backgroundColor: "#0AA1FF",
     contentColor: 'white',
   },
   Food: {

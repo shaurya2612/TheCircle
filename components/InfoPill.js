@@ -27,7 +27,7 @@ const InfoPill = ({
       }}>
       <View
         style={{
-          width: scale(10),
+          width: scale(15),
           ...styles.centerView,
         }}>
         <FontAwesome5Icon
