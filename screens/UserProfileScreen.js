@@ -28,6 +28,9 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Feather';
 import CustomSafeAreaView from '../components/CustomSafeAreaView';
 import LinearGradient from 'react-native-linear-gradient';
+import NameText from '../components/NameText';
+import InfoPill from '../components/InfoPill';
+import {infoIconColors} from '../constants/infoIconsConfig';
 
 export const UserProfileScreen = ({scrollViewRef, onScroll, onPressX}) => {
   const insets = useSafeAreaInsets();
@@ -58,12 +61,12 @@ export const UserProfileScreen = ({scrollViewRef, onScroll, onPressX}) => {
   // ];
 
   // const info = {
-  //   zodiac: "Capricorn",
-  //   drinks: "Sometimes",
-  //   smokes: "Frequently",
-  //   lookingFor: "Casual",
-  //   political: "Moderate",
-  //   food: "Indian",
+  //   Zodiac: "Capricorn",
+  //   Drinks: "Sometimes",
+  //   Smokes: "Frequently",
+  //   LookingFor: "Casual",
+  //   Political: "Moderate",
+  //   Food: "Indian",
   // };
 
   // const about =
@@ -110,6 +113,24 @@ export const UserProfileScreen = ({scrollViewRef, onScroll, onPressX}) => {
     );
   };
 
+  const generateInfoPills = () => {
+    let arr = [];
+    const infoKeys = Object.keys(profile.info);
+    const n = infoKeys.length;
+
+    for (var i = 0; i < n; i++) {
+      arr.push(
+        <InfoPill
+          iconType={infoKeys[i]}
+          text={profile.info[infoKeys[i]]}
+          contentColor={infoIconColors[infoKeys[i]].contentColor}
+          backgroundColor={infoIconColors[infoKeys[i]].backgroundColor}
+        />,
+      );
+    }
+    return arr;
+  };
+
   return (
     <ScrollView
       contentContainerStyle={{flexGrow: 1}}
@@ -150,7 +171,7 @@ export const UserProfileScreen = ({scrollViewRef, onScroll, onPressX}) => {
                 {photoTabs()}
 
                 <ImageBackground
-                  imageStyle={{resizeMode: 'contain'}}
+                  imageStyle={{resizeMode: 'cover'}}
                   style={{flexDirection: 'row', flex: 1}}
                   source={{uri: userPhotos[selectedIndex]}}>
                   <View style={{flexDirection: 'row', flex: 1}}>
@@ -191,12 +212,13 @@ export const UserProfileScreen = ({scrollViewRef, onScroll, onPressX}) => {
             {/* Name and age */}
             <View
               style={{
-                height: verticalScale(55),
-                flexDirection: 'row',
-                alignItems: 'center',
-                padding: scale(2),
+                height: verticalScale(60),
+                justifyContent: 'center',
+                paddingHorizontal: scale(10),
+                paddingVertical: scale(2),
                 borderTopWidth: scale(0.2),
-                borderColor: "grey"
+                borderBottomWidth: scale(0.2),
+                borderColor: '#cccccc',
               }}>
               <View
                 style={{
@@ -215,16 +237,19 @@ export const UserProfileScreen = ({scrollViewRef, onScroll, onPressX}) => {
               </View>
             </View>
 
-            {/* Custom Border */}
-            <View
-              style={{
-                marginVertical: scale(5),
-                width: '90%',
-                alignSelf: 'center',
-                height: scale(0.5),
-                backgroundColor: 'black',
-              }}
-            />
+            {/* New Info Circles */}
+            {!profile?.about ? null : (
+              <View
+                style={{
+                  paddingHorizontal: scale(7.5),
+                  paddingVertical: scale(15),
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                }}>
+                {generateInfoPills()}
+              </View>
+            )}
+
             {/* info page */}
             <View
               style={{
@@ -237,15 +262,14 @@ export const UserProfileScreen = ({scrollViewRef, onScroll, onPressX}) => {
                       <View
                         style={{
                           justifyContent: 'center',
-                          alignItems: 'center',
-                          padding: scale(20),
-                          marginVertical: scale(20),
+                          // alignItems: 'center',
+                          padding: scale(10),
                         }}>
-                        <AppText style={{fontSize: scale(20)}}>
+                        <AppText style={{fontSize: scale(15), color: 'grey'}}>
                           {profile.about}
                         </AppText>
                       </View>
-                      <View
+                      {/* <View
                         style={{
                           marginVertical: scale(5),
                           width: '90%',
@@ -253,35 +277,10 @@ export const UserProfileScreen = ({scrollViewRef, onScroll, onPressX}) => {
                           height: scale(0.5),
                           backgroundColor: 'black',
                         }}
-                      />
+                      /> */}
                     </View>
                   ) : null}
-                  <View
-                    style={{
-                      ...styles.expandedCenterView,
-                      paddingHorizontal: scale(20),
-                      flexGrow: 1,
-                      overflow: 'scroll',
-                    }}>
-                    {/*IconCircles*/}
-                    {profile.info ? (
-                      <FlatList
-                        numColumns={2}
-                        data={Object.keys(profile.info)}
-                        renderItem={({item}) => (
-                          <IconCircle
-                            iconType={item}
-                            label={profile.info[item]}
-                          />
-                        )}
-                        columnWrapperStyle={{
-                          justifyContent: 'space-evenly',
-                          alignContent: 'center',
-                          marginVertical: verticalScale(10),
-                        }}
-                      />
-                    ) : null}
-                  </View>
+                  {/* Old Icon Circles can be placed here */}
                 </View>
               ) : null}
             </View>
