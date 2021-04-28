@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   ImageBackground,
   View,
@@ -118,8 +118,7 @@ export const UserProfileScreen = ({
     );
   };
 
-  const generateInfoPills = () => {
-    console.warn(profile.info);
+  const generateInfoPills = useCallback(() => {
     let arr = [];
     const infoKeys = Object.keys(profile.info);
     const n = infoKeys.length;
@@ -135,7 +134,7 @@ export const UserProfileScreen = ({
       );
     }
     return arr;
-  };
+  }, [profile?.info]);
 
   return (
     <ScrollView
@@ -248,8 +247,7 @@ export const UserProfileScreen = ({
                       borderRadius: scale(100),
                       left: '85%',
                       bottom: '60%',
-                    }}
-                    >
+                    }}>
                     <Icon name="edit" color="white" size={scale(20)} />
                   </LinearGradient>
                 </TouchableWithoutFeedback>
