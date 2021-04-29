@@ -109,9 +109,9 @@ import {unmatch} from '../firebase/utils';
 
 export const MatchesListScreen = props => {
   const [isActionsModalVisible, setIsActionsModalVisible] = useState(false);
-  const [modalMatch, setModalMatch] = useState(null);
+  const [actionModalMatch, setActionModalMatch] = useState(null);
   const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
-  const [currentMatchId, setCurrentMatchId] = useState(null);
+  const [profileMatchId, setProfileMatchId] = useState(null);
   const matches = useSelector(state => state.user.matches);
   const listeningForMatches = useSelector(
     state => state.user.listeningForMatches,
@@ -167,7 +167,7 @@ export const MatchesListScreen = props => {
         style={{justifyContent: 'flex-end', margin: 0}}
         onBackdropPress={() => setIsActionsModalVisible(false)}
         onModalHide={() => {
-          setModalMatch(null);
+          setActionModalMatch(null);
         }}
         isVisible={isActionsModalVisible}
         backdropTransitionInTiming={0}
@@ -179,7 +179,7 @@ export const MatchesListScreen = props => {
             </View>
             <TouchableOpacity
               onPress={async () => {
-                unmatch(modalMatch.id);
+                unmatch(actionModalMatch.id);
                 setIsActionsModalVisible(false);
               }}
               style={{padding: scale(10)}}>
@@ -203,9 +203,12 @@ export const MatchesListScreen = props => {
         backdropOpacity={0}
         isVisible={isProfileModalVisible}>
         <MatchProfileScreen
-          matchId={currentMatchId}
+          matchId={profileMatchId}
           scrollViewRef={scrollViewRef}
           onScroll={handleOnScroll}
+          onPressX={() => {
+            setIsProfileModalVisible(false);
+          }}
         />
       </Modal>
 
@@ -234,7 +237,7 @@ export const MatchesListScreen = props => {
                 return (
                   <AvatarCircle
                     onLongPress={() => {
-                      setModalMatch(item);
+                      setActionModalMatch(item);
                       setIsActionsModalVisible(true);
                     }}
                     onPress={() => {
@@ -276,11 +279,11 @@ export const MatchesListScreen = props => {
                 return (
                   <ChatListItem
                     onLongPress={() => {
-                      setModalMatch(item);
+                      setActionModalMatch(item);
                       setIsActionsModalVisible(true);
                     }}
                     onPressAvatar={() => {
-                      setCurrentMatchId(item.id);
+                      setProfileMatchId(item.id);
                       modalRef.current.open();
                       setIsProfileModalVisible(true);
                     }}

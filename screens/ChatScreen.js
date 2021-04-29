@@ -104,7 +104,12 @@ const ChatScreen = props => {
         }}
         backdropOpacity={0}
         isVisible={isModalVisible}>
-        <MatchProfileScreen matchId={match.id} />
+        <MatchProfileScreen
+          matchId={match.id}
+          onPressX={() => {
+            setIsModalVisible(false);
+          }}
+        />
       </Modal>
 
       {/* Cue cards modal */}
