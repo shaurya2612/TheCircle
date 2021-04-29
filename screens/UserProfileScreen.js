@@ -270,11 +270,11 @@ export const UserProfileScreen = ({
             </View>
 
             {/* New Info Circles */}
-            {Object.keys(profile.info || {}).length > 0 ? (
+            {Object.keys(profile?.info || {}).length > 0 ? (
               <View
                 style={{
                   paddingHorizontal: scale(7.5),
-                  paddingVertical: scale(15),
+                  paddingVertical: scale(10),
                   flexDirection: 'row',
                   flexWrap: 'wrap',
                 }}>
