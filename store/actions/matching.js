@@ -6,6 +6,11 @@ import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import {serverKey} from '../../firebase/config';
 import {sendNotification} from '../../firebase/utils';
+import {
+  InterstitialAd,
+  TestIds,
+  AdEventType,
+} from '@react-native-firebase/admob';
 
 export const SET_USER_MATCHING_STATUS = 'SET_USER_MATCHING_STATUS';
 export const SET_CHAT_ROOM = 'SET_CHAT_ROOM';
@@ -57,6 +62,23 @@ export const changeUserMatchingStatus = newStatus => {
 
       //Matching on
       if (newStatus === 1) {
+        // const adUnitId = __DEV__
+        //   ? TestIds.INTERSTITIAL
+        //   : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy';
+
+        // const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
+        //   requestNonPersonalizedAdsOnly: true,
+        //   keywords: ['fashion', 'clothing'],
+        // });
+
+        // interstitial.onAdEvent(type => {
+        //   if (type === AdEventType.LOADED) {
+        //     interstitial.show();
+        //   }
+        // });
+        
+        // interstitial.load();
+
         await db.ref('/matchingStatus').child(uid).set(1);
 
         let chosenFOF = null; //FOF chosen
