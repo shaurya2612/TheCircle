@@ -172,7 +172,6 @@
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				3F3D0F53E57CDA9CB235212D /* [CP] Embed Pods Frameworks */,
 				EF36D116815C1989A07AC375 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -195,7 +194,6 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				91A10C7E5F7DCA7F4B43C138 /* [CP] Embed Pods Frameworks */,
 				26FBA632F662BC8272C51081 /* [CP] Copy Pods Resources */,
 				C254878AEC51916E84FD6333 /* [CP-User] [RNFB] Core Configuration */,
 			);
@@ -296,23 +294,6 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TheCircle_Native/Pods-TheCircle_Native-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		3F3D0F53E57CDA9CB235212D /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TheCircle_Native-TheCircle_NativeTests/Pods-TheCircle_Native-TheCircle_NativeTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TheCircle_Native-TheCircle_NativeTests/Pods-TheCircle_Native-TheCircle_NativeTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TheCircle_Native-TheCircle_NativeTests/Pods-TheCircle_Native-TheCircle_NativeTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		462CD60CC234D423D7717448 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -333,23 +314,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		91A10C7E5F7DCA7F4B43C138 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TheCircle_Native/Pods-TheCircle_Native-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TheCircle_Native/Pods-TheCircle_Native-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TheCircle_Native/Pods-TheCircle_Native-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AE30418AB306C7EFB476F747 /* [CP] Check Pods Manifest.lock */ = {
