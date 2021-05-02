@@ -11,6 +11,7 @@ import {
   TestIds,
   AdEventType,
 } from '@react-native-firebase/admob';
+import {Platform} from 'react-native';
 
 export const SET_USER_MATCHING_STATUS = 'SET_USER_MATCHING_STATUS';
 export const SET_CHAT_ROOM = 'SET_CHAT_ROOM';
@@ -64,7 +65,9 @@ export const changeUserMatchingStatus = newStatus => {
       if (newStatus === 1) {
         const adUnitId = __DEV__
           ? TestIds.INTERSTITIAL
-          : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy';
+          : Platform.OS === 'android'
+          ? 'ca-app-pub-6422755385693448~2128581452'
+          : 'ca-app-pub-6422755385693448~5404292110';
 
         const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
           requestNonPersonalizedAdsOnly: true,
