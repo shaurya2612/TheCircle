@@ -52,6 +52,7 @@ const SearchingScreen = () => {
       }
       if (type === AdEventType.CLOSED) {
         setClosed(true);
+        setLoaded(false);
       }
     });
 
@@ -62,7 +63,7 @@ const SearchingScreen = () => {
     return () => {
       eventListener();
     };
-  }, []);
+  }, [closed]);
 
   if (!loaded) return null;
 
