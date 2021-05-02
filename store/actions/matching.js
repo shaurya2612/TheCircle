@@ -66,8 +66,8 @@ export const changeUserMatchingStatus = newStatus => {
         const adUnitId = __DEV__
           ? TestIds.INTERSTITIAL
           : Platform.OS === 'android'
-          ? 'ca-app-pub-6422755385693448~2128581452'
-          : 'ca-app-pub-6422755385693448~5404292110';
+          ? 'ca-app-pub-6422755385693448/9628631675' //Under Ad Unit Id section of adMob
+          : 'ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy';
 
         const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
           requestNonPersonalizedAdsOnly: true,
