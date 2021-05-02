@@ -17,20 +17,20 @@ import {
 } from '@react-native-firebase/admob';
 import {setErrorMessage} from '../../store/actions/error';
 
-const adUnitId = __DEV__
-  ? TestIds.INTERSTITIAL
-  : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy';
+// const adUnitId = __DEV__
+//   ? TestIds.INTERSTITIAL
+//   : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy';
 
-const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
-  requestNonPersonalizedAdsOnly: true,
-  keywords: ['fashion', 'clothing'],
-});
+// const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
+//   requestNonPersonalizedAdsOnly: true,
+//   keywords: ['fashion', 'clothing'],
+// });
 
 const SearchingScreen = () => {
   const dispatch = useDispatch();
   const [canCancel, setCanCancel] = useState(false);
-  const [loaded, setLoaded] = useState(false);
-  const [closed, setClosed] = useState(false);
+  // const [loaded, setLoaded] = useState(false);
+  // const [closed, setClosed] = useState(false);
 
   useEffect(() => {
     const firestoreDb = firestore();
@@ -45,47 +45,32 @@ const SearchingScreen = () => {
     return unsubscribe;
   }, []);
 
-  useEffect(() => {
-    const eventListener = interstitial.onAdEvent(type => {
-      if (type === AdEventType.LOADED) {
-        setLoaded(true);
-      }
-      if (type === AdEventType.CLOSED) {
-        setClosed(true);
-        setLoaded(false);
-      }
-    });
+  // useEffect(() => {
+  //   const eventListener = interstitial.onAdEvent(type => {
+  //     if (type === AdEventType.LOADED) {
+  //       setLoaded(true);
+  //     }
+  //     if (type === AdEventType.CLOSED) {
+  //       setClosed(true);
+  //       setLoaded(false);
+  //     }
+  //   });
 
-    // Start loading the interstitial straight away
-    interstitial.load();
+  //   // Start loading the interstitial straight away
+  //   interstitial.load();
 
-    // Unsubscribe from events on unmount
-    return () => {
-      eventListener();
-    };
-  }, [closed]);
-
-  if (!loaded) return null;
-
-  return (
-    <Button
-      title="Show Interstitial"
-      onPress={() => {
-        interstitial.show();
-      }}
-    />
-  );
+  //   // Unsubscribe from events on unmount
+  //   return () => {
+  //     eventListener();
+  //   };
+  // }, []);
 
   return (
     <LinearGradient
       style={styles.expandedCenterView}
       colors={[colors.primary, colors.accent]}>
-      {loaded && !closed ? (
-        interstitial.show()
-      ) : (
-        <ActivityIndicator size={'large'} color={'white'} />
-      )}
-      {/* {canCancel ? (
+      <ActivityIndicator size={'large'} color={'white'} />
+      {canCancel ? (
         <FormButton
           title={'Cancel'}
           onPress={() => {
@@ -93,7 +78,7 @@ const SearchingScreen = () => {
           }}
           style={{marginVertical: scale(30)}}
         />
-      ) : null} */}
+      ) : null}
     </LinearGradient>
   );
 };
