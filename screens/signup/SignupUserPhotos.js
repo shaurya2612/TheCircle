@@ -8,22 +8,19 @@ import {
   ImageBackground,
   Keyboard,
 } from 'react-native';
-import AppText from '../components/AppText';
-import FormButton from '../components/FormButton';
-import Spacer from '../components/Spacer';
-import StackHeader from '../components/StackHeader';
-import styles from '../styles';
-import * as Animatable from 'react-native-animatable';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import UserPhotoGrid from '../components/UserPhotoGrid';
+import AppText from '../../components/AppText';
+import FormButton from '../../components/FormButton';
+import Spacer from '../../components/Spacer';
+import StackHeader from '../../components/StackHeader';
+import styles from '../../styles';
 import {verticalScale} from 'react-native-size-matters';
 import {useDispatch, useSelector} from 'react-redux';
-import {setSignupFormData, signupUser} from '../store/actions/signupForm';
-import ProgressLine from '../components/ProgressLine';
-import SignupUserPhotoGrid from '../components/SignupUserPhotoGrid';
+import {setSignupFormData, signupUser} from '../../store/actions/signupForm';
+import ProgressLine from '../../components/ProgressLine';
+import SignupUserPhotoGrid from '../../components/SignupUserPhotoGrid';
 import LinearGradient from 'react-native-linear-gradient';
-import colors from '../constants/colors';
-import CustomSafeAreaView from '../components/CustomSafeAreaView';
+import colors from '../../constants/colors';
+import CustomSafeAreaView from '../../components/CustomSafeAreaView';
 
 const SignupUserPhotos = props => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);

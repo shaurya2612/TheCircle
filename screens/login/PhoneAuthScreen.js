@@ -11,21 +11,20 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
 import Icon from 'react-native-vector-icons/Feather';
 import {useDispatch, useSelector} from 'react-redux';
-import AppText from '../components/AppText';
-import CountryCodeInput from '../components/CountryCodeInput';
-import CustomHeader from '../components/CustomHeader';
-import FormButton from '../components/FormButton';
-import FormTextInput from '../components/FormTextInput';
-import ProgressLine from '../components/ProgressLine';
-import Spacer from '../components/Spacer';
-import colors from '../constants/colors';
+import AppText from '../../components/AppText';
+import CountryCodeInput from '../../components/CountryCodeInput';
+import CustomHeader from '../../components/CustomHeader';
+import FormButton from '../../components/FormButton';
+import FormTextInput from '../../components/FormTextInput';
+import Spacer from '../../components/Spacer';
+import colors from '../../constants/colors';
 import {
   clearSignupFormData,
   setSignupFormData,
-} from '../store/actions/signupForm';
+} from '../../store/actions/signupForm';
 import auth from '@react-native-firebase/auth';
-import styles from '../styles';
-import CustomSafeAreaView from '../components/CustomSafeAreaView';
+import styles from '../../styles';
+import CustomSafeAreaView from '../../components/CustomSafeAreaView';
 
 const PhoneAuthScreen = props => {
   const signupFormData = useSelector(state => state.signupForm);

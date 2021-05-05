@@ -6,20 +6,20 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import styles from '../styles';
-import StackHeader from '../components/StackHeader';
-import FormButton from '../components/FormButton';
-import FormTextInput from '../components/FormTextInput';
-import Spacer from '../components/Spacer';
+import styles from '../../styles';
+import StackHeader from '../../components/StackHeader';
+import FormButton from '../../components/FormButton';
+import FormTextInput from '../../components/FormTextInput';
+import Spacer from '../../components/Spacer';
 import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
-import AppText from '../components/AppText';
+import AppText from '../../components/AppText';
 import * as Animatable from 'react-native-animatable';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
-import {setSignupFormData} from '../store/actions/signupForm';
-import ProgressLine from '../components/ProgressLine';
-import CustomSafeAreaView from '../components/CustomSafeAreaView';
-import colors from '../constants/colors';
+import {setSignupFormData} from '../../store/actions/signupForm';
+import ProgressLine from '../../components/ProgressLine';
+import CustomSafeAreaView from '../../components/CustomSafeAreaView';
+import colors from '../../constants/colors';
 
 const SignupAgeScreen = props => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);

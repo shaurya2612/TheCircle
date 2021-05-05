@@ -2,16 +2,16 @@
 //Shown if the user is not logged in
 import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import LoginScreen from '../screens/LoginScreen';
-import PhoneAuthScreen from '../screens/PhoneAuthScreen';
-import SignupNameScreen from '../screens/SignupNameScreen';
-import SignupAgeScreen from '../screens/SignupAgeScreen';
-import SignupUsernameScreen from '../screens/SignupUsernameScreen';
-import SignupGenderScreen from '../screens/SignupGenderScreen';
-import SignupUserPhotos from '../screens/SignupUserPhotos';
-import SignupInterestedInScreen from '../screens/SignupInterestedInScreen';
-import SignupShowMeInTheSearchForScreen from '../screens/SignupShowMeInTheSearchForScreen';
-import PhoneVerificationScreen from '../screens/PhoneVerificationScreen';
+import LoginScreen from '../screens/login/LoginScreen';
+import PhoneAuthScreen from '../screens/login/PhoneAuthScreen';
+import SignupNameScreen from '../screens/signup/SignupNameScreen';
+import SignupAgeScreen from '../screens/signup/SignupAgeScreen';
+import SignupUsernameScreen from '../screens/signup/SignupUsernameScreen';
+import SignupGenderScreen from '../screens/signup/SignupGenderScreen';
+import SignupUserPhotos from '../screens/signup/SignupUserPhotos';
+import SignupInterestedInScreen from '../screens/signup/SignupInterestedInScreen';
+import SignupShowMeInTheSearchForScreen from '../screens/signup/SignupShowMeInTheSearchForScreen';
+import PhoneVerificationScreen from '../screens/login/PhoneVerificationScreen';
 
 const AuthStackNavigator = createStackNavigator();
 

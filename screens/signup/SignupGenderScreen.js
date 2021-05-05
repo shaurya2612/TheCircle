@@ -1,21 +1,21 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {Keyboard, StyleSheet, View} from 'react-native';
-import AppText from '../components/AppText';
-import FormButton from '../components/FormButton';
-import FormTextInput from '../components/FormTextInput';
-import Spacer from '../components/Spacer';
-import StackHeader from '../components/StackHeader';
-import styles from '../styles';
+import AppText from '../../components/AppText';
+import FormButton from '../../components/FormButton';
+import FormTextInput from '../../components/FormTextInput';
+import Spacer from '../../components/Spacer';
+import StackHeader from '../../components/StackHeader';
+import styles from '../../styles';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import SelectionButton from '../components/SelectionButton';
+import SelectionButton from '../../components/SelectionButton';
 import Modal from 'react-native-modal';
 import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
-import ModalCardView from '../components/ModalCardView';
+import ModalCardView from '../../components/ModalCardView';
 import {useDispatch, useSelector} from 'react-redux';
-import {setSignupFormData} from '../store/actions/signupForm';
-import ProgressLine from '../components/ProgressLine';
-import colors from '../constants/colors';
+import {setSignupFormData} from '../../store/actions/signupForm';
+import ProgressLine from '../../components/ProgressLine';
+import colors from '../../constants/colors';
 
 const SignupGenderScreen = props => {
   const signupFormData = useSelector(state => state.signupForm);

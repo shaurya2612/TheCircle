@@ -7,20 +7,19 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import CustomSafeAreaView from '../components/CustomSafeAreaView';
-import styles from '../styles';
+import CustomSafeAreaView from '../../components/CustomSafeAreaView';
+import styles from '../../styles';
 import auth from '@react-native-firebase/auth';
 import {useDispatch, useSelector} from 'react-redux';
-import {setErrorMessage} from '../store/actions/error';
-import StackHeader from '../components/StackHeader';
-import colors from '../constants/colors';
-import AppText from '../components/AppText';
-import FormTextInput from '../components/FormTextInput';
+import {setErrorMessage} from '../../store/actions/error';
+import StackHeader from '../../components/StackHeader';
+import colors from '../../constants/colors';
+import AppText from '../../components/AppText';
 import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import ProgressLine from '../components/ProgressLine';
-import FormButton from '../components/FormButton';
-import Spacer from '../components/Spacer';
+import ProgressLine from '../../components/ProgressLine';
+import FormButton from '../../components/FormButton';
+import Spacer from '../../components/Spacer';
 
 const PhoneVerificationScreen = props => {
   const textInputRef1 = useRef();

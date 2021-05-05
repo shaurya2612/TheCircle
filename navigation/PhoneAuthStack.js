@@ -2,9 +2,9 @@ import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import MatchesListScreen from '../screens/MatchesListScreen';
 import ChatScreen from '../screens/ChatScreen';
-import PhoneAuthScreen from '../screens/PhoneAuthScreen';
-import PhoneVerificationScreen from '../screens/PhoneVerificationScreen';
-import LoginScreen from '../screens/LoginScreen';
+import PhoneAuthScreen from '../screens/login/PhoneAuthScreen';
+import PhoneVerificationScreen from '../screens/login/PhoneVerificationScreen';
+import LoginScreen from '../screens/login/LoginScreen';
 
 const PhoneAuthStackNavigator = createStackNavigator();
 

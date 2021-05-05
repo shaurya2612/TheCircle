@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   Button,
   ImageBackground,
@@ -8,15 +8,12 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {verticalScale} from 'react-native-size-matters';
-import AppText from '../components/AppText';
-import FormButton from '../components/FormButton';
-import FormTextInput from '../components/FormTextInput';
-import SelectionButton from '../components/SelectionButton';
+import AppText from '../../components/AppText';
 import * as Animatable from 'react-native-animatable';
-import styles from '../styles';
+import styles from '../../styles';
 import LinearGradient from 'react-native-linear-gradient';
-import colors from '../constants/colors';
-import StartMatchingButton from '../components/StartMatchingButton';
+import colors from '../../constants/colors';
+import StartMatchingButton from '../../components/StartMatchingButton';
 
 const LoginScreen = props => {
   return (

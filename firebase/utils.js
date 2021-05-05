@@ -244,6 +244,7 @@ export const unmatch = async unmatchId => {
     return currentMatches - 1;
   });
 
+  console.warn(unmatchId);
   //update match matches stat
   const matchMatchesStatRef = db
     .ref('/stats')

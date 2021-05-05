@@ -213,35 +213,7 @@ export const UserProfileScreen = ({
               </View>
             )}
           </View>
-          {onEditIconPress ? (
-            <TouchableWithoutFeedback
-              onPress={onEditIconPress}
-              style={{
-                ...styles.centerView,
-                position: 'absolute',
-                height: scale(50),
-                width: scale(50),
-                borderRadius: scale(100),
-                zIndex: 100
-                // left: '85%',
-                // bottom: '60%',
-              }}>
-              <LinearGradient
-                colors={[colors.primary, colors.accent]}
-                style={{
-                  ...styles.centerView,
-                  position: 'absolute',
-                  height: scale(50),
-                  width: scale(50),
-                  borderRadius: scale(100),
-                  left: '80%',
-                  bottom: '10.5%',
-                  zIndex: 100
-                }}>
-                <Icon name="edit" color="white" size={scale(20)} />
-              </LinearGradient>
-            </TouchableWithoutFeedback>
-          ) : null}
+
           <View>
             {/* Name and age */}
             <View
@@ -254,6 +226,35 @@ export const UserProfileScreen = ({
                 borderBottomWidth: scale(0.2),
                 borderColor: '#cccccc',
               }}>
+              {onEditIconPress ? (
+                <TouchableWithoutFeedback
+                  onPress={onEditIconPress}
+                  style={{
+                    ...styles.centerView,
+                    position: 'absolute',
+                    height: scale(50),
+                    width: scale(50),
+                    borderRadius: scale(100),
+                    zIndex: 100,
+                    // left: '85%',
+                    // bottom: '60%',
+                  }}>
+                  <LinearGradient
+                    colors={[colors.primary, colors.accent]}
+                    style={{
+                      ...styles.centerView,
+                      position: 'absolute',
+                      height: scale(50),
+                      width: scale(50),
+                      borderRadius: scale(100),
+                      left: '90%',
+                      bottom: '10.5%',
+                      zIndex: 100,
+                    }}>
+                    <Icon name="edit" color="white" size={scale(20)} />
+                  </LinearGradient>
+                </TouchableWithoutFeedback>
+              ) : null}
               <View
                 style={{
                   flexDirection: 'row',

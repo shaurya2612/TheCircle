@@ -1,21 +1,21 @@
 //Screen that asks username
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, Keyboard, View} from 'react-native';
-import AppText from '../components/AppText';
-import FormButton from '../components/FormButton';
-import FormTextInput from '../components/FormTextInput';
-import Spacer from '../components/Spacer';
-import StackHeader from '../components/StackHeader';
-import styles from '../styles';
+import AppText from '../../components/AppText';
+import FormButton from '../../components/FormButton';
+import FormTextInput from '../../components/FormTextInput';
+import Spacer from '../../components/Spacer';
+import StackHeader from '../../components/StackHeader';
+import styles from '../../styles';
 import * as Animatable from 'react-native-animatable';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
-import {setSignupFormData} from '../store/actions/signupForm';
+import {setSignupFormData} from '../../store/actions/signupForm';
 import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
-import ProgressLine from '../components/ProgressLine';
-import {isUsernameValid} from '../firebase/utils';
-import {setLoadingState} from '../store/actions/loading';
-import colors from '../constants/colors';
+import ProgressLine from '../../components/ProgressLine';
+import {isUsernameValid} from '../../firebase/utils';
+import {setLoadingState} from '../../store/actions/loading';
+import colors from '../../constants/colors';
 
 const SignupUsernameScreen = props => {
   const signupFormData = useSelector(state => state.signupForm);

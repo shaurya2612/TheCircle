@@ -8,20 +8,18 @@ import {
   ImageBackground,
   Keyboard,
 } from 'react-native';
-import AppText from '../components/AppText';
-import CustomHeader from '../components/CustomHeader';
-import FormButton from '../components/FormButton';
-import FormTextInput from '../components/FormTextInput';
-import Spacer from '../components/Spacer';
-import StackHeader from '../components/StackHeader';
-import styles from '../styles';
+import AppText from '../../components/AppText';
+import FormButton from '../../components/FormButton';
+import FormTextInput from '../../components/FormTextInput';
+import Spacer from '../../components/Spacer';
+import styles from '../../styles';
 import * as Animatable from 'react-native-animatable';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {setSignupFormData} from '../store/actions/signupForm';
+import {setSignupFormData} from '../../store/actions/signupForm';
 import {useDispatch, useSelector} from 'react-redux';
-import ProgressLine from '../components/ProgressLine';
+import ProgressLine from '../../components/ProgressLine';
 import {moderateScale, verticalScale} from 'react-native-size-matters';
-import colors from '../constants/colors';
+import colors from '../../constants/colors';
 
 const SignupNameScreen = props => {
   const signupFormData = useSelector(state => state.signupForm);
