@@ -12,6 +12,7 @@ import {
   AdEventType,
 } from '@react-native-firebase/admob';
 import {Platform} from 'react-native';
+import {setLoadingAd} from './loading';
 
 export const SET_USER_MATCHING_STATUS = 'SET_USER_MATCHING_STATUS';
 export const SET_CHAT_ROOM = 'SET_CHAT_ROOM';
@@ -63,6 +64,7 @@ export const changeUserMatchingStatus = newStatus => {
 
       //Matching on
       if (newStatus === 1) {
+        dispatch(setLoadingAd(true));
         const adUnitId = __DEV__
           ? TestIds.INTERSTITIAL
           : Platform.OS === 'android'
@@ -76,6 +78,7 @@ export const changeUserMatchingStatus = newStatus => {
 
         interstitial.onAdEvent(async type => {
           if (type === AdEventType.LOADED) {
+            dispatch(setLoadingAd(false));
             interstitial.show();
           }
           if (type === AdEventType.CLOSED) {

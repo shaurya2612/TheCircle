@@ -32,7 +32,7 @@ const HomeScreen = props => {
   const loadingState = useSelector(state => state.loading);
   const matchingState = useSelector(state => state.matching);
   const {dp, stats} = userState;
-  const {signingUp} = loadingState;
+  const {signingUp, loadingAd} = loadingState;
   const {matchingStatus} = matchingState;
   const dispatch = useDispatch();
 
@@ -65,7 +65,10 @@ const HomeScreen = props => {
                 ...styles.expandedCenterView,
               }}>
               <Animatable.View animation={'fadeInUp'}>
-                <HomeStatCard friends={stats?.friends} matches={stats?.matches} />
+                <HomeStatCard
+                  friends={stats?.friends}
+                  matches={stats?.matches}
+                />
               </Animatable.View>
             </View>
             <Animatable.View
@@ -101,6 +104,15 @@ const HomeScreen = props => {
   useEffect(() => {
     console.log('matchingStatus', matchingStatus);
   }, [matchingStatus]);
+
+  if (loadingAd)
+    return (
+      <LinearGradient
+        colors={[colors.primary, colors.accent]}
+        style={styles.expandedCenterView}>
+        <ActivityIndicator size="large" color={'white'} />
+      </LinearGradient>
+    );
 
   return (
     <View style={styles.rootView}>
