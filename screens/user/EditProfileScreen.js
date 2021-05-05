@@ -31,7 +31,6 @@ import {
   updateProfileInfo,
 } from '../../store/actions/user';
 import styles from '../../styles';
-import UserProfileScreen from '../UserProfileScreen';
 
 const iconMap = {
   Zodiac: 'moon',

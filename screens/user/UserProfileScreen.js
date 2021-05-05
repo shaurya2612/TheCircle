@@ -8,35 +8,36 @@ import {
   FlatList,
   ActivityIndicator,
   Platform,
+  TouchableOpacity,
 } from 'react-native';
 import {scale, verticalScale} from 'react-native-size-matters';
-import colors from '../constants/colors';
-import styles from '../styles';
+import colors from '../../constants/colors';
+import styles from '../../styles';
 import {useSafeAreaInsets, SafeAreaView} from 'react-native-safe-area-context';
-import IconCircle from '../components/IconCircle';
-import AppText from '../components/AppText';
+import IconCircle from '../../components/IconCircle';
+import AppText from '../../components/AppText';
 import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  fetchMatchProfile,
   fetchName,
   fetchUser,
   fetchUserPhotos,
   fetchUserProfile,
-} from '../store/actions/user';
+} from '../../store/actions/user';
 import {useFocusEffect} from '@react-navigation/native';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import CustomSafeAreaView from '../components/CustomSafeAreaView';
-import LinearGradient from 'react-native-linear-gradient';
-import {infoIconColors} from '../constants/infoIconsConfig';
 import Icon from 'react-native-vector-icons/Feather';
-import InfoPill from '../components/InfoPill';
+import CustomSafeAreaView from '../../components/CustomSafeAreaView';
+import LinearGradient from 'react-native-linear-gradient';
+import NameText from '../../components/NameText';
+import InfoPill from '../../components/InfoPill';
+import {infoIconColors} from '../../constants/infoIconsConfig';
 
-export const MatchProfileScreen = ({
+export const UserProfileScreen = ({
   scrollViewRef,
   onScroll,
-  matchId,
   onPressX,
+  onEditIconPress,
 }) => {
   const insets = useSafeAreaInsets();
   let {height, width} = Dimensions.get('window');
@@ -44,16 +45,38 @@ export const MatchProfileScreen = ({
   width -= insets.left + insets.right;
 
   const userState = useSelector(state => state.user);
-  const {currentMatchProfile} = userState;
-  let {userPhotos, profile, name, age, id} = currentMatchProfile ?? {};
-
-  userPhotos = (userPhotos || []).filter(item => item !== null);
+  let {userPhotos, profile, name, age} = userState;
+  if (userState.userPhotosUpdated)
+    userPhotos = userPhotos.filter(item => item !== null);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchMatchProfile(matchId));
+    dispatch(fetchUser());
+    dispatch(fetchUserPhotos());
+    dispatch(fetchUserProfile());
     setSelectedIndex(0);
-  }, [matchId]);
+  }, []);
+  //dummy data
+  // const data = [
+  //   "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80",
+  //   "https://images.unsplash.com/photo-1599200786358-4a661fb85b1e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+  //   "https://images.unsplash.com/photo-1488716820095-cbe80883c496?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=666&q=80",
+  //   "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80",
+  //   "https://images.unsplash.com/photo-1599200786358-4a661fb85b1e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+  //   "https://images.unsplash.com/photo-1488716820095-cbe80883c496?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=666&q=80",
+  // ];
+
+  // const info = {
+  //   Zodiac: "Capricorn",
+  //   Drinks: "Sometimes",
+  //   Smokes: "Frequently",
+  //   LookingFor: "Casual",
+  //   Political: "Moderate",
+  //   Food: "Indian",
+  // };
+
+  // const about =
+  //   "I am a little teapot short and stout, this is my handle and this is my stout";
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const photoTabs = () => {
@@ -113,14 +136,6 @@ export const MatchProfileScreen = ({
     }
     return arr;
   }, [profile?.info]);
-
-  if (matchId !== id) {
-    return (
-      <View style={styles.expandedCenterView}>
-        <ActivityIndicator color="black" size="large" />
-      </View>
-    );
-  }
 
   return (
     <ScrollView
@@ -207,21 +222,22 @@ export const MatchProfileScreen = ({
                 justifyContent: 'center',
                 paddingHorizontal: scale(10),
                 paddingVertical: scale(2),
-                borderTopWidth: scale(0.2),
+                // borderTopWidth: scale(0.2),
                 borderBottomWidth: scale(0.2),
                 borderColor: '#cccccc',
               }}>
-              {/* {onMessageIconPress ? (
+              {onEditIconPress ? (
                 <TouchableWithoutFeedback
-                  onPress={onMessageIconPress}
+                  onPress={onEditIconPress}
                   style={{
                     ...styles.centerView,
                     position: 'absolute',
                     height: scale(50),
                     width: scale(50),
                     borderRadius: scale(100),
-                    left: '85%',
-                    bottom: '60%',
+                    zIndex: 100,
+                    // left: '85%',
+                    // bottom: '60%',
                   }}>
                   <LinearGradient
                     colors={[colors.primary, colors.accent]}
@@ -231,13 +247,14 @@ export const MatchProfileScreen = ({
                       height: scale(50),
                       width: scale(50),
                       borderRadius: scale(100),
-                      left: '85%',
-                      bottom: '60%',
+                      left: '90%',
+                      bottom: '10.5%',
+                      zIndex: 100,
                     }}>
-                    <Icon name="message" color="white" size={scale(20)} />
+                    <Icon name="edit" color="white" size={scale(20)} />
                   </LinearGradient>
                 </TouchableWithoutFeedback>
-              ) : null} */}
+              ) : null}
               <View
                 style={{
                   flexDirection: 'row',
@@ -309,4 +326,4 @@ export const MatchProfileScreen = ({
   );
 };
 
-export default MatchProfileScreen;
+export default UserProfileScreen;

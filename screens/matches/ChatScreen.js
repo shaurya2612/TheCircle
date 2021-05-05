@@ -14,24 +14,24 @@ import {
   Actions,
   Bubble,
 } from 'react-native-gifted-chat';
-import CustomHeader from '../components/CustomHeader';
-import CustomSafeAreaView from '../components/CustomSafeAreaView';
+import CustomHeader from '../../components/CustomHeader';
+import CustomSafeAreaView from '../../components/CustomSafeAreaView';
 import Icon from 'react-native-vector-icons/Feather';
-import StackHeader from '../components/StackHeader';
-import styles from '../styles';
+import StackHeader from '../../components/StackHeader';
+import styles from '../../styles';
 import {scale, verticalScale} from 'react-native-size-matters';
-import AvatarCircle from '../components/AvatarCircle';
-import AppText from '../components/AppText';
+import AvatarCircle from '../../components/AvatarCircle';
+import AppText from '../../components/AppText';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import Modal from 'react-native-modalbox';
-import UserProfileScreen from './UserProfileScreen';
-import IconCircle from '../components/IconCircle';
-import FormTextInput from '../components/FormTextInput';
-import ReplyChatFooter from '../components/chat/ReplyChatFooter';
-import CustomComposer from '../components/chat/CustomComposer';
-import CustomSend from '../components/chat/CustomSend';
-import MatchChatHeader from '../components/chat/MatchChatHeader';
-import colors from '../constants/colors';
+import UserProfileScreen from '../user/UserProfileScreen';
+import IconCircle from '../../components/IconCircle';
+import FormTextInput from '../../components/FormTextInput';
+import ReplyChatFooter from '../../components/chat/ReplyChatFooter';
+import CustomComposer from '../../components/chat/CustomComposer';
+import CustomSend from '../../components/chat/CustomSend';
+import MatchChatHeader from '../../components/chat/MatchChatHeader';
+import colors from '../../constants/colors';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   CLEAR_CHAT_STATE,
@@ -40,13 +40,13 @@ import {
   sendMessageToMatch,
   startListeningForChat,
   stopListeningForChat,
-} from '../store/actions/chat';
+} from '../../store/actions/chat';
 import MatchProfileScreen from './MatchProfileScreen';
-import CueCardsScreen from './CueCardsScreen';
+import CueCardsScreen from '../CueCardsScreen';
 import ReactNativeModal from 'react-native-modal';
-import {setUserIsTyping} from '../firebase/utils';
+import {setUserIsTyping} from '../../firebase/utils';
 import auth from '@react-native-firebase/auth';
-import ImageChatFooter from '../components/chat/ImageChatFooter';
+import ImageChatFooter from '../../components/chat/ImageChatFooter';
 import {launchImageLibrary} from 'react-native-image-picker';
 
 const ChatScreen = props => {

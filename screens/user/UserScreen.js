@@ -17,7 +17,7 @@ import NameText from '../../components/NameText';
 import colors from '../../constants/colors';
 import {fetchUser, updateInterestedIn} from '../../store/actions/user';
 import styles from '../../styles';
-import UserProfileScreen from '../UserProfileScreen';
+import UserProfileScreen from './UserProfileScreen';
 
 const UserScreen = props => {
   const userState = useSelector(state => state.user);

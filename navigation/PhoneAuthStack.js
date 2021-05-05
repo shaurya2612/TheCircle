@@ -1,7 +1,7 @@
 import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import MatchesListScreen from '../screens/MatchesListScreen';
-import ChatScreen from '../screens/ChatScreen';
+import MatchesListScreen from '../screens/matches/MatchesListScreen';
+import ChatScreen from '../screens/matches/ChatScreen';
 import PhoneAuthScreen from '../screens/login/PhoneAuthScreen';
 import PhoneVerificationScreen from '../screens/login/PhoneVerificationScreen';
 import LoginScreen from '../screens/login/LoginScreen';

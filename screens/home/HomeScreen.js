@@ -22,7 +22,7 @@ import {
   listenForUserMatchingStatus,
 } from '../../store/actions/matching';
 import SearchingScreen from './SearchingScreen';
-import ChatScreen from '../ChatScreen';
+import ChatScreen from '../matches/ChatScreen';
 import AnonymousChatScreen from './AnonymousChatScreen';
 import colors from '../../constants/colors';
 import LinearGradient from 'react-native-linear-gradient';

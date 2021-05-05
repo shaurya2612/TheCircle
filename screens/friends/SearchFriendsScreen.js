@@ -241,7 +241,7 @@ const SearchFriendsScreen = () => {
               <View style={styles.centerView}>
                 <AppText style={styles.titleText}>Oops !</AppText>
                 <Image
-                  source={require('../assets/stumble.png')}
+                  source={require('../../assets/stumble.png')}
                   style={{resizeMode: 'contain'}}
                 />
                 <AppText style={{...styles.nameText, textAlign: 'center'}}>

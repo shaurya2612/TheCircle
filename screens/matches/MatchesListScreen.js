@@ -12,26 +12,26 @@ import {
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {scale, verticalScale} from 'react-native-size-matters';
-import AppText from '../components/AppText';
-import AvatarCircle from '../components/AvatarCircle';
-import ChatListItem from '../components/ChatListItem';
-import styles from '../styles';
+import AppText from '../../components/AppText';
+import AvatarCircle from '../../components/AvatarCircle';
+import ChatListItem from '../../components/ChatListItem';
+import styles from '../../styles';
 import Modal from 'react-native-modalbox';
 // import Modal from 'react-native-modal';
-import UserProfileScreen from './UserProfileScreen';
+import UserProfileScreen from '../user/UserProfileScreen';
 import {createRef} from 'react';
-import SearchBar from '../components/SearchBar';
+import SearchBar from '../../components/SearchBar';
 import {useDispatch, useSelector} from 'react-redux';
-import colors from '../constants/colors';
-import {listenForMatches} from '../store/actions/user';
-import {setMatch} from '../store/actions/chat';
+import colors from '../../constants/colors';
+import {listenForMatches} from '../../store/actions/user';
+import {setMatch} from '../../store/actions/chat';
 import MatchProfileScreen from './MatchProfileScreen';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Feather';
 import ReactNativeModal from 'react-native-modal';
-import NameText from '../components/NameText';
-import ModalCardView from '../components/ModalCardView';
-import {unmatch} from '../firebase/utils';
+import NameText from '../../components/NameText';
+import ModalCardView from '../../components/ModalCardView';
+import {unmatch} from '../../firebase/utils';
 // const data = [
 //   {
 //     name: "Mila",
