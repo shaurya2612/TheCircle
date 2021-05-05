@@ -4,11 +4,11 @@ import {FlatList} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {scale, verticalScale} from 'react-native-size-matters';
 import {useDispatch, useSelector} from 'react-redux';
-import AppText from '../components/AppText';
-import FriendCard from '../components/FriendCard';
-import SearchBar from '../components/SearchBar';
-import {listenForRequests, loadMoreRequests} from '../store/actions/user';
-import styles from '../styles';
+import AppText from '../../components/AppText';
+import FriendCard from '../../components/FriendCard';
+import SearchBar from '../../components/SearchBar';
+import {listenForRequests, loadMoreRequests} from '../../store/actions/user';
+import styles from '../../styles';
 
 const data = [
   {dp: 'https://picsum.photos/200/300', name: 'Chad'},

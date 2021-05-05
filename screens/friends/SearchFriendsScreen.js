@@ -10,19 +10,19 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {scale, verticalScale} from 'react-native-size-matters';
 import Icon from 'react-native-vector-icons/Feather';
-import AppText from '../components/AppText';
-import FriendCard from '../components/FriendCard';
-import SearchBar from '../components/SearchBar';
-import styles from '../styles';
-import FormButton from '../components/FormButton';
+import AppText from '../../components/AppText';
+import FriendCard from '../../components/FriendCard';
+import SearchBar from '../../components/SearchBar';
+import styles from '../../styles';
+import FormButton from '../../components/FormButton';
 import {
   searchFriendByUsername,
   searchFriendsByNameOrUsername,
-} from '../firebase/utils';
+} from '../../firebase/utils';
 import {useDispatch, useSelector} from 'react-redux';
-import {setSearchingForFriends} from '../store/actions/loading';
-import {setErrorMessage} from '../store/actions/error';
-import FriendsListItem from '../components/FriendsListItem';
+import {setSearchingForFriends} from '../../store/actions/loading';
+import {setErrorMessage} from '../../store/actions/error';
+import FriendsListItem from '../../components/FriendsListItem';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import ReactNativeModal from 'react-native-modal';
 import database from '@react-native-firebase/database';

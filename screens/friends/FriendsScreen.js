@@ -8,16 +8,16 @@ import {
 } from 'react-native';
 import ReactNativeModal from 'react-native-modal';
 import {scale, verticalScale} from 'react-native-size-matters';
-import AppText from '../components/AppText';
-import ModalCardView from '../components/ModalCardView';
-import FriendsListItem from '../components/FriendsListItem';
-import SearchBar from '../components/SearchBar';
-import styles from '../styles';
-import NameText from '../components/NameText';
+import AppText from '../../components/AppText';
+import ModalCardView from '../../components/ModalCardView';
+import FriendsListItem from '../../components/FriendsListItem';
+import SearchBar from '../../components/SearchBar';
+import styles from '../../styles';
+import NameText from '../../components/NameText';
 import {useDispatch, useSelector} from 'react-redux';
-import {listenForFriends, loadMoreFriends} from '../store/actions/user';
-import {unfriend} from '../firebase/utils';
-import colors from '../constants/colors';
+import {listenForFriends, loadMoreFriends} from '../../store/actions/user';
+import {unfriend} from '../../firebase/utils';
+import colors from '../../constants/colors';
 import LinearGradient from 'react-native-linear-gradient';
 
 const dummyData = [
