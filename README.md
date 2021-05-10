@@ -1,5 +1,5 @@
 # The Circle
-A dating app which matches user based on their common friends.
+A dating app which matches users based on their common friends.
 Made with React-Native, Redux and Google's Firebase.
 
 ## Matching Demo 
