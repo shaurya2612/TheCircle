@@ -2,10 +2,8 @@
 A dating app which matches user based on their common friends.
 Made with React-Native, Redux, Firebase Realtime Database.
 
-## Matching with another User 
+## Matching Demo 
 <p align="middle">
- <img src="https://github.com/shaurya2612/TheCircle/blob/main/CircleMatching.gif" width=20% height=20%>
- <img src="https://github.com/shaurya2612/TheCircle/blob/main/CircleMatching.gif" width=20% height=20%>
  <img src="https://github.com/shaurya2612/TheCircle/blob/main/CircleMatching.gif" width=20% height=20%>
 </p>
 
