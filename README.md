@@ -4,7 +4,8 @@ Made with React-Native, Redux and Google's Firebase.
 
 ## Matching Demo 
 <p align="middle">
- <blockquote class="imgur-embed-pub" lang="en" data-id="a/XF0NHvZ" data-context="false" ><a href="//imgur.com/a/XF0NHvZ"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+ <blockquote class="imgur-embed-pub" lang="en" data-id="a/XF0NHvZ" data-context="false" ><a href="//imgur.com/a/XF0NHvZ"></a></blockquote>
+ <script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
  <img src="https://github.com/shaurya2612/TheCircle/blob/main/CircleMatching.gif" width=30% height=30%>
 </p>
 
