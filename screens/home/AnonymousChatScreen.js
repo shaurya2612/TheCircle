@@ -43,12 +43,12 @@ import LinearGradient from 'react-native-linear-gradient';
 const AnonymousChatScreen = props => {
   const matchingState = useSelector(state => state.matching);
   const {
-    FOF,
     viaFriend,
     messages,
     matchingStatus,
     canLoadEarlierMessages,
   } = matchingState;
+  const FOF = useSelector(state => state.matching.FOF);
   const dispatch = useDispatch();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [areCueCardsVisible, setAreCueCardsVisible] = useState(false);
@@ -62,9 +62,14 @@ const AnonymousChatScreen = props => {
   );
   const [userIsAlreadyTyping, setUserIsAlreadyTyping] = useState(null);
   useEffect(() => {
+    console.warn('Ran useEffect', FOF);
     if (FOF === null) {
       dispatch(configureAnonymousChatRoom());
     } else {
+      console.warn(
+        'listeningForAnonymousChatRoom',
+        listeningForAnonymousChatRoom,
+      );
       if (!listeningForAnonymousChatRoom) {
         dispatch(paginateMessagesInAnonymousChatRoomQuery());
         dispatch(startListeningForAnonymousChatRoom());

@@ -64,192 +64,192 @@ export const changeUserMatchingStatus = newStatus => {
 
       //Matching on
       if (newStatus === 1) {
-        dispatch(setLoadingAd(true));
-        const adUnitId = __DEV__
-          ? TestIds.INTERSTITIAL
-          : Platform.OS === 'android'
-          ? 'ca-app-pub-6422755385693448/9628631675' //Under Ad Unit Id section of adMob
-          : 'ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy';
+        // dispatch(setLoadingAd(true));
+        // const adUnitId = __DEV__
+        //   ? TestIds.INTERSTITIAL
+        //   : Platform.OS === 'android'
+        //   ? 'ca-app-pub-6422755385693448/9628631675' //Under Ad Unit Id section of adMob
+        //   : 'ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy';
 
-        const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
-          requestNonPersonalizedAdsOnly: true,
-          keywords: ['fashion', 'clothing'],
-        });
+        // const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
+        //   requestNonPersonalizedAdsOnly: true,
+        //   keywords: ['fashion', 'clothing'],
+        // });
 
-        interstitial.onAdEvent(async type => {
-          if (type === AdEventType.LOADED) {
-            dispatch(setLoadingAd(false));
-            interstitial.show();
+        // interstitial.onAdEvent(async type => {
+        //   if (type === AdEventType.LOADED) {
+        //     dispatch(setLoadingAd(false));
+        //     interstitial.show();
+        //   }
+        //   if (type === AdEventType.CLOSED) {
+        //   }
+        // });
+
+        // interstitial.load();
+        await db.ref('/matchingStatus').child(uid).set(1);
+
+        let chosenFOF = null; //FOF chosen
+        let foundFOF = false; //is FOF found or not (since chosenFOF !== null is not a sufficient condition)
+        let viaFriendId = null; //Friend via which final fof is chosen
+
+        //pick a random friend
+        const friendsSnapshot = await db
+          .ref('/friends')
+          .child(uid)
+          .once('value'); //**** potentially heavy data downloaded ****
+
+        if (!friendsSnapshot.exists()) {
+          //user does not have friends yet
+          dispatch(setErrorMessage('Please add at friends first !'));
+          dispatch(changeUserMatchingStatus(0));
+          return;
+        }
+
+        let friendsIds = Object.keys(friendsSnapshot.val());
+        let copyOfFriendsIds = Object.keys(friendsSnapshot.val()); // for later use during adding users name in every friends waitingList
+
+        while (friendsIds.length > 0) {
+          //select a random friend from friendsIds array
+          const randomFriendIndex = Math.floor(
+            Math.random() * friendsIds.length,
+          );
+
+          const chosenFriendId = friendsIds[randomFriendIndex];
+
+          //Query in firestore to find a potential match
+
+          //if user is interested in everyone
+          if (userState.interestedIn === 'Everyone') {
+            chosenFOF = await firestoreDb
+              .collection(`waitingUsers`)
+              .where('friends', 'array-contains', chosenFriendId)
+              .where('interestedIn', 'in', [userState.gender, 'Everyone'])
+              .orderBy('timestamp', 'asc')
+              .limit(1)
+              .get();
+          } else {
+            chosenFOF = await firestoreDb
+              .collection(`waitingUsers`)
+              .where('friends', 'array-contains', chosenFriendId)
+              .where('gender', '==', userState.interestedIn)
+              .where('interestedIn', 'in', [userState.gender, 'Everyone'])
+              .orderBy('timestamp', 'asc')
+              .limit(1)
+              .get();
           }
-          if (type === AdEventType.CLOSED) {
-            await db.ref('/matchingStatus').child(uid).set(1);
-
-            let chosenFOF = null; //FOF chosen
-            let foundFOF = false; //is FOF found or not (since chosenFOF !== null is not a sufficient condition)
-            let viaFriendId = null; //Friend via which final fof is chosen
-
-            //pick a random friend
-            const friendsSnapshot = await db
+          if (chosenFOF.empty) {
+            friendsIds.splice(randomFriendIndex, 1);
+            continue;
+          } else {
+            //check if the chosen fof is in your matches
+            let matchesRes = await db
+              .ref('/matches')
+              .child(uid)
+              .child(chosenFOF.docs[0].id)
+              .once('value');
+            if (matchesRes.exists()) {
+              friendsIds.splice(randomFriendIndex, 1);
+              continue;
+            }
+            //check if the chosen fof is in your friends
+            let friendsRes = await db
               .ref('/friends')
               .child(uid)
-              .once('value'); //**** potentially heavy data downloaded ****
-
-            if (!friendsSnapshot.exists()) {
-              //user does not have friends yet
-              dispatch(setErrorMessage('Please add at friends first !'));
-              dispatch(changeUserMatchingStatus(0));
-              return;
+              .child(chosenFOF.docs[0].id)
+              .once('value');
+            if (friendsRes.exists()) {
+              friendsIds.splice(randomFriendIndex, 1);
+              continue;
             }
 
-            let friendsIds = Object.keys(friendsSnapshot.val());
-            let copyOfFriendsIds = Object.keys(friendsSnapshot.val()); // for later use during adding users name in every friends waitingList
-
-            while (friendsIds.length > 0) {
-              //select a random friend from friendsIds array
-              const randomFriendIndex = Math.floor(
-                Math.random() * friendsIds.length,
-              );
-
-              const chosenFriendId = friendsIds[randomFriendIndex];
-
-              //Query in firestore to find a potential match
-
-              //if user is interested in everyone
-              if (userState.interestedIn === 'Everyone') {
-                chosenFOF = await firestoreDb
-                  .collection(`waitingUsers`)
-                  .where('friends', 'array-contains', chosenFriendId)
-                  .where('interestedIn', 'in', [userState.gender, 'Everyone'])
-                  .orderBy('timestamp', 'asc')
-                  .limit(1)
-                  .get();
-              } else {
-                chosenFOF = await firestoreDb
-                  .collection(`waitingUsers`)
-                  .where('friends', 'array-contains', chosenFriendId)
-                  .where('gender', '==', userState.interestedIn)
-                  .where('interestedIn', 'in', [userState.gender, 'Everyone'])
-                  .orderBy('timestamp', 'asc')
-                  .limit(1)
-                  .get();
-              }
-              if (chosenFOF.empty) {
-                friendsIds.splice(randomFriendIndex, 1);
-                continue;
-              } else {
-                //check if the chosen fof is in your matches
-                let matchesRes = await db
-                  .ref('/matches')
-                  .child(uid)
-                  .child(chosenFOF.docs[0].id)
-                  .once('value');
-                if (matchesRes.exists()) {
-                  friendsIds.splice(randomFriendIndex, 1);
-                  continue;
-                }
-                //check if the chosen fof is in your friends
-                let friendsRes = await db
-                  .ref('/friends')
-                  .child(uid)
-                  .child(chosenFOF.docs[0].id)
-                  .once('value');
-                if (friendsRes.exists()) {
-                  friendsIds.splice(randomFriendIndex, 1);
-                  continue;
-                }
-
-                //change the data structure of chosenFOF to {id, gender, timestamp, interestedIn}
-                chosenFOF = {
-                  ...chosenFOF.docs[0].data(),
-                  id: chosenFOF.docs[0].id,
-                };
-                foundFOF = true;
-                viaFriendId = chosenFriendId;
-                break;
-              }
-            }
-
-            if (foundFOF) {
-              //make an anonymous chat room with the chosenFOF and change the matching status
-
-              //delete the doc of the selected FOF from all their friends' waiting lists
-              await firestoreDb
-                .collection('waitingUsers')
-                .doc(chosenFOF.id)
-                .delete();
-
-              //Add in chat rooms
-              await Promise.all([
-                db.ref('/chatRooms').child(uid).set(chosenFOF.id),
-                db.ref('/chatRooms').child(chosenFOF.id).set(uid),
-              ]);
-
-              //Add in viaFriend
-              await Promise.all([
-                db.ref('/viaFriend').child(uid).set(viaFriendId),
-                db.ref('/viaFriend').child(chosenFOF.id).set(viaFriendId),
-              ]);
-
-              //get the name of via friend
-              let viaFriendName = await db
-                .ref('/users')
-                .child(viaFriendId)
-                .child('name')
-                .once('value');
-              viaFriendName = viaFriendName.val();
-
-              //get the age of FOF
-              let FOFbd = await db
-                .ref('/users')
-                .child(chosenFOF.id)
-                .child('bd')
-                .once('value');
-              FOFbd = FOFbd.val();
-
-              chosenFOF['age'] = bdToAge(FOFbd);
-
-              //check the nonbinary (if that's the case)
-              let FOFNonBinary = await db
-                .ref('/nonBinary')
-                .child(chosenFOF.id)
-                .once('value');
-
-              if (FOFNonBinary.exists()) {
-                FOFNonBinary = FOFNonBinary.val();
-                chosenFOF['nonBinary'] = FOFNonBinary;
-              }
-
-              dispatch({
-                type: SET_CHAT_ROOM,
-                payload: {
-                  viaFriend: {name: viaFriendName, id: viaFriendId},
-                  FOF: chosenFOF,
-                },
-              });
-
-              //change Matching Status of both the users
-              await Promise.all([
-                db.ref('/matchingStatus').child(uid).set(2),
-                db.ref('/matchingStatus').child(chosenFOF.id).set(2),
-              ]);
-              await sendNotification(
-                chosenFOF.id,
-                'We found someone!',
-                'Press to enter the chat room',
-              );
-            } else {
-              //push current user to waiting users
-              await firestoreDb.collection(`waitingUsers`).doc(uid).set({
-                gender: userState.gender,
-                interestedIn: userState.interestedIn,
-                timestamp: firestore.FieldValue.serverTimestamp(),
-                friends: copyOfFriendsIds,
-              });
-            }
+            //change the data structure of chosenFOF to {id, gender, timestamp, interestedIn}
+            chosenFOF = {
+              ...chosenFOF.docs[0].data(),
+              id: chosenFOF.docs[0].id,
+            };
+            foundFOF = true;
+            viaFriendId = chosenFriendId;
+            break;
           }
-        });
+        }
 
-        interstitial.load();
+        if (foundFOF) {
+          //make an anonymous chat room with the chosenFOF and change the matching status
+
+          //delete the doc of the selected FOF from all their friends' waiting lists
+          await firestoreDb
+            .collection('waitingUsers')
+            .doc(chosenFOF.id)
+            .delete();
+
+          //Add in chat rooms
+          await Promise.all([
+            db.ref('/chatRooms').child(uid).set(chosenFOF.id),
+            db.ref('/chatRooms').child(chosenFOF.id).set(uid),
+          ]);
+
+          //Add in viaFriend
+          await Promise.all([
+            db.ref('/viaFriend').child(uid).set(viaFriendId),
+            db.ref('/viaFriend').child(chosenFOF.id).set(viaFriendId),
+          ]);
+
+          //get the name of via friend
+          let viaFriendName = await db
+            .ref('/users')
+            .child(viaFriendId)
+            .child('name')
+            .once('value');
+          viaFriendName = viaFriendName.val();
+
+          //get the age of FOF
+          let FOFbd = await db
+            .ref('/users')
+            .child(chosenFOF.id)
+            .child('bd')
+            .once('value');
+          FOFbd = FOFbd.val();
+
+          chosenFOF['age'] = bdToAge(FOFbd);
+
+          //check the nonbinary (if that's the case)
+          let FOFNonBinary = await db
+            .ref('/nonBinary')
+            .child(chosenFOF.id)
+            .once('value');
+
+          if (FOFNonBinary.exists()) {
+            FOFNonBinary = FOFNonBinary.val();
+            chosenFOF['nonBinary'] = FOFNonBinary;
+          }
+
+          dispatch({
+            type: SET_CHAT_ROOM,
+            payload: {
+              viaFriend: {name: viaFriendName, id: viaFriendId},
+              FOF: chosenFOF,
+            },
+          });
+
+          //change Matching Status of both the users
+          await Promise.all([
+            db.ref('/matchingStatus').child(uid).set(2),
+            db.ref('/matchingStatus').child(chosenFOF.id).set(2),
+          ]);
+          await sendNotification(
+            chosenFOF.id,
+            'We found someone!',
+            'Press to enter the chat room',
+          );
+        } else {
+          //push current user to waiting users
+          await firestoreDb.collection(`waitingUsers`).doc(uid).set({
+            gender: userState.gender,
+            interestedIn: userState.interestedIn,
+            timestamp: firestore.FieldValue.serverTimestamp(),
+            friends: copyOfFriendsIds,
+          });
+        }
       }
 
       if (newStatus === 2) {
@@ -524,6 +524,7 @@ export const skipThisFOF = (keepChats = false) => {
     }
 
     dispatch({type: REMOVE_CHAT_ROOM});
+    dispatch({type: SET_LISTENING_FOR_ANONYMOUS_CHAT_ROOM, payload: false});
   };
 };
 
