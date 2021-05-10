@@ -3,7 +3,8 @@ A dating app which matches user based on their common friends.
 Made with React-Native, Redux, Firebase Realtime Database.
 
 ## Matching with another User 
-<img src="https://github.com/shaurya2612/TheCircle/blob/main/CircleMatching.gif" width=40% height=40% style="display:block;margin:auto;"> 
+<img src="https://github.com/shaurya2612/TheCircle/blob/main/CircleMatching.gif" width=40% height=40% style="display:block;margin:auto;">
+<img src="https://github.com/shaurya2612/TheCircle/blob/main/CircleMatching.gif" width=40% height=40% style="display:block;margin:auto;">
 
 ## How it works
 1. The app makes temporary chatrooms based on **The friends of your friends**. In Circle your friends are called actually called **Permis**. And the friends of your friends are called **Temps**. The registration works through OTP verification of phone number and a password.
