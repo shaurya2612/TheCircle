@@ -2,14 +2,9 @@
 A dating app which matches users based on their common friends.
 Made with React-Native, Redux and Google's Firebase.
 
-## Matching Demo 
-Matching with another User  | Your profile and Editing options
--------------------------------------------------- | -----------------------------------------------------
- <img src="https://github.com/shaurya2612/TheCircle/blob/main/CircleMatching.gif" width=30% height=30%>  |  <img src="https://imgur.com/tAlNphA.gifv" width=30% height=30%>
-
 <p align="middle">
- <img src="https://github.com/shaurya2612/TheCircle/blob/main/CircleMatching.gif" width=30% height=30%>
- <img src="https://imgur.com/tAlNphA.gifv" width=30% height=30%>
+ <img src="https://github.com/shaurya2612/TheCircle_DemoGifs/blob/main/TheCircle_Matching.gif" width=30% height=30%>
+ <img src="https://github.com/shaurya2612/TheCircle_DemoGifs/blob/main/TheCircle_Profile.gif" width=30% height=30%>
 </p>
 
 ## How it works
