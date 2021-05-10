@@ -1,10 +1,12 @@
 # The Circle
-An Algorithm Centric Networking app.
-Made from React-Native, Redux, Firebase Realtime Database.
+A dating app which matches users based on their common friends.
+Made with React-Native, Redux and Google's Firebase.
 
-Matching with another User  | Your profile and Editing options
--------------------------------------------------- | -----------------------------------------------------
-![Matching with another user](CircleMatching.gif)  | ![Your profile and editing options](CircleProfile.gif)
+## Demo Gifs
+<p align="middle">
+ <img src="https://github.com/shaurya2612/TheCircle_DemoGifs/blob/main/TheCircle_Matching.gif" width=30% height=30%>
+ <img src="https://github.com/shaurya2612/TheCircle_DemoGifs/blob/main/TheCircle_Profile.gif" width=30% height=30%>
+</p>
 
 ## How it works
 1. The app makes temporary chatrooms based on **The friends of your friends**. In Circle your friends are called actually called **Permis**. And the friends of your friends are called **Temps**. The registration works through OTP verification of phone number and a password.
