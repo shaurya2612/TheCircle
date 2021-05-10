@@ -1,6 +1,6 @@
 # The Circle
 A dating app which matches user based on their common friends.
-Made with React-Native, Redux, Firebase Realtime Database.
+Made with React-Native, Redux and Google's Firebase.
 
 ## Matching Demo 
 <p align="middle">
