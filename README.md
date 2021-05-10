@@ -4,7 +4,7 @@ Made from React-Native, Redux, Firebase Realtime Database.
 
 Matching with another User  | Your profile and Editing options
 -------------------------------------------------- | -----------------------------------------------------
-![Matching with another user](CircleMatching.gif)  | ![Your profile and editing options](CircleProfile.gif)
+![Matching with another user](CircleMatching.gif){:height="50%" width="50%"}  | ![Your profile and editing options](CircleProfile.gif)
 
 ## How it works
 1. The app makes temporary chatrooms based on **The friends of your friends**. In Circle your friends are called actually called **Permis**. And the friends of your friends are called **Temps**. The registration works through OTP verification of phone number and a password.
