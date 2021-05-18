@@ -1,0 +1,30 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1080 1080">
+    <defs>
+        <style>.cls-1{fill:url(#linear-gradient);}.cls-2{fill:url(#linear-gradient-2);}</style>
+        <linearGradient id="linear-gradient" x1="259.92" y1="700.75" x2="805.88" y2="385.54" gradientUnits="userSpaceOnUse">
+            <stop offset="0.01" stop-color="#b569fe" />
+            <stop offset="0.09" stop-color="#9e66ff" />
+            <stop offset="0.16" stop-color="#8463ff" />
+            <stop offset="0.33" stop-color="#6361ff" />
+            <stop offset="0.44" stop-color="#4176ff" />
+            <stop offset="0.57" stop-color="#1b87ff" />
+            <stop offset="0.67" stop-color="#0095ff" />
+            <stop offset="0.77" stop-color="#00b5ff" />
+            <stop offset="0.86" stop-color="#00d1ff" />
+            <stop offset="0.93" stop-color="#00eaf8" />
+            <stop offset="1" stop-color="#00ffe1" />
+        </linearGradient>
+        <linearGradient id="linear-gradient-2" x1="709.07" y1="570.7" x2="872.47" y2="476.36" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#4176ff" />
+            <stop offset="0.16" stop-color="#1b87ff" />
+            <stop offset="0.35" stop-color="#0095ff" />
+            <stop offset="0.59" stop-color="#00b5ff" />
+            <stop offset="0.77" stop-color="#00d1ff" />
+            <stop offset="0.93" stop-color="#00eaf8" />
+            <stop offset="1" stop-color="#00ffe1" />
+        </linearGradient>
+    </defs>
+    <title>thecircle_logo</title>
+    <path class="cls-1" d="M815,684.77a64.47,64.47,0,0,0-121.21-30.59,192.55,192.55,0,0,1-155.43,78.69c-106.52,0-192.87-86.35-192.87-192.87s86.35-192.87,192.87-192.87a192.1,192.1,0,0,1,126.78,47.54,64.44,64.44,0,1,0,83-98.16,320.16,320.16,0,0,0-209.83-78C360.82,218.55,216.9,362.47,216.9,540S360.82,861.45,538.35,861.45c110.74,0,208.4-56,266.21-141.23l-.15-.1A64.08,64.08,0,0,0,815,684.77Z" />
+    <path class="cls-2" d="M803.56,358.88A94.12,94.12,0,0,1,710,442.59c-1.92,0-3.81-.17-5.71-.29A192.83,192.83,0,0,1,723,594.76,94,94,0,0,1,839,652.94a321.66,321.66,0,0,0-35.47-294.06Z" />
+</svg>

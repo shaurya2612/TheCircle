@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {
   Button,
+  Dimensions,
   ImageBackground,
   Keyboard,
   Text,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
 import Icon from 'react-native-vector-icons/Feather';
 import {useDispatch, useSelector} from 'react-redux';
@@ -25,12 +26,16 @@ import {
 import auth from '@react-native-firebase/auth';
 import styles from '../../styles';
 import CustomSafeAreaView from '../../components/CustomSafeAreaView';
+import Svg, {Circle} from 'react-native-svg';
+import * as Animatable from 'react-native-animatable';
+import CocentricCircles from '../../components/svgs/CocentricCircles';
 
 const PhoneAuthScreen = props => {
   const signupFormData = useSelector(state => state.signupForm);
   const {phoneNumber} = signupFormData;
   const dispatch = useDispatch();
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
   const phoneNumberValidator = phoneNum => {
     let rjx = /^[0-9]{10}$/;
@@ -46,20 +51,56 @@ const PhoneAuthScreen = props => {
     setIsButtonDisabled(!phoneNumberValidator(phoneNumber.trim()));
   }, [phoneNumber]);
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setIsKeyboardVisible(true);
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setIsKeyboardVisible(false);
+      },
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
   return (
     <TouchableWithoutFeedback
       onPress={() => {
         Keyboard.dismiss();
       }}
       style={styles.rootView}>
-      <SafeAreaView
-        style={{...styles.rootView, backgroundColor: colors.primary}}>
-        <View style={{...styles.rootView, backgroundColor: colors.primary}}>
+      <CustomSafeAreaView
+        style={{...styles.rootView, backgroundColor: 'white'}}>
+        <View style={{...styles.rootView, backgroundColor: 'white'}}>
+          <CocentricCircles
+            innerCircleColor={colors.primary}
+            outerCircleColor={'pink'}
+            animatableViewProps={{
+              animation: 'pulse',
+              iterationCount: 'infinite',
+              iterationDelay: 2000,
+              easing: 'ease-out',
+              delay: 200,
+              style: {
+                position: 'absolute',
+                left: '50%',
+                top: isKeyboardVisible ? '-33%' : '-22%',
+              },
+            }}
+          />
           <CustomHeader>
             <Icon
               name={'x'}
               size={35}
-              color={'white'}
+              color={'black'}
               onPress={() => {
                 dispatch(clearSignupFormData());
                 props.navigation.goBack();
@@ -68,7 +109,7 @@ const PhoneAuthScreen = props => {
           </CustomHeader>
           <View style={styles.expandedCenterView}>
             <View style={styles.titleView}>
-              <AppText style={{...styles.titleText, color: 'white'}}>
+              <AppText style={{...styles.titleText, color: colors.primary}}>
                 Enter your phone number
               </AppText>
             </View>
@@ -82,9 +123,12 @@ const PhoneAuthScreen = props => {
               <CountryCodeInput />
               <FormTextInput
                 placeholder={'Phone Number'}
-                selectedBorderColor="white"
-                style={{fontSize: moderateScale(20, 0.4), color: 'white'}}
-                selectionColor={'white'}
+                selectedBorderColor={colors.primary}
+                style={{
+                  fontSize: moderateScale(20, 0.4),
+                  color: colors.primary,
+                }}
+                selectionColor={colors.primary}
                 keyboardType={'number-pad'}
                 onChangeText={text => {
                   dispatch(
@@ -108,7 +152,7 @@ const PhoneAuthScreen = props => {
           </View>
           <Spacer height={80} />
         </View>
-      </SafeAreaView>
+      </CustomSafeAreaView>
     </TouchableWithoutFeedback>
   );
 };
