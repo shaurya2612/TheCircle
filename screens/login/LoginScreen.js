@@ -14,6 +14,7 @@ import styles from '../../styles';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../constants/colors';
 import StartMatchingButton from '../../components/StartMatchingButton';
+import TheCircleLogo from '../../assets/thecircle_logo.svg';
 
 const LoginScreen = props => {
   return (
@@ -25,9 +26,10 @@ const LoginScreen = props => {
           style={styles.expandedCenterView}
           animation={'slideInUp'}>
           <View style={{justifyContent: 'center'}}>
-            <AppText style={{...styles.titleText, color: 'white'}}>
+            {/* <AppText style={{...styles.titleText, color: 'white'}}>
               The Circle
-            </AppText>
+            </AppText> */}
+            <TheCircleLogo width={48} height={48} fill="#000" />
           </View>
           <View style={{height: '20%'}} />
           <StartMatchingButton
