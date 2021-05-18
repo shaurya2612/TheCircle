@@ -20,7 +20,7 @@ export const StartMatchingButton = ({title, ...props}) => {
       }>
       <Text
         style={{
-          fontSize: scale(22, 0.4),
+          fontSize: scale(20, 0.4),
           color: props.disabled ? '#cccccc' : colors.accent,
         }}>
         {title}
