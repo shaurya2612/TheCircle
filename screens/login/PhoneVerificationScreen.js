@@ -20,6 +20,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import ProgressLine from '../../components/ProgressLine';
 import FormButton from '../../components/FormButton';
 import Spacer from '../../components/Spacer';
+import CocentricCircles from '../../components/svgs/CocentricCircles';
 
 const PhoneVerificationScreen = props => {
   const textInputRef1 = useRef();
@@ -37,6 +38,7 @@ const PhoneVerificationScreen = props => {
     4: null,
     5: null,
   });
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const {phoneNumber} = useSelector(state => state.signupForm);
   const dispatch = useDispatch();
 
@@ -69,6 +71,26 @@ const PhoneVerificationScreen = props => {
     signInWithPhoneNumber();
   }, []);
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setIsKeyboardVisible(true);
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setIsKeyboardVisible(false);
+      },
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
   if (!codeSent)
     return (
       <CustomSafeAreaView
@@ -88,42 +110,47 @@ const PhoneVerificationScreen = props => {
         Keyboard.dismiss();
       }}
       style={styles.rootView}>
-      <SafeAreaView
-        style={{...styles.rootView, backgroundColor: colors.primary}}>
-        <StackHeader backIconColor={'white'} navigation={props.navigation} />
-        <View style={styles.expandedCenterView}>
-          <View style={styles.titleView}>
-            <AppText style={{color: 'white', fontSize: scale(20)}}>
-              Enter the verification code sent to {`+91 ${phoneNumber}`}
-            </AppText>
-          </View>
-          <AppText style={{color: 'white', fontSize: scale(20)}}>
-            Did not receive a code?{' '}
-            <Text
-              style={{textDecorationLine: 'underline'}}
-              onPress={async () => {
-                await signInWithPhoneNumber();
-              }}>
-              Resend
-            </Text>
+      <SafeAreaView style={{...styles.rootView, backgroundColor: 'white'}}>
+        <CocentricCircles
+          innerCircleColor={colors.primary}
+          outerCircleColor={'pink'}
+          animatableViewProps={{
+            animation: 'pulse',
+            iterationCount: 'infinite',
+            iterationDelay: 2000,
+            easing: 'ease-out',
+            delay: 200,
+            style: {
+              position: 'absolute',
+              left: '50%',
+              top: isKeyboardVisible ? '-33%' : '-22%',
+            },
+          }}
+        />
+        <StackHeader backIconColor={'black'} navigation={props.navigation} />
+        <View style={{...styles.expandedCenterView}}>
+          <AppText style={{color: colors.primary, fontSize: scale(20)}}>
+            Enter the verification code sent to {`+91 ${phoneNumber}`}
           </AppText>
+
           <View
             style={{
               flexDirection: 'row',
               alignItems: 'center',
               paddingHorizontal: scale(70),
-              flex: 1,
+              marginTop: scale(20),
+              marginBottom: scale(50),
             }}>
             <TextInput
               style={{
                 ...styles.selectedFormTextInput,
-                borderColor: 'white',
+                borderColor: '#cccccc',
                 fontSize: moderateScale(20, 0.4),
-                color: 'white',
+                color: colors.primary,
                 width: '16.66%',
                 textAlign: 'center',
               }}
-              selectionColor={'white'}
+              selectionColor={colors.primary}
               keyboardType={'number-pad'}
               maxLength={1}
               onChangeText={text => {
@@ -137,13 +164,13 @@ const PhoneVerificationScreen = props => {
               ref={textInputRef1}
               style={{
                 ...styles.selectedFormTextInput,
-                borderColor: 'white',
+                borderColor: '#cccccc',
                 fontSize: moderateScale(20, 0.4),
-                color: 'white',
+                color: colors.primary,
                 width: '16.66%',
                 textAlign: 'center',
               }}
-              selectionColor={'white'}
+              selectionColor={colors.primary}
               keyboardType={'number-pad'}
               maxLength={1}
               onChangeText={text => {
@@ -157,13 +184,13 @@ const PhoneVerificationScreen = props => {
               ref={textInputRef2}
               style={{
                 ...styles.selectedFormTextInput,
-                borderColor: 'white',
+                borderColor: '#cccccc',
                 fontSize: moderateScale(20, 0.4),
-                color: 'white',
+                color: colors.primary,
                 width: '16.66%',
                 textAlign: 'center',
               }}
-              selectionColor={'white'}
+              selectionColor={colors.primary}
               keyboardType={'number-pad'}
               maxLength={1}
               onChangeText={text => {
@@ -177,13 +204,13 @@ const PhoneVerificationScreen = props => {
               ref={textInputRef3}
               style={{
                 ...styles.selectedFormTextInput,
-                borderColor: 'white',
+                borderColor: '#cccccc',
                 fontSize: moderateScale(20, 0.4),
-                color: 'white',
+                color: colors.primary,
                 width: '16.66%',
                 textAlign: 'center',
               }}
-              selectionColor={'white'}
+              selectionColor={colors.primary}
               keyboardType={'number-pad'}
               maxLength={1}
               onChangeText={text => {
@@ -197,13 +224,13 @@ const PhoneVerificationScreen = props => {
               ref={textInputRef4}
               style={{
                 ...styles.selectedFormTextInput,
-                borderColor: 'white',
+                borderColor: '#cccccc',
                 fontSize: moderateScale(20, 0.4),
-                color: 'white',
+                color: colors.primary,
                 width: '16.66%',
                 textAlign: 'center',
               }}
-              selectionColor={'white'}
+              selectionColor={colors.primary}
               keyboardType={'number-pad'}
               maxLength={1}
               onChangeText={text => {
@@ -217,13 +244,13 @@ const PhoneVerificationScreen = props => {
               ref={textInputRef5}
               style={{
                 ...styles.selectedFormTextInput,
-                borderColor: 'white',
+                borderColor: '#cccccc',
                 fontSize: moderateScale(20, 0.4),
-                color: 'white',
+                color: colors.primary,
                 width: '16.66%',
                 textAlign: 'center',
               }}
-              selectionColor={'white'}
+              selectionColor={colors.primary}
               keyboardType={'number-pad'}
               maxLength={1}
               onChangeText={text => {
@@ -231,6 +258,17 @@ const PhoneVerificationScreen = props => {
               }}
             />
           </View>
+
+          <AppText style={{color: colors.primary, fontSize: scale(20)}}>
+            Did not receive a code?{' '}
+            <Text
+              style={{textDecorationLine: 'underline'}}
+              onPress={async () => {
+                await signInWithPhoneNumber();
+              }}>
+              Resend
+            </Text>
+          </AppText>
         </View>
 
         <View style={styles.formButtonView}>

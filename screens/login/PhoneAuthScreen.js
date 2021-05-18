@@ -123,6 +123,7 @@ const PhoneAuthScreen = props => {
               <CountryCodeInput />
               <FormTextInput
                 placeholder={'Phone Number'}
+                value={phoneNumber}
                 selectedBorderColor={colors.primary}
                 style={{
                   fontSize: moderateScale(20, 0.4),
