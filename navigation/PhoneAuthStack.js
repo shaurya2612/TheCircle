@@ -6,6 +6,7 @@ import PhoneAuthScreen from '../screens/login/PhoneAuthScreen';
 import PhoneVerificationScreen from '../screens/login/PhoneVerificationScreen';
 import LoginScreen from '../screens/login/LoginScreen';
 import SignupInterestedInScreen from '../screens/signup/SignupInterestedInScreen';
+import SignupNameScreen from '../screens/signup/SignupNameScreen';
 
 const PhoneAuthStackNavigator = createStackNavigator();
 
@@ -18,7 +19,7 @@ export const PhoneAuthStack = () => {
       />
       <PhoneAuthStackNavigator.Screen
         name={'PhoneAuthScreen'}
-        component={SignupInterestedInScreen}
+        component={SignupNameScreen}
         options={TransitionPresets.ModalSlideFromBottomIOS}
       />
       <PhoneAuthStackNavigator.Screen

@@ -20,6 +20,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import ProgressLine from '../../components/ProgressLine';
 import {moderateScale, verticalScale} from 'react-native-size-matters';
 import colors from '../../constants/colors';
+import CocentricCircles from '../../components/svgs/CocentricCircles';
 
 const SignupNameScreen = props => {
   const signupFormData = useSelector(state => state.signupForm);
@@ -27,6 +28,7 @@ const SignupNameScreen = props => {
   // const [firstName, setFirstName] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [isErrShown, setIsErrShown] = useState(false);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const dispatch = useDispatch();
 
   //Validator for firstName
@@ -46,13 +48,49 @@ const SignupNameScreen = props => {
     setIsErrShown(!firstNameValidator(firstName.trim()));
   }, [firstName]);
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setIsKeyboardVisible(true);
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setIsKeyboardVisible(false);
+      },
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
   return (
-    <SafeAreaView style={{...styles.rootView, backgroundColor: colors.accent}}>
+    <SafeAreaView style={{...styles.rootView, backgroundColor: "white"}}>
+      <CocentricCircles
+        innerCircleColor={colors.primary}
+        outerCircleColor={'pink'}
+        animatableViewProps={{
+          animation: 'pulse',
+          iterationCount: 'infinite',
+          iterationDelay: 2000,
+          easing: 'ease-out',
+          delay: 200,
+          style: {
+            position: 'absolute',
+            left: '50%',
+            top: isKeyboardVisible ? '-33%' : '-22%',
+          },
+        }}
+      />
       <View style={{...styles.rootView}}>
         <ProgressLine
           style={{
             width: '28.6%',
-            backgroundColor: 'white',
+            backgroundColor: '#cccccc',
             height: verticalScale(5),
           }}
         />
@@ -60,14 +98,14 @@ const SignupNameScreen = props => {
 
         <View style={styles.expandedCenterView}>
           <View style={styles.titleView}>
-            <AppText style={{...styles.titleText, color: 'white'}}>
+            <AppText style={{...styles.titleText, color: colors.primary}}>
               Enter your first name
             </AppText>
           </View>
           <FormTextInput
             value={firstName}
-            selectedBorderColor="white"
-            style={{fontSize: moderateScale(20, 0.4), color: 'white'}}
+            selectedBorderColor={colors.primary}
+            style={{fontSize: moderateScale(20, 0.4), color: colors.primary}}
             selectionColor={'#cccccc'}
             onChangeText={text => {
               dispatch(setSignupFormData({...signupFormData, name: text}));
@@ -86,7 +124,7 @@ const SignupNameScreen = props => {
         <View style={styles.formButtonView}>
           <FormButton
             title={'Continue'}
-            textColor={colors.accent}
+            textColor={colors.primary}
             disabled={isButtonDisabled}
             autoCorrect={false}
             onPress={() => {
