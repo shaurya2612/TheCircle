@@ -306,7 +306,7 @@ export const MatchesListScreen = props => {
                           <AppText>Photo</AppText>
                         </View>
                       ) : item.lastMessage.length > 15 ? (
-                        item.lastMessage.substring(0, 16) + '...'
+                        item.lastMessage.substring(0, 26) + '...'
                       ) : (
                         item.lastMessage
                       )

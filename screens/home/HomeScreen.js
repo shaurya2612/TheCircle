@@ -26,6 +26,7 @@ import ChatScreen from '../matches/ChatScreen';
 import AnonymousChatScreen from './AnonymousChatScreen';
 import colors from '../../constants/colors';
 import LinearGradient from 'react-native-linear-gradient';
+import CocentricCircles from '../../components/svgs/CocentricCircles';
 
 const HomeScreen = props => {
   const userState = useSelector(state => state.user);
@@ -54,11 +55,41 @@ const HomeScreen = props => {
             style={{
               ...styles.rootView,
               backgroundColor: 'white',
-            }}
-            source={{
-              uri: dp,
-            }}
-            blurRadius={Platform.OS === 'android' ? 4 : 12}>
+            }}>
+            <CocentricCircles
+              innerCircleColor={colors.primary}
+              outerCircleColor={'pink'}
+              animatableViewProps={{
+                animation: 'pulse',
+                iterationCount: 'infinite',
+                iterationDelay: 2000,
+                easing: 'ease-out',
+                delay: 200,
+                style: {
+                  position: 'absolute',
+                  left: '50%',
+                  top: '-20%',
+                  useNativeDriver: true,
+                },
+              }}
+            />
+            <CocentricCircles
+              innerCircleColor={colors.accent}
+              outerCircleColor={'lightblue'}
+              animatableViewProps={{
+                animation: 'pulse',
+                iterationCount: 'infinite',
+                iterationDelay: 2000,
+                easing: 'ease-out',
+                delay: 200,
+                style: {
+                  position: 'absolute',
+                  left: '-50%',
+                  bottom: '-20%',
+                  useNativeDriver: true,
+                },
+              }}
+            />
             <View style={{flex: 1}} />
             <View
               style={{
