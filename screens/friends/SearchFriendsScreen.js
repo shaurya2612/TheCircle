@@ -27,6 +27,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import ReactNativeModal from 'react-native-modal';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
+import LostSvg from '../../assets/lost.svg';
 
 const SearchFriendsScreen = () => {
   const loadingState = useSelector(state => state.loading);
@@ -240,10 +241,7 @@ const SearchFriendsScreen = () => {
             <View style={styles.expandedCenterView}>
               <View style={styles.centerView}>
                 <AppText style={styles.titleText}>Oops !</AppText>
-                <Image
-                  source={require('../../assets/stumble.png')}
-                  style={{resizeMode: 'contain'}}
-                />
+                <LostSvg height={scale(300)} width={scale(300)}/>
                 <AppText style={{...styles.nameText, textAlign: 'center'}}>
                   No matching results
                 </AppText>
