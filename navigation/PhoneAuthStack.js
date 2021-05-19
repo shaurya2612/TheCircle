@@ -1,12 +1,8 @@
 import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import MatchesListScreen from '../screens/matches/MatchesListScreen';
-import ChatScreen from '../screens/matches/ChatScreen';
 import PhoneAuthScreen from '../screens/login/PhoneAuthScreen';
 import PhoneVerificationScreen from '../screens/login/PhoneVerificationScreen';
 import LoginScreen from '../screens/login/LoginScreen';
-import SignupInterestedInScreen from '../screens/signup/SignupInterestedInScreen';
-import SignupNameScreen from '../screens/signup/SignupNameScreen';
 
 const PhoneAuthStackNavigator = createStackNavigator();
 
@@ -19,7 +15,7 @@ export const PhoneAuthStack = () => {
       />
       <PhoneAuthStackNavigator.Screen
         name={'PhoneAuthScreen'}
-        component={SignupNameScreen}
+        component={PhoneAuthScreen}
         options={TransitionPresets.ModalSlideFromBottomIOS}
       />
       <PhoneAuthStackNavigator.Screen

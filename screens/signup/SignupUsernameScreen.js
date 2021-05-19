@@ -16,6 +16,8 @@ import ProgressLine from '../../components/ProgressLine';
 import {isUsernameValid} from '../../firebase/utils';
 import {setLoadingState} from '../../store/actions/loading';
 import colors from '../../constants/colors';
+import CocentricCircles from '../../components/svgs/CocentricCircles';
+import LinearGradient from 'react-native-linear-gradient';
 
 const SignupUsernameScreen = props => {
   const signupFormData = useSelector(state => state.signupForm);
@@ -23,66 +25,84 @@ const SignupUsernameScreen = props => {
   const {fetchingUsername} = loadingState.SignupUsernameScreen;
   const {username} = signupFormData;
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const [isErrShown, setIsErrShown] = useState(false);
   const [errMessage, setErrMessage] = useState('');
   const dispatch = useDispatch();
 
-  const usernameValidator = async name => {
-    dispatch(
-      setLoadingState({
-        ...loadingState,
-        SignupUsernameScreen: {fetchingUsername: true},
-      }),
-    );
+  const usernameValidator = name => {
     let rjx = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,20}$/;
-    let isValid = rjx.test(name) && (await isUsernameValid(username));
-    dispatch(
-      setLoadingState({
-        ...loadingState,
-        SignupUsernameScreen: {fetchingUsername: false},
-      }),
-    );
+    let isValid = rjx.test(name);
+    setErrMessage('Username must contain only letters and numbers.');
     return isValid;
   };
 
   useEffect(() => {
-    const asyncValidate = async () => {
-      if (username === '' || !username) {
-        setIsButtonDisabled(true);
-        setIsErrShown(false);
-        return;
-      }
-      if (username.length <= 3) {
-        setIsButtonDisabled(true);
-        setIsErrShown(true);
-        setErrMessage('Username is too short');
-        return;
-      }
-      setIsButtonDisabled(!(await usernameValidator(username.trim())));
-      setIsErrShown(!(await usernameValidator(username.trim())));
-      if (!(await usernameValidator(username.trim()))) {
-        setErrMessage('This username is already taken');
-        return;
-      }
-      //make req to database to check if username is there or not
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setIsKeyboardVisible(true);
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setIsKeyboardVisible(false);
+      },
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
     };
-    asyncValidate();
+  }, []);
+
+  useEffect(() => {
+    if (username === '' || !username) {
+      setIsButtonDisabled(true);
+      setIsErrShown(false);
+      return;
+    }
+    if (username.length <= 3) {
+      setIsButtonDisabled(true);
+      setIsErrShown(true);
+      setErrMessage('Username is too short.');
+      return;
+    }
+    setIsButtonDisabled(!usernameValidator(username.trim()));
+    setIsErrShown(!usernameValidator(username.trim()));
   }, [username]);
 
   return (
-    <SafeAreaView style={{...styles.rootView, backgroundColor: colors.accent}}>
+    <View style={{...styles.rootView, backgroundColor: 'white'}}>
+      <CocentricCircles
+        innerCircleColor={colors.primary}
+        outerCircleColor={'pink'}
+        animatableViewProps={{
+          animation: 'pulse',
+          iterationCount: 'infinite',
+          iterationDelay: 2000,
+          easing: 'ease-out',
+          delay: 200,
+          style: {
+            position: 'absolute',
+            left: '50%',
+            top: isKeyboardVisible ? '-33%' : '-22%',
+          },
+        }}
+      />
       <ProgressLine
         style={{
           width: '57.2%',
-          backgroundColor: 'white',
+          backgroundColor: '#cccccc',
           height: verticalScale(5),
         }}
       />
-      <StackHeader backIconColor="white" navigation={props.navigation} />
+      <StackHeader backIconColor="black" navigation={props.navigation} />
 
       <View style={styles.expandedCenterView}>
         <View style={styles.titleView}>
-          <AppText style={{...styles.titleText, color: 'white'}}>
+          <AppText style={{...styles.titleText, color: colors.primary}}>
             Select a username
           </AppText>
           {fetchingUsername ? (
@@ -95,8 +115,8 @@ const SignupUsernameScreen = props => {
         </View>
         <FormTextInput
           maxLength={20}
-          selectedBorderColor="white"
-          style={{fontSize: moderateScale(20, 0.4), color: 'white'}}
+          selectedBorderColor={colors.primary}
+          style={{fontSize: moderateScale(20, 0.4), color: colors.primary}}
           selectionColor={'#cccccc'}
           autoCorrect={false}
           autoCapitalize="none"
@@ -118,16 +138,37 @@ const SignupUsernameScreen = props => {
       <View style={styles.formButtonView}>
         <FormButton
           title={'Continue'}
-          textColor={colors.accent}
+          textColor={colors.primary}
           disabled={isButtonDisabled || fetchingUsername}
-          onPress={() => {
+          onPress={async () => {
             Keyboard.dismiss();
+            dispatch(
+              setLoadingState({
+                ...loadingState,
+                SignupUsernameScreen: {fetchingUsername: true},
+              }),
+            );
+
+            let isValid = await isUsernameValid(username.trim());
+
+            dispatch(
+              setLoadingState({
+                ...loadingState,
+                SignupUsernameScreen: {fetchingUsername: false},
+              }),
+            );
+
+            if (!isValid) {
+              setErrMessage('This username is already taken.');
+              setIsErrShown(true);
+              return;
+            }
             props.navigation.navigate('SignupGenderScreen');
           }}
         />
       </View>
       <Spacer height={80} />
-    </SafeAreaView>
+    </View>
   );
 };
 

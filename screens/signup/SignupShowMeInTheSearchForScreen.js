@@ -12,31 +12,69 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setSignupFormData} from '../../store/actions/signupForm';
 import ProgressLine from '../../components/ProgressLine';
 import colors from '../../constants/colors';
+import CocentricCircles from '../../components/svgs/CocentricCircles';
 
 const SignupShowMeInTheSearchForScreen = props => {
   const signupFormData = useSelector(state => state.signupForm);
   const {gender} = signupFormData;
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
     if (gender) setIsButtonDisabled(false);
     else setIsButtonDisabled(true);
   }, [gender]);
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setIsKeyboardVisible(true);
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setIsKeyboardVisible(false);
+      },
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
   return (
-    <SafeAreaView style={{...styles.rootView, backgroundColor: colors.primary}}>
-      <ProgressLine
-        style={{
-          width: '85.8%',
-          backgroundColor: 'white',
-          height: verticalScale(5),
+    <SafeAreaView style={{...styles.rootView, backgroundColor: 'white'}}>
+      <CocentricCircles
+        innerCircleColor={colors.primary}
+        outerCircleColor={'pink'}
+        animatableViewProps={{
+          animation: 'pulse',
+          iterationCount: 'infinite',
+          iterationDelay: 2000,
+          easing: 'ease-out',
+          delay: 200,
+          style: {
+            position: 'absolute',
+            left: '50%',
+            top: isKeyboardVisible ? '-33%' : '-22%',
+          },
         }}
       />
 
-      <StackHeader backIconColor="white" navigation={props.navigation} />
+      <ProgressLine
+        style={{
+          width: '85.8%',
+          backgroundColor: '#cccccc',
+          height: verticalScale(5),
+        }}
+      />
+      <StackHeader backIconColor="black" navigation={props.navigation} />
       <View style={styles.expandedCenterView}>
         <View style={styles.titleView}>
-          <AppText style={{...styles.titleText, color: 'white'}}>
+          <AppText style={{...styles.titleText, color: colors.primary}}>
             Show me in the search for
           </AppText>
         </View>
@@ -49,7 +87,7 @@ const SignupShowMeInTheSearchForScreen = props => {
             onPress={() => {
               dispatch(setSignupFormData({...signupFormData, gender: 'Male'}));
             }}
-            textColor="white"
+            textColor={colors.primary}
             disabledStyle={gender === 'Male' ? true : false}
             style={localStyles.selectionButton}
             title="Men"
@@ -60,7 +98,7 @@ const SignupShowMeInTheSearchForScreen = props => {
                 setSignupFormData({...signupFormData, gender: 'Female'}),
               );
             }}
-            textColor="white"
+            textColor={colors.primary}
             disabledStyle={gender === 'Female' ? true : false}
             style={localStyles.selectionButton}
             title="Women"
