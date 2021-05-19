@@ -22,6 +22,7 @@ export const EditInfoBar = ({
   onValueChange,
   valueOptions,
   removeOption,
+  contentColor,
   ...props
 }) => {
   const [areOptionsVisible, setAreOptionsVisible] = useState(false);
@@ -126,11 +127,20 @@ export const EditInfoBar = ({
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Icon size={scale(20)} style={{margin: scale(10)}} name={iconName} />
+          <Icon
+            size={scale(20)}
+            style={{margin: scale(10)}}
+            name={iconName}
+            color={contentColor ?? 'black'}
+          />
         </View>
-        <NameText>{title}</NameText>
+        <NameText style={{color: contentColor ?? 'black'}}>{title}</NameText>
       </View>
-      {loading ? <ActivityIndicator /> : <NameText>{value}</NameText>}
+      {loading ? (
+        <ActivityIndicator />
+      ) : (
+        <NameText style={{color: contentColor ?? 'black'}}>{value}</NameText>
+      )}
     </TouchableOpacity>
   );
 };

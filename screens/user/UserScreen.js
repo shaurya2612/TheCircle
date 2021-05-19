@@ -138,13 +138,13 @@ const UserScreen = props => {
               else value = 'Everyone';
               dispatch(updateInterestedIn(value));
             }}
-            style={{marginBottom: scale(20)}}
+            style={{marginBottom: scale(20), borderWidth: scale(0.5)}}
           />
           <EditInfoBar
             iconName={'clone'}
             title={'Cue Cards'}
             value={<FontAwesome5Icon name={'chevron-right'} />}
-            style={{marginBottom: scale(20)}}
+            style={{marginBottom: scale(20), borderWidth: scale(0.5)}}
             onPress={() => {
               props.navigation.navigate('UserCueCardsScreen');
             }}
