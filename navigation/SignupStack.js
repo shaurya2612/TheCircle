@@ -13,44 +13,44 @@ import SignupInterestedInScreen from '../screens/signup/SignupInterestedInScreen
 import SignupShowMeInTheSearchForScreen from '../screens/signup/SignupShowMeInTheSearchForScreen';
 import PhoneVerificationScreen from '../screens/login/PhoneVerificationScreen';
 
-const AuthStackNavigator = createStackNavigator();
+const SignupStackNavigator = createStackNavigator();
 
-const AuthStack = () => {
+const SignupStack = () => {
   return (
-    <AuthStackNavigator.Navigator
+    <SignupStackNavigator.Navigator
       screenOptions={TransitionPresets.SlideFromRightIOS}
       headerMode="none">
-      <AuthStackNavigator.Screen
+      <SignupStackNavigator.Screen
         name="SignupNameScreen"
         component={SignupNameScreen}
         options={TransitionPresets.ModalSlideFromBottomIOS}
       />
-      <AuthStackNavigator.Screen
+      <SignupStackNavigator.Screen
         name="SignupAgeScreen"
         component={SignupAgeScreen}
       />
-      <AuthStackNavigator.Screen
+      <SignupStackNavigator.Screen
         name="SignupUsernameScreen"
         component={SignupUsernameScreen}
       />
-      <AuthStackNavigator.Screen
+      <SignupStackNavigator.Screen
         name="SignupGenderScreen"
         component={SignupGenderScreen}
       />
-      <AuthStackNavigator.Screen
+      <SignupStackNavigator.Screen
         name="SignupShowMeInTheSearchForScreen"
         component={SignupShowMeInTheSearchForScreen}
       />
-      <AuthStackNavigator.Screen
+      <SignupStackNavigator.Screen
         name="SignupInterestedInScreen"
         component={SignupInterestedInScreen}
       />
-      <AuthStackNavigator.Screen
+      <SignupStackNavigator.Screen
         name="SignupUserPhotos"
         component={SignupUserPhotos}
       />
-    </AuthStackNavigator.Navigator>
+    </SignupStackNavigator.Navigator>
   );
 };
 
-export default AuthStack;
+export default SignupStack;

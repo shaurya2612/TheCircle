@@ -5,7 +5,7 @@ import {View} from 'react-native';
 import ReactNativeModal from 'react-native-modal';
 import {useDispatch, useSelector} from 'react-redux';
 import styles from '../styles';
-import AuthStack from './AuthStack';
+import SignupStack from './SignupStack';
 import MainAppBottomTab from './MainAppBottomTab';
 import LoadingScreen from '../screens/LoadingScreen';
 import ErrorScreen from '../screens/ErrorScreen';
@@ -80,7 +80,7 @@ const AppNavigator = () => {
         isProfileCompleted ? (
           <MainAppBottomTab />
         ) : (
-          <AuthStack />
+          <SignupStack />
         )
       ) : (
         <PhoneAuthStack />
