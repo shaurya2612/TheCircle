@@ -10,12 +10,14 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import CustomSafeAreaView from '../../components/CustomSafeAreaView';
 import LinearGradient from 'react-native-linear-gradient';
+import * as Animatable from 'react-native-animatable';
 import {
   InterstitialAd,
   AdEventType,
   TestIds,
 } from '@react-native-firebase/admob';
 import {setErrorMessage} from '../../store/actions/error';
+import TheCircleLoading from '../../components/svgs/TheCircleLoading';
 
 // const adUnitId = __DEV__
 //   ? TestIds.INTERSTITIAL
@@ -69,14 +71,14 @@ const SearchingScreen = () => {
     <LinearGradient
       style={styles.expandedCenterView}
       colors={[colors.primary, colors.accent]}>
-      <ActivityIndicator size={'large'} color={'white'} />
+      <TheCircleLoading height={scale(100)} width={scale(100)}/>
       {canCancel ? (
         <FormButton
           title={'Cancel'}
           onPress={() => {
             dispatch(changeUserMatchingStatus(0));
           }}
-          style={{marginVertical: scale(30)}}
+          style={{position:"absolute" ,bottom:'30%'}}
         />
       ) : null}
     </LinearGradient>

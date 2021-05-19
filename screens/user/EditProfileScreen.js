@@ -136,6 +136,7 @@ const EditProfileScreen = props => {
                   style={{marginHorizontal: scale(5)}}
                   name={'arrow-left'}
                   size={scale(25)}
+                  color="white"
                 />
               </TouchableOpacity>
               <View />
