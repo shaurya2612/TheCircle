@@ -5,7 +5,7 @@ import ChatScreen from '../screens/matches/ChatScreen';
 import PhoneAuthScreen from '../screens/login/PhoneAuthScreen';
 import PhoneVerificationScreen from '../screens/login/PhoneVerificationScreen';
 import LoginScreen from '../screens/login/LoginScreen';
-import SignupGenderScreen from '../screens/signup/SignupGenderScreen';
+import SignupInterestedInScreen from '../screens/signup/SignupInterestedInScreen';
 
 const PhoneAuthStackNavigator = createStackNavigator();
 
@@ -18,7 +18,7 @@ export const PhoneAuthStack = () => {
       />
       <PhoneAuthStackNavigator.Screen
         name={'PhoneAuthScreen'}
-        component={SignupGenderScreen}
+        component={SignupInterestedInScreen}
         options={TransitionPresets.ModalSlideFromBottomIOS}
       />
       <PhoneAuthStackNavigator.Screen
