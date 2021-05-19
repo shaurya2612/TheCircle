@@ -233,7 +233,7 @@ const SettingsScreen = props => {
                         width: '10%',
                         textAlign: 'center',
                       }}
-                      selectionColor={'black'}
+                      selectionColor={'#cccccc'}
                       keyboardType={'number-pad'}
                       maxLength={1}
                       onChangeText={text => {
@@ -253,7 +253,7 @@ const SettingsScreen = props => {
                         width: '10%',
                         textAlign: 'center',
                       }}
-                      selectionColor={'black'}
+                      selectionColor={'#cccccc'}
                       keyboardType={'number-pad'}
                       maxLength={1}
                       onChangeText={text => {
@@ -273,7 +273,7 @@ const SettingsScreen = props => {
                         width: '10%',
                         textAlign: 'center',
                       }}
-                      selectionColor={'black'}
+                      selectionColor={'#cccccc'}
                       keyboardType={'number-pad'}
                       maxLength={1}
                       onChangeText={text => {
@@ -293,7 +293,7 @@ const SettingsScreen = props => {
                         width: '10%',
                         textAlign: 'center',
                       }}
-                      selectionColor={'black'}
+                      selectionColor={'#cccccc'}
                       keyboardType={'number-pad'}
                       maxLength={1}
                       onChangeText={text => {
@@ -313,7 +313,7 @@ const SettingsScreen = props => {
                         width: '10%',
                         textAlign: 'center',
                       }}
-                      selectionColor={'black'}
+                      selectionColor={'#cccccc'}
                       keyboardType={'number-pad'}
                       maxLength={1}
                       onChangeText={text => {
@@ -333,7 +333,7 @@ const SettingsScreen = props => {
                         width: '10%',
                         textAlign: 'center',
                       }}
-                      selectionColor={'black'}
+                      selectionColor={'#cccccc'}
                       keyboardType={'number-pad'}
                       maxLength={1}
                       onChangeText={text => {

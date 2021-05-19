@@ -97,7 +97,7 @@ const SignupUsernameScreen = props => {
           maxLength={20}
           selectedBorderColor="white"
           style={{fontSize: moderateScale(20, 0.4), color: 'white'}}
-          selectionColor={'white'}
+          selectionColor={'#cccccc'}
           autoCorrect={false}
           autoCapitalize="none"
           value={username}

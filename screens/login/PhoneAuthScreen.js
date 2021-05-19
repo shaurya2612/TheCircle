@@ -129,7 +129,7 @@ const PhoneAuthScreen = props => {
                   fontSize: moderateScale(20, 0.4),
                   color: colors.primary,
                 }}
-                selectionColor={colors.primary}
+                selectionColor={"#cccccc"}
                 keyboardType={'number-pad'}
                 onChangeText={text => {
                   dispatch(

@@ -16,6 +16,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setSignupFormData} from '../../store/actions/signupForm';
 import ProgressLine from '../../components/ProgressLine';
 import colors from '../../constants/colors';
+import {color} from 'react-native-reanimated';
+import CocentricCircles from '../../components/svgs/CocentricCircles';
 
 const SignupGenderScreen = props => {
   const signupFormData = useSelector(state => state.signupForm);
@@ -23,6 +25,7 @@ const SignupGenderScreen = props => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [moreText, setMoreText] = useState(nonBinary);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
     if (gender) setIsButtonDisabled(false);
@@ -36,20 +39,56 @@ const SignupGenderScreen = props => {
     }, [props]),
   );
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setIsKeyboardVisible(true);
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setIsKeyboardVisible(false);
+      },
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
   return (
-    <SafeAreaView style={{...styles.rootView, backgroundColor: colors.primary}}>
+    <SafeAreaView style={{...styles.rootView, backgroundColor: 'white'}}>
+      <CocentricCircles
+        innerCircleColor={colors.primary}
+        outerCircleColor={'pink'}
+        animatableViewProps={{
+          animation: 'pulse',
+          iterationCount: 'infinite',
+          iterationDelay: 2000,
+          easing: 'ease-out',
+          delay: 200,
+          style: {
+            position: 'absolute',
+            left: '50%',
+            top: isKeyboardVisible ? '-33%' : '-22%',
+          },
+        }}
+      />
       <ProgressLine
         style={{
           width: '85.8%',
-          backgroundColor: 'white',
+          backgroundColor: '#cccccc',
           height: verticalScale(5),
         }}
       />
-      <StackHeader backIconColor={'white'} navigation={props.navigation} />
+      <StackHeader backIconColor={'black'} navigation={props.navigation} />
 
       <View style={styles.expandedCenterView}>
         <View style={styles.titleView}>
-          <AppText style={{...styles.titleText, color: 'white'}}>
+          <AppText style={{...styles.titleText, color: colors.primary}}>
             I am a
           </AppText>
         </View>
@@ -64,7 +103,7 @@ const SignupGenderScreen = props => {
             }}
             disabledStyle={gender === 'Male' ? true : false}
             style={localStyles.selectionButton}
-            textColor="white"
+            textColor={colors.primary}
             title="Male"
           />
           <SelectionButton
@@ -75,7 +114,7 @@ const SignupGenderScreen = props => {
             }}
             disabledStyle={gender === 'Female' ? true : false}
             style={localStyles.selectionButton}
-            textColor="white"
+            textColor={colors.primary}
             title="Female"
           />
           <SelectionButton
@@ -86,7 +125,7 @@ const SignupGenderScreen = props => {
               gender !== 'Male' && gender !== 'Female' && gender ? true : false
             }
             style={localStyles.selectionButton}
-            textColor="white"
+            textColor={colors.primary}
             title={moreText ? moreText : 'More'}
           />
         </View>
@@ -103,6 +142,8 @@ const SignupGenderScreen = props => {
               onChangeText={text => {
                 setMoreText(text);
               }}
+              style={{color: colors.primary}}
+              selectionColor={"#cccccc"}
               placeholder={'Start typing...'}
             />
             <View style={{flexDirection: 'row', justifyContent: 'center'}}>

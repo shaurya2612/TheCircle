@@ -150,7 +150,7 @@ const PhoneVerificationScreen = props => {
                 width: '16.66%',
                 textAlign: 'center',
               }}
-              selectionColor={colors.primary}
+              selectionColor={'#cccccc'}
               keyboardType={'number-pad'}
               maxLength={1}
               onChangeText={text => {
@@ -170,7 +170,7 @@ const PhoneVerificationScreen = props => {
                 width: '16.66%',
                 textAlign: 'center',
               }}
-              selectionColor={colors.primary}
+              selectionColor={'#cccccc'}
               keyboardType={'number-pad'}
               maxLength={1}
               onChangeText={text => {
@@ -190,7 +190,7 @@ const PhoneVerificationScreen = props => {
                 width: '16.66%',
                 textAlign: 'center',
               }}
-              selectionColor={colors.primary}
+              selectionColor={'#cccccc'}
               keyboardType={'number-pad'}
               maxLength={1}
               onChangeText={text => {
@@ -210,7 +210,7 @@ const PhoneVerificationScreen = props => {
                 width: '16.66%',
                 textAlign: 'center',
               }}
-              selectionColor={colors.primary}
+              selectionColor={'#cccccc'}
               keyboardType={'number-pad'}
               maxLength={1}
               onChangeText={text => {
@@ -230,7 +230,7 @@ const PhoneVerificationScreen = props => {
                 width: '16.66%',
                 textAlign: 'center',
               }}
-              selectionColor={colors.primary}
+              selectionColor={'#cccccc'}
               keyboardType={'number-pad'}
               maxLength={1}
               onChangeText={text => {
@@ -250,7 +250,7 @@ const PhoneVerificationScreen = props => {
                 width: '16.66%',
                 textAlign: 'center',
               }}
-              selectionColor={colors.primary}
+              selectionColor={'#cccccc'}
               keyboardType={'number-pad'}
               maxLength={1}
               onChangeText={text => {
