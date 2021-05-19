@@ -3,6 +3,7 @@ import {
   Keyboard,
   Platform,
   Text,
+  TextInput,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
@@ -20,6 +21,7 @@ import {setSignupFormData} from '../../store/actions/signupForm';
 import ProgressLine from '../../components/ProgressLine';
 import CustomSafeAreaView from '../../components/CustomSafeAreaView';
 import colors from '../../constants/colors';
+import CocentricCircles from '../../components/svgs/CocentricCircles';
 
 const SignupAgeScreen = props => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
@@ -30,8 +32,13 @@ const SignupAgeScreen = props => {
   const mm = signupFormData.birthDate.mm;
   const yyyy = signupFormData.birthDate.yyyy;
   const dispatch = useDispatch();
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const monthTextInputRef = useRef();
   const yearTextInputRef = useRef();
+
+  const [isDateTextInputFocused, setIsDateTextInputFocused] = useState(false);
+  const [isMonthTextInputFocused, setIsMonthTextInputFocused] = useState(false);
+  const [isYearTextInputFocused, setIsYearTextInputFocused] = useState(false);
 
   useEffect(() => {
     if (!yyyy || !dd || !mm) {
@@ -50,6 +57,26 @@ const SignupAgeScreen = props => {
     setIsButtonDisabled(!birthDateValidator(birthDate));
     setIsErrShown(!birthDateValidator(birthDate));
   }, [dd, mm, yyyy]);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setIsKeyboardVisible(true);
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setIsKeyboardVisible(false);
+      },
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   const numberValidator = text => {
     let rjx = /^[0-9]*$/;
@@ -88,19 +115,34 @@ const SignupAgeScreen = props => {
         Keyboard.dismiss();
       }}
       style={styles.rootView}>
-      <SafeAreaView
-        style={{...styles.rootView, backgroundColor: colors.primary}}>
+      <SafeAreaView style={{...styles.rootView, backgroundColor: 'white'}}>
+        <CocentricCircles
+          innerCircleColor={colors.primary}
+          outerCircleColor={'pink'}
+          animatableViewProps={{
+            animation: 'pulse',
+            iterationCount: 'infinite',
+            iterationDelay: 2000,
+            easing: 'ease-out',
+            delay: 200,
+            style: {
+              position: 'absolute',
+              left: '50%',
+              top: isKeyboardVisible ? '-33%' : '-22%',
+            },
+          }}
+        />
         <ProgressLine
           style={{
             width: '42.9%',
-            backgroundColor: 'white',
+            backgroundColor: '#cccccc',
             height: verticalScale(5),
           }}
         />
-        <StackHeader backIconColor={'white'} navigation={props.navigation} />
+        <StackHeader backIconColor={'black'} navigation={props.navigation} />
         <View style={styles.expandedCenterView}>
           <View style={styles.titleView}>
-            <AppText style={{...styles.titleText, color: 'white'}}>
+            <AppText style={{...styles.titleText, color: colors.primary}}>
               Enter your birth date
             </AppText>
           </View>
@@ -112,14 +154,25 @@ const SignupAgeScreen = props => {
               paddingHorizontal: scale(10),
             }}>
             <View style={styles.expandedCenterView}>
-              <FormTextInput
+              <TextInput
                 placeholder="DD"
                 textAlign={'center'}
                 letterSpacing={scale(6)}
                 maxLength={2}
-                selectedBorderColor="white"
-                style={{fontSize: moderateScale(20, 0.4), color: 'white'}}
-                selectionColor={'white'}
+                onFocus={() => {
+                  setIsDateTextInputFocused(true);
+                }}
+                onBlur={() => {
+                  setIsDateTextInputFocused(false);
+                }}
+                style={{
+                  ...styles.selectedFormTextInput,
+                  fontSize: moderateScale(20, 0.4),
+                  color: colors.primary,
+                  borderColor: isDateTextInputFocused
+                    ? colors.primary
+                    : '#cccccc',
+                }}
                 keyboardType="number-pad"
                 value={dd}
                 onChangeText={text => {
@@ -130,24 +183,37 @@ const SignupAgeScreen = props => {
                       birthDate: {...signupFormData.birthDate, dd: text},
                     }),
                   );
-                  // if (text.length == 2) monthTextInputRef.current.focus();
+                  if (text.length == 2) monthTextInputRef.current.focus();
                 }}
               />
             </View>
 
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
-              <AppText style={{...styles.titleText, color: 'white'}}>/</AppText>
+              <AppText style={{...styles.titleText, color: colors.primary}}>
+                /
+              </AppText>
             </View>
 
             <View style={styles.expandedCenterView}>
-              <FormTextInput
-                // ref={monthTextInputRef}
+              <TextInput
+                ref={monthTextInputRef}
                 placeholder="MM"
                 textAlign={'center'}
                 letterSpacing={scale(6)}
-                selectedBorderColor="white"
-                style={{fontSize: moderateScale(20, 0.4), color: 'white'}}
-                selectionColor={'white'}
+                onFocus={() => {
+                  setIsMonthTextInputFocused(true);
+                }}
+                onBlur={() => {
+                  setIsMonthTextInputFocused(false);
+                }}
+                style={{
+                  ...styles.selectedFormTextInput,
+                  fontSize: moderateScale(20, 0.4),
+                  color: colors.primary,
+                  borderColor: isMonthTextInputFocused
+                    ? colors.primary
+                    : '#cccccc',
+                }}
                 maxLength={2}
                 keyboardType="number-pad"
                 value={mm}
@@ -159,24 +225,37 @@ const SignupAgeScreen = props => {
                       birthDate: {...signupFormData.birthDate, mm: text},
                     }),
                   );
-                  // if (text.length == 2) yearTextInputRef.current.focus();
+                  if (text.length == 2) yearTextInputRef.current.focus();
                 }}
               />
             </View>
 
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
-              <AppText style={{...styles.titleText, color: 'white'}}>/</AppText>
+              <AppText style={{...styles.titleText, color: colors.primary}}>
+                /
+              </AppText>
             </View>
 
             <View style={{...styles.expandedCenterView, flex: 2}}>
-              <FormTextInput
-                // ref={yearTextInputRef}
+              <TextInput
+                ref={yearTextInputRef}
                 placeholder="YYYY"
                 textAlign={'center'}
                 letterSpacing={scale(6)}
-                selectedBorderColor="white"
-                style={{fontSize: moderateScale(20, 0.4), color: 'white'}}
-                selectionColor={'white'}
+                onFocus={() => {
+                  setIsYearTextInputFocused(true);
+                }}
+                onBlur={() => {
+                  setIsYearTextInputFocused(false);
+                }}
+                style={{
+                  ...styles.selectedFormTextInput,
+                  fontSize: moderateScale(20, 0.4),
+                  color: colors.primary,
+                  borderColor: isYearTextInputFocused
+                    ? colors.primary
+                    : '#cccccc',
+                }}
                 maxLength={4}
                 keyboardType="number-pad"
                 value={yyyy}
