@@ -20,20 +20,9 @@ import {setErrorMessage} from '../../store/actions/error';
 import TheCircleLoading from '../../components/svgs/TheCircleLoading';
 import AppText from '../../components/AppText';
 
-// const adUnitId = __DEV__
-//   ? TestIds.INTERSTITIAL
-//   : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy';
-
-// const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
-//   requestNonPersonalizedAdsOnly: true,
-//   keywords: ['fashion', 'clothing'],
-// });
-
 const SearchingScreen = () => {
   const dispatch = useDispatch();
   const [canCancel, setCanCancel] = useState(false);
-  // const [loaded, setLoaded] = useState(false);
-  // const [closed, setClosed] = useState(false);
 
   useEffect(() => {
     const firestoreDb = firestore();
@@ -47,26 +36,6 @@ const SearchingScreen = () => {
       });
     return unsubscribe;
   }, []);
-
-  // useEffect(() => {
-  //   const eventListener = interstitial.onAdEvent(type => {
-  //     if (type === AdEventType.LOADED) {
-  //       setLoaded(true);
-  //     }
-  //     if (type === AdEventType.CLOSED) {
-  //       setClosed(true);
-  //       setLoaded(false);
-  //     }
-  //   });
-
-  //   // Start loading the interstitial straight away
-  //   interstitial.load();
-
-  //   // Unsubscribe from events on unmount
-  //   return () => {
-  //     eventListener();
-  //   };
-  // }, []);
 
   return (
     <LinearGradient

@@ -365,10 +365,10 @@ const SettingsScreen = props => {
             <Icon
               style={{marginHorizontal: scale(10)}}
               name={'arrow-left'}
-              size={scale(30)}
+              size={scale(20)}
             />
           </TouchableOpacity>
-          <AppText style={styles.titleText}>Settings</AppText>
+          <AppText style={{fontSize: scale(18)}}>{'Settings'}</AppText>
           <View style={{width: scale(50)}} />
         </CustomHeader>
 

@@ -27,6 +27,7 @@ import AnonymousChatScreen from './AnonymousChatScreen';
 import colors from '../../constants/colors';
 import LinearGradient from 'react-native-linear-gradient';
 import CocentricCircles from '../../components/svgs/CocentricCircles';
+import TheCircleLoading from '../../components/svgs/TheCircleLoading';
 
 const HomeScreen = props => {
   const userState = useSelector(state => state.user);
@@ -141,7 +142,7 @@ const HomeScreen = props => {
       <LinearGradient
         colors={[colors.primary, colors.accent]}
         style={styles.expandedCenterView}>
-        <ActivityIndicator size="large" color={'white'} />
+        <TheCircleLoading/>
       </LinearGradient>
     );
 
