@@ -39,6 +39,7 @@ import auth from '@react-native-firebase/auth';
 import {launchImageLibrary} from 'react-native-image-picker';
 import ImageChatFooter from '../../components/chat/ImageChatFooter';
 import LinearGradient from 'react-native-linear-gradient';
+import TheCircleLoading from '../../components/svgs/TheCircleLoading';
 
 const AnonymousChatScreen = props => {
   const matchingState = useSelector(state => state.matching);
@@ -88,8 +89,9 @@ const AnonymousChatScreen = props => {
       <LinearGradient
         colors={[colors.primary, colors.accent]}
         style={styles.expandedCenterView}>
-        <AppText style={{color: 'white', ...styles.nameText}}>
-          Loading Chat Room...
+        <TheCircleLoading />
+        <AppText style={{color: 'white', textAlign: 'center'}}>
+          {'Loading Chat Room...'}
         </AppText>
       </LinearGradient>
     );

@@ -142,7 +142,10 @@ const HomeScreen = props => {
       <LinearGradient
         colors={[colors.primary, colors.accent]}
         style={styles.expandedCenterView}>
-        <TheCircleLoading/>
+        <TheCircleLoading />
+        <AppText style={{color: 'white', textAlign: 'center'}}>
+          Loading Ad...
+        </AppText>
       </LinearGradient>
     );
 

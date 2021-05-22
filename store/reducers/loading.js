@@ -6,6 +6,7 @@ import {
   SET_SIGNING_UP,
   SET_SEARCHING_FOR_FRIENDS,
   SET_LOADING_AD,
+  SET_AD_OPENED,
 } from "../actions/loading";
 
 const initialState = {
@@ -16,7 +17,8 @@ const initialState = {
   signingUp: false,
   searchingForFriends: false,
   fetchingFriends: false,
-  loadingAd: false 
+  loadingAd: false, 
+  adOpened: false
 };
 
 export default (state = initialState, action) => {
@@ -37,6 +39,8 @@ export default (state = initialState, action) => {
       return initialState;
     case SET_LOADING_AD:
       return {...state, loadingAd: payload};
+    case SET_AD_OPENED:
+      return{...state, adOpened: payload}
     default:
       return state;
   }

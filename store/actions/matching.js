@@ -12,7 +12,7 @@ import {
   AdEventType,
 } from '@react-native-firebase/admob';
 import {Platform} from 'react-native';
-import {setLoadingAd} from './loading';
+import {setAdOpened, setLoadingAd} from './loading';
 
 export const SET_USER_MATCHING_STATUS = 'SET_USER_MATCHING_STATUS';
 export const SET_CHAT_ROOM = 'SET_CHAT_ROOM';
@@ -50,6 +50,7 @@ export const changeUserMatchingStatus = newStatus => {
     const matchingState = getState().matching;
     try {
       const userState = getState().user;
+      const adOpened = getState().loading.adOpened;
       const {uid} = auth().currentUser;
       const db = database();
       const firestoreDb = firestore();
@@ -64,6 +65,7 @@ export const changeUserMatchingStatus = newStatus => {
 
       //Matching on
       if (newStatus === 1) {
+        console.warn('Changed status to 1');
         dispatch(setLoadingAd(true));
 
         const match = async () => {
@@ -246,15 +248,22 @@ export const changeUserMatchingStatus = newStatus => {
         interstitial.onAdEvent(async type => {
           if (type === AdEventType.LOADED) {
             dispatch(setLoadingAd(false));
-
-            // console.warn('reached for showing ad');
-            await interstitial.show();
+            console.warn('reached for showing ad');
+            console.warn('asa ' + adOpened);
+            if (!adOpened) {
+              await interstitial.show({immersiveModeEnabled: true});
+              dispatch(setAdOpened(true));
+            }
           }
           if (type === AdEventType.CLOSED) {
+            dispatch(setAdOpened(false));
+            dispatch(setLoadingAd(false));
             await match();
           }
         });
-        interstitial.load();
+        if (!adOpened) {
+          interstitial.load();
+        }
       }
 
       if (newStatus === 2) {
