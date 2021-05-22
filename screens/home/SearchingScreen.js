@@ -18,6 +18,7 @@ import {
 } from '@react-native-firebase/admob';
 import {setErrorMessage} from '../../store/actions/error';
 import TheCircleLoading from '../../components/svgs/TheCircleLoading';
+import AppText from '../../components/AppText';
 
 // const adUnitId = __DEV__
 //   ? TestIds.INTERSTITIAL
@@ -72,6 +73,7 @@ const SearchingScreen = () => {
       style={styles.expandedCenterView}
       colors={[colors.primary, colors.accent]}>
       <TheCircleLoading height={scale(100)} width={scale(100)}/>
+      <AppText style={{color:'white', textAlign:'center'}}>{canCancel ? "You've been put in the waiting list...\n We will notify you as soon as we find someone." :"Searching for a match..."}</AppText>
       {canCancel ? (
         <FormButton
           title={'Cancel'}

@@ -60,7 +60,7 @@ const HomeScreen = props => {
               innerCircleColor={colors.primary}
               outerCircleColor={'pink'}
               animatableViewProps={{
-                animation: 'pulse',
+                // animation: 'none',
                 iterationCount: 'infinite',
                 iterationDelay: 2000,
                 easing: 'ease-out',
@@ -77,7 +77,7 @@ const HomeScreen = props => {
               innerCircleColor={colors.accent}
               outerCircleColor={'lightblue'}
               animatableViewProps={{
-                animation: 'pulse',
+                // animation: 'none',
                 iterationCount: 'infinite',
                 iterationDelay: 2000,
                 easing: 'ease-out',
