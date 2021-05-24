@@ -3,6 +3,7 @@ import {useEffect} from 'react';
 import {createRef} from 'react';
 import {useState} from 'react';
 import {FlatList, ScrollView, TouchableOpacity, View} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import Modal from 'react-native-modalbox';
 import {scale, verticalScale} from 'react-native-size-matters';
 import Icon from 'react-native-vector-icons/Feather';
@@ -138,19 +139,20 @@ const UserScreen = props => {
               else value = 'Everyone';
               dispatch(updateInterestedIn(value));
             }}
-            style={{marginBottom: scale(20), borderWidth: scale(0.5)}}
+            style={{marginBottom: scale(20)}}
           />
           <EditInfoBar
             iconName={'clone'}
             title={'Cue Cards'}
             value={<FontAwesome5Icon name={'chevron-right'} />}
-            style={{marginBottom: scale(20), borderWidth: scale(0.5)}}
+            style={{marginBottom: scale(20)}}
             onPress={() => {
               props.navigation.navigate('UserCueCardsScreen');
             }}
           />
         </View>
       </View>
+
     </CustomSafeAreaView>
   );
 };

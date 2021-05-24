@@ -200,7 +200,7 @@ const UserCueCardsScreen = ({ ...props }) => {
   }, [cueCards]);
 
   return (
-    <CustomSafeAreaView style={styles.rootView}>
+    <CustomSafeAreaView style={{...styles.rootView, backgroundColor:"white"}}>
       <CustomHeader style={{ backgroundColor:'white' }}>
         <TouchableOpacity
           onPress={() => {
