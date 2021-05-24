@@ -10,13 +10,6 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import CustomSafeAreaView from '../../components/CustomSafeAreaView';
 import LinearGradient from 'react-native-linear-gradient';
-import * as Animatable from 'react-native-animatable';
-import {
-  InterstitialAd,
-  AdEventType,
-  TestIds,
-} from '@react-native-firebase/admob';
-import {setErrorMessage} from '../../store/actions/error';
 import TheCircleLoading from '../../components/svgs/TheCircleLoading';
 import AppText from '../../components/AppText';
 

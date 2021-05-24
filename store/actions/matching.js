@@ -6,11 +6,11 @@ import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import {serverKey} from '../../firebase/config';
 import {sendNotification} from '../../firebase/utils';
-import {
-  InterstitialAd,
-  TestIds,
-  AdEventType,
-} from '@react-native-firebase/admob';
+// import {
+//   InterstitialAd,
+//   TestIds,
+//   AdEventType,
+// } from '@react-native-firebase/admob';
 import {Platform} from 'react-native';
 import {setAdOpened, setLoadingAd} from './loading';
 
