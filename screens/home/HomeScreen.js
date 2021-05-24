@@ -57,7 +57,7 @@ const HomeScreen = props => {
               ...styles.rootView,
               backgroundColor: 'white',
             }}>
-            <CocentricCircles
+            {/* <CocentricCircles
               innerCircleColor={colors.primary}
               outerCircleColor={'pink'}
               animatableViewProps={{
@@ -90,7 +90,7 @@ const HomeScreen = props => {
                   useNativeDriver: true,
                 },
               }}
-            />
+            /> */}
             <View style={{flex: 1}} />
             <View
               style={{
