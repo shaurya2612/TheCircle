@@ -41,7 +41,7 @@ const UserScreen = props => {
   };
 
   return (
-    <View style={{...styles.rootView, backgroundColor: 'white'}}>
+    <CustomSafeAreaView style={{...styles.rootView, backgroundColor: 'white'}}>
       <Modal
         style={{margin: 0}}
         swipeToClose={true}
@@ -65,7 +65,7 @@ const UserScreen = props => {
           onScroll={handleOnScroll}
         />
       </Modal>
-      <CustomSafeAreaView style={{backgroundColor: 'white', flex: 1}}>
+      <View style={{backgroundColor: 'white', flex: 1}}>
         {/* Profile Preview Screen */}
         <CustomHeader style={{height: 'auto', padding: scale(10)}}>
           {/* <View /> */}
@@ -150,8 +150,8 @@ const UserScreen = props => {
             }}
           />
         </View>
-      </CustomSafeAreaView>
-    </View>
+      </View>
+    </CustomSafeAreaView>
   );
 };
 

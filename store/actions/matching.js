@@ -65,8 +65,7 @@ export const changeUserMatchingStatus = newStatus => {
 
       //Matching on
       if (newStatus === 1) {
-        console.warn('Changed status to 1');
-        dispatch(setLoadingAd(true));
+        // dispatch(setLoadingAd(true));
 
         const match = async () => {
           await db.ref('/matchingStatus').child(uid).set(1);
@@ -235,35 +234,36 @@ export const changeUserMatchingStatus = newStatus => {
           }
         };
 
-        const adUnitId = __DEV__
-          ? TestIds.INTERSTITIAL
-          : Platform.OS === 'android'
-          ? 'ca-app-pub-6422755385693448/9628631675' //Under Ad Unit Id section of adMob
-          : 'ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy';
+        // const adUnitId = __DEV__
+        //   ? TestIds.INTERSTITIAL
+        //   : Platform.OS === 'android'
+        //   ? 'ca-app-pub-6422755385693448/9628631675' //Under Ad Unit Id section of adMob
+        //   : 'ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy';
 
-        const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
-          requestNonPersonalizedAdsOnly: true,
-        });
+        // const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
+        //   requestNonPersonalizedAdsOnly: true,
+        // });
 
-        interstitial.onAdEvent(async type => {
-          if (type === AdEventType.LOADED) {
-            dispatch(setLoadingAd(false));
-            console.warn('reached for showing ad');
-            console.warn('asa ' + adOpened);
-            if (!adOpened) {
-              await interstitial.show({immersiveModeEnabled: true});
-              dispatch(setAdOpened(true));
-            }
-          }
-          if (type === AdEventType.CLOSED) {
-            dispatch(setAdOpened(false));
-            dispatch(setLoadingAd(false));
-            await match();
-          }
-        });
-        if (!adOpened) {
-          interstitial.load();
-        }
+        // interstitial.onAdEvent(async type => {
+        //   if (type === AdEventType.LOADED) {
+        //     dispatch(setLoadingAd(false));
+        //     console.warn('reached for showing ad');
+        //     console.warn('asa ' + adOpened);
+        //     if (!adOpened) {
+        //       await interstitial.show({immersiveModeEnabled: true});
+        //       dispatch(setAdOpened(true));
+        //     }
+        //   }
+        //   if (type === AdEventType.CLOSED) {
+        //     dispatch(setAdOpened(false));
+        //     dispatch(setLoadingAd(false));
+        //     await match();
+        //   }
+        // });
+        // if (!adOpened) {
+        //   interstitial.load();
+        // }
+        await match();
       }
 
       if (newStatus === 2) {

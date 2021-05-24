@@ -637,37 +637,37 @@ PODS:
     - React-cxxreact (= 0.64.0)
     - React-jsi (= 0.64.0)
     - React-perflogger (= 0.64.0)
-  - RNFBAdMob (11.4.1):
+  - RNFBAdMob (11.5.0):
     - Firebase/AdMob (= 7.11.0)
     - PersonalizedAdConsent (~> 1.0.5)
     - React-Core
     - RNFBApp
-  - RNFBApp (11.4.1):
+  - RNFBApp (11.5.0):
     - Firebase/CoreOnly (= 7.11.0)
     - React-Core
-  - RNFBAuth (11.4.1):
+  - RNFBAuth (11.5.0):
     - Firebase/Auth (= 7.11.0)
     - React-Core
     - RNFBApp
-  - RNFBDatabase (11.4.1):
+  - RNFBDatabase (11.5.0):
     - Firebase/Database (= 7.11.0)
     - React-Core
     - RNFBApp
-  - RNFBFirestore (11.4.1):
+  - RNFBFirestore (11.5.0):
     - Firebase/Firestore (= 7.11.0)
     - React-Core
     - RNFBApp
-  - RNFBMessaging (11.4.1):
+  - RNFBMessaging (11.5.0):
     - Firebase/Messaging (= 7.11.0)
     - React-Core
     - RNFBApp
-  - RNFBStorage (11.4.1):
+  - RNFBStorage (11.5.0):
     - Firebase/Storage (= 7.11.0)
     - React-Core
     - RNFBApp
   - RNGestureHandler (1.10.3):
     - React-Core
-  - RNReanimated (2.0.0):
+  - RNReanimated (2.1.0):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -927,15 +927,15 @@ SPEC CHECKSUMS:
   React-RCTVibration: 0fd6b21751a33cb72fce1a4a33ab9678416d307a
   React-runtimeexecutor: cad74a1eaa53ee6e7a3620231939d8fe2c6afcf0
   ReactCommon: cfe2b7fd20e0dbd2d1185cd7d8f99633fbc5ff05
-  RNFBAdMob: bbc64554e13d019d37fbc981f5f48ba4c6ea5889
-  RNFBApp: 996860ad6832996faba79ef3f6ec2d3ea5870dd9
-  RNFBAuth: 3726f7f9bc9e9efb80cd1f5b2e65c4b04dc53760
-  RNFBDatabase: 026067d3ce9d65c96146f7f32c1f044f27665f29
-  RNFBFirestore: 7fa546e352aad031a78b934a67435e55b32cba49
-  RNFBMessaging: 8d84ceadc705ca6b6047c37376d2e2aaabcb8e3d
-  RNFBStorage: 519ea44ccd27418d4bffbc9cd088a72697b5cb98
+  RNFBAdMob: a2b5f148468b16d02543707d4627bc9a19016bf3
+  RNFBApp: 9c90f9d576861947ba75fe0830567c570bcbcf6d
+  RNFBAuth: 99fdbce04ff3d39e57a7a3956d632ee69145685b
+  RNFBDatabase: 64aaecd9e48c6378864ef7d0fe65cc5f312987ed
+  RNFBFirestore: bedb9727c0df9a1f1ec23b5e23988075a4cbea78
+  RNFBMessaging: c873e6c37f69d22de22cab134413030a9c6330a9
+  RNFBStorage: 052a32c5af38b106e4d6b0a296df304d97be995e
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
-  RNReanimated: 64f6c5789f82818c07ba3c71864b73619cb23c76
+  RNReanimated: b8c8004b43446e3c2709fe64b2b41072f87428ad
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4

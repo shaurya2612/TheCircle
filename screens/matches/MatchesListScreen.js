@@ -32,6 +32,7 @@ import ReactNativeModal from 'react-native-modal';
 import NameText from '../../components/NameText';
 import ModalCardView from '../../components/ModalCardView';
 import {unmatch} from '../../firebase/utils';
+import CustomSafeAreaView from '../../components/CustomSafeAreaView';
 // const data = [
 //   {
 //     name: "Mila",
@@ -143,7 +144,7 @@ export const MatchesListScreen = props => {
 
   if (!matches?.length) {
     return (
-      <View style={{...styles.rootView, backgroundColor: 'white'}}>
+      <CustomSafeAreaView style={{...styles.rootView, backgroundColor: 'white'}}>
         <View
           style={{
             paddingHorizontal: scale(10),
@@ -156,12 +157,12 @@ export const MatchesListScreen = props => {
           <Icon name="inbox" size={scale(80)} color="grey" />
           <AppText>No conversations yet</AppText>
         </View>
-      </View>
+      </CustomSafeAreaView>
     );
   }
 
   return (
-    <View style={{...styles.rootView, backgroundColor: 'white'}}>
+    <CustomSafeAreaView style={{...styles.rootView, backgroundColor: 'white'}}>
       {/* Actions Modal */}
       <ReactNativeModal
         style={{justifyContent: 'flex-end', margin: 0}}
@@ -318,7 +319,7 @@ export const MatchesListScreen = props => {
           />
         </View>
       </ScrollView>
-    </View>
+    </CustomSafeAreaView>
   );
 };
 
