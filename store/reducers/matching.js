@@ -75,6 +75,13 @@ export default (state = initialState, action) => {
       };
 
     case ADD_MESSAGE_IN_CHAT_ROOM:
+      if (
+        state.messages.slice(0, 21).filter(item => {
+          return item._id == payload._id;
+        }).length > 0
+      ) {
+        return state;
+      }
       return {
         ...state,
         messages: [payload, ...(state.messages || [])],
