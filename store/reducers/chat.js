@@ -9,8 +9,8 @@ import {
   SET_MATCH_CUE_CARDS,
   SET_IS_MATCH_ONLINE,
   SET_IS_MATCH_TYPING,
-} from "../actions/chat";
-import { CLEAR_REDUX_STATE } from "../../utils";
+} from '../actions/chat';
+import {CLEAR_REDUX_STATE} from '../../utils';
 
 const initialState = {
   match: null,
@@ -19,11 +19,11 @@ const initialState = {
   canLoadEarlierMessages: false,
   matchCueCards: null,
   isMatchOnline: null,
-  isMatchTyping: null
+  isMatchTyping: null,
 };
 
 export default (state = initialState, action) => {
-  const { type, payload } = action;
+  const {type, payload} = action;
   switch (type) {
     case SET_LISTENING_FOR_CHAT:
       return {
@@ -32,6 +32,13 @@ export default (state = initialState, action) => {
       };
 
     case ADD_MESSAGE_IN_CHAT:
+      if (
+        state.messages.slice(0, 21).filter(item => {
+          return item._id == payload._id;
+        }).length > 0
+      ) {
+        return state;
+      }
       return {
         ...state,
         messages: [payload, ...(state.messages || [])],
@@ -56,10 +63,10 @@ export default (state = initialState, action) => {
       };
 
     case SET_IS_MATCH_TYPING:
-      return{
-        ...state, 
-        isMatchTyping: payload
-      }  
+      return {
+        ...state,
+        isMatchTyping: payload,
+      };
 
     case ADD_MULTIPLE_MESSAGES_IN_CHAT:
       return {
