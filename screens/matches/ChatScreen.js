@@ -73,7 +73,7 @@ const ChatScreen = props => {
     };
   }, []);
 
-  const onSend = (newMessages = []) => {
+  const customOnSend = (newMessages = []) => {
     // setMessages((previousState) => GiftedChat.append(previousState, messages));
     dispatch(sendMessageToMatch(newMessages));
     setAttachedImage(false);
@@ -153,7 +153,7 @@ const ChatScreen = props => {
           renderAvatar={null}
           onSend={newMessages => {
             if (attachedImage) newMessages[0].image = attachedImage.uri;
-            onSend(newMessages);
+            customOnSend(newMessages);
           }}
           alwaysShowSend={attachedImage ? true : false}
           isTyping={isMatchTyping}
@@ -240,9 +240,28 @@ const ChatScreen = props => {
                 Cancel: () => {},
               }}></Actions>
           )}
-          renderSend={props => (
-            <CustomSend {...props} iconColor={colors.primary} />
+          renderSend={({onSend, text, sendButtonProps, ...props}) => (
+            <CustomSend
+              {...props}
+              iconColor={colors.primary}
+              sendButtonProps={{
+                ...sendButtonProps,
+                onPress: () => {
+                  if (onSend) {
+                    onSend({text: text ? text.trim() : ''}, true);
+                  }
+                }, 
+              }}
+              onSend={onSend}
+              text={text}
+            />
           )}
+          imageStyle={{
+            alignSelf: 'center',
+            resizeMode: 'cover',
+            width: '95%',
+            minWidth: scale(150),
+          }}
           renderInputToolbar={props => (
             <InputToolbar
               {...props}

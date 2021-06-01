@@ -78,7 +78,7 @@ const AnonymousChatScreen = props => {
     }
   }, [FOF]);
 
-  const onSend = (newMessages = []) => {
+  const customOnSend = (newMessages = []) => {
     // setMessages((previousState) => GiftedChat.append(previousState, messages));
     dispatch(sendMessageInAnonymousChatRoom(newMessages));
     setAttachedImage(false);
@@ -219,7 +219,7 @@ const AnonymousChatScreen = props => {
         messages={messages}
         onSend={newMessages => {
           if (attachedImage) newMessages[0].image = attachedImage.uri;
-          onSend(newMessages);
+          customOnSend(newMessages);
         }}
         alwaysShowSend={attachedImage ? true : false}
         renderAvatar={null}
@@ -310,15 +310,33 @@ const AnonymousChatScreen = props => {
               Cancel: () => {},
             }}></Actions>
         )}
-        renderSend={props => (
-          <CustomSend {...props} iconColor={colors.primary} />
+        renderSend={({onSend, text, sendButtonProps, ...props}) => (
+          <CustomSend
+            {...props}
+            iconColor={colors.primary}
+            sendButtonProps={{
+              ...sendButtonProps,
+              onPress: () => {
+                if (onSend) {
+                  onSend({text: text ? text.trim() : ''}, true);
+                }
+              }, 
+            }}
+            onSend={onSend}
+            text={text}
+          />
         )}
+        imageStyle={{
+          alignSelf: 'center',
+          resizeMode: 'cover',
+          width: '95%',
+          minWidth: scale(150),
+        }}
         renderInputToolbar={props => (
           <InputToolbar
             {...props}
             containerStyle={{
               backgroundColor: 'white',
-              // borderTopColor: 'black',
               marginTop: 0,
               paddingTop: scale(2),
               paddingBottom: scale(5),
