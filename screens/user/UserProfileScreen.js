@@ -79,6 +79,7 @@ export const UserProfileScreen = ({
   //   "I am a little teapot short and stout, this is my handle and this is my stout";
 
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [imageLoading, setImageLoading] = useState(false);
   const photoTabs = () => {
     let arr = [];
     var i;
@@ -178,6 +179,15 @@ export const UserProfileScreen = ({
 
                 <ImageBackground
                   imageStyle={{resizeMode: 'cover'}}
+                  onLoadStart={() => {
+                    setImageLoading(true);
+                  }}
+                  onLoadEnd={() => {
+                    setImageLoading(false);
+                  }}
+                  onLoad={() => {
+                    setImageLoading(false);
+                  }}
                   style={{flexDirection: 'row', flex: 1}}
                   source={{uri: userPhotos[selectedIndex]}}>
                   <View style={{flexDirection: 'row', flex: 1}}>
@@ -191,7 +201,12 @@ export const UserProfileScreen = ({
                       style={{flex: 1}}>
                       <View style={{flex: 1}}></View>
                     </TouchableWithoutFeedback>
-
+                    {imageLoading ? (
+                      <ActivityIndicator
+                        color={colors.primary}
+                        size="large"
+                      />
+                    ) : null}
                     <TouchableWithoutFeedback
                       onPress={() => {
                         setSelectedIndex(
