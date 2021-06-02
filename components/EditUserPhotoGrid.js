@@ -16,7 +16,6 @@ import {
   verticalScale,
 } from 'react-native-size-matters';
 import Icon from 'react-native-vector-icons/Feather';
-// import * as ImagePicker from "expo-image-picker";
 import {useDispatch, useSelector} from 'react-redux';
 import {setSignupFormData} from '../store/actions/signupForm';
 import colors from '../constants/colors';
@@ -25,6 +24,7 @@ import {useImperativeHandle} from 'react';
 import {uploadUserPhotos} from '../firebase/utils';
 import {setUserState, updateUserPhotos} from '../store/actions/user';
 import {launchImageLibrary} from 'react-native-image-picker';
+import {setErrorMessage} from '../store/actions/error';
 
 const {height, width} = Dimensions.get('window');
 const parentWidth = width;
@@ -149,9 +149,14 @@ export const EditUserPhotoGrid = forwardRef(({onDragStart, onDragEnd}, ref) => {
             if (data.filter(i => i !== null).length !== 1)
               setIsDeleteMode(!isDeleteMode);
           } else {
-            launchImageLibrary({mediaType: 'photo', quality: 1}, response => {
+            launchImageLibrary({mediaType: 'photo', quality: 0.8}, response => {
               if (response.didCancel) return;
               if (response.uri) {
+                console.warn(response.fileSize);
+                if (response.fileSize / 1048576 > 10) {
+                  dispatch(setErrorMessage('Max file size for upload is 10 MB'));
+                  return;
+                }
                 for (var i = 0; i < 6; i++) {
                   if (data[i] === null) {
                     data[i] = response.uri;

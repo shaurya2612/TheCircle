@@ -40,6 +40,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import ImageChatFooter from '../../components/chat/ImageChatFooter';
 import LinearGradient from 'react-native-linear-gradient';
 import TheCircleLoading from '../../components/svgs/TheCircleLoading';
+import { setErrorMessage } from '../../store/actions/error';
 
 const AnonymousChatScreen = props => {
   const matchingState = useSelector(state => state.matching);
@@ -297,9 +298,15 @@ const AnonymousChatScreen = props => {
             options={{
               'Send Image': props => {
                 launchImageLibrary(
-                  {mediaType: 'photo', quality: 1},
+                  {mediaType: 'photo', quality: 0.8},
                   response => {
                     if (response.didCancel) return;
+                    if (response.fileSize / 1048576 > 10) {
+                      dispatch(
+                        setErrorMessage('Max file size for upload is 10 MB'),
+                      );
+                      return;
+                    }
                     const pickedImage = {
                       uri: response.uri,
                       extension: response.type,

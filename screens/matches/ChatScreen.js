@@ -48,6 +48,7 @@ import {setUserIsTyping} from '../../firebase/utils';
 import auth from '@react-native-firebase/auth';
 import ImageChatFooter from '../../components/chat/ImageChatFooter';
 import {launchImageLibrary} from 'react-native-image-picker';
+import { setErrorMessage } from '../../store/actions/error';
 
 const ChatScreen = props => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -227,9 +228,15 @@ const ChatScreen = props => {
               options={{
                 'Send Image': props => {
                   launchImageLibrary(
-                    {mediaType: 'photo', quality: 1},
+                    {mediaType: 'photo', quality: 0.8},
                     response => {
                       if (response.didCancel) return;
+                      if (response.fileSize / 1048576 > 10) {
+                        dispatch(
+                          setErrorMessage('Max file size for upload is 10 MB'),
+                        );
+                        return;
+                      }
                       const pickedImage = {
                         uri: response.uri,
                         extension: response.type,
@@ -251,7 +258,7 @@ const ChatScreen = props => {
                   if (onSend) {
                     onSend({text: text ? text.trim() : ''}, true);
                   }
-                }, 
+                },
               }}
               onSend={onSend}
               text={text}

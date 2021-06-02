@@ -15,6 +15,7 @@ import {
 } from 'react-native-size-matters';
 import Icon from 'react-native-vector-icons/Feather';
 import {useDispatch, useSelector} from 'react-redux';
+import { setErrorMessage } from '../store/actions/error';
 import {setData} from '../store/actions/photoGrid';
 
 const {height, width} = Dimensions.get('window');
@@ -115,9 +116,13 @@ export const UserPhotoGrid = () => {
           }
           //toggled delete mode
           else {
-            launchImageLibrary({mediaType: 'photo', quality: 1}, response => {
+            launchImageLibrary({mediaType: 'photo', quality: 0.8}, response => {
               if (response.didCancel) return;
               if (response.uri) {
+                if (response.fileSize / 1048576 > 10) {
+                  dispatch(setErrorMessage('Max file size for upload is 10 MB'));
+                  return;
+                }
                 for (var i = 0; i < 6; i++) {
                   if (data[i] === null) {
                     data[i] = response.uri;
