@@ -200,8 +200,9 @@ const ChatScreen = props => {
                 ) : null}
                 {attachedImage ? (
                   <ImageChatFooter
+                    imageUri={attachedImage.uri}
                     text={
-                      attachedImage.uri.substring(0, 30) +
+                      attachedImage.uri.substring(0, 20) +
                       '...' +
                       attachedImage.extension
                     }
