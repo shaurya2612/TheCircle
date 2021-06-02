@@ -162,7 +162,7 @@ export const MatchesListScreen = props => {
   }
 
   return (
-    <CustomSafeAreaView style={{...styles.rootView, backgroundColor: 'white'}}>
+    <View style={{...styles.rootView, backgroundColor: 'white'}}>
       {/* Actions Modal */}
       <ReactNativeModal
         style={{justifyContent: 'flex-end', margin: 0}}
@@ -319,7 +319,7 @@ export const MatchesListScreen = props => {
           />
         </View>
       </ScrollView>
-    </CustomSafeAreaView>
+    </View>
   );
 };
 

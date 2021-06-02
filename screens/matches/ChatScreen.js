@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
+  Image,
   Keyboard,
   TouchableNativeFeedback,
   TouchableOpacity,
@@ -13,6 +14,7 @@ import {
   InputToolbar,
   Actions,
   Bubble,
+  MessageImage,
 } from 'react-native-gifted-chat';
 import CustomHeader from '../../components/CustomHeader';
 import CustomSafeAreaView from '../../components/CustomSafeAreaView';
@@ -48,7 +50,7 @@ import {setUserIsTyping} from '../../firebase/utils';
 import auth from '@react-native-firebase/auth';
 import ImageChatFooter from '../../components/chat/ImageChatFooter';
 import {launchImageLibrary} from 'react-native-image-picker';
-import { setErrorMessage } from '../../store/actions/error';
+import {setErrorMessage} from '../../store/actions/error';
 
 const ChatScreen = props => {
   const [isModalVisible, setIsModalVisible] = useState(false);
