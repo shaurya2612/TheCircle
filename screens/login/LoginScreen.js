@@ -15,7 +15,7 @@ import styles from '../../styles';
 import LinearGadient from 'react-native-linear-gradient';
 import colors from '../../constants/colors';
 import StartMatchingButton from '../../components/StartMatchingButton';
-import TheCircleLogo from '../../assets/thecircle_logo_solid.svg';
+import TheCircleLogo from '../../assets/svgs/thecircle_logo_solid.svg';
 import ReactNativeModal from 'react-native-modal';
 import ModalCardView from '../../components/ModalCardView';
 import Icon from 'react-native-vector-icons/Feather';

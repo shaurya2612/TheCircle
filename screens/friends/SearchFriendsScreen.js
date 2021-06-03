@@ -27,7 +27,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import ReactNativeModal from 'react-native-modal';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
-import LostSvg from '../../assets/lost.svg';
+import LostSvg from '../../assets/svgs/lost.svg';
 
 const SearchFriendsScreen = () => {
   const loadingState = useSelector(state => state.loading);

@@ -130,7 +130,7 @@ const PhoneVerificationScreen = props => {
         <StackHeader backIconColor={'black'} navigation={props.navigation} />
         <View style={{...styles.expandedCenterView}}>
           <AppText style={{color: colors.primary, fontSize: scale(20)}}>
-            Enter the verification code sent to {`+91 ${phoneNumber}`}
+            Enter the verification code sent to {`\n+91 ${phoneNumber}`}
           </AppText>
 
           <View
