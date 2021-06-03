@@ -53,7 +53,7 @@ export const termsOfUse = [
       <Text>
         These terms of use apply to your use of the Circle mobile application
         (iOS application / Android application - hereafter the "App"), provided
-        by __________ (hereafter "we" or "us" or "our" or "Circle"). Please go
+        by Cherry Pi Pvt Ltd (hereafter "we" or "us" or "our" or "Circle"). Please go
         through them carefully. If you object to anything in the terms of use or
         our privacy policy, please do not use the app.
       </Text>
@@ -446,7 +446,7 @@ export const termsOfUse = [
     text: (
       <View>
         <Bullet>
-          Circle or _________ can be acquired for a part or in whole by another
+          Circle or Cherry Pi Pvt Ltd can be acquired for a part or in whole by another
           company. This will be done without (written) notice.
         </Bullet>
         <Bullet>
@@ -483,8 +483,8 @@ export const privacyPolicy = [
     heading: 'Privacy Policy',
     text: (
       <Text>
-        Geniushut built the Circle app as an Ad Supported app. This SERVICE is
-        provided by Geniushut at no cost and is intended for use as is. This
+        Cherry Pi Pvt Ltd built the Circle app as an Ad Supported app. This SERVICE is
+        provided by Cherry Pi Pvt Ltd at no cost and is intended for use as is. This
         page is used to inform visitors regarding our policies with the
         collection, use, and disclosure of Personal Information if anyone
         decided to use our Service. If you choose to use our Service, then you
