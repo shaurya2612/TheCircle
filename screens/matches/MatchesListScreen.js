@@ -146,7 +146,8 @@ export const MatchesListScreen = props => {
 
   if (!matches?.length) {
     return (
-      <CustomSafeAreaView style={{...styles.rootView, backgroundColor: 'white'}}>
+      <CustomSafeAreaView
+        style={{...styles.rootView, backgroundColor: 'white'}}>
         <View
           style={{
             paddingHorizontal: scale(10),
@@ -301,11 +302,19 @@ export const MatchesListScreen = props => {
                     lastMessage={
                       item.hasPhoto ? (
                         <View style={{flexDirection: 'row'}}>
-                          <Icon
-                            style={{marginRight: scale(5)}}
-                            name={'camera'}
-                            size={15}
-                          />
+                          <View
+                            style={{
+                              ...styles.centerView,
+                              height: '100%',
+                            }}>
+                            <Icon
+                              style={{
+                                marginRight: scale(5),
+                              }}
+                              name={'camera'}
+                              size={scale(15)}
+                            />
+                          </View>
                           <AppText>Photo</AppText>
                         </View>
                       ) : item.lastMessage.length > 15 ? (

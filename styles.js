@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
   },
   appText: {
     color: colors.appText,
+    fontFamily:'Quicksand-Medium'
   },
   countryCodeInputView: {
     height: moderateScale(30, 0.4),

@@ -28,6 +28,9 @@ import colors from '../../constants/colors';
 import LinearGradient from 'react-native-linear-gradient';
 import CocentricCircles from '../../components/svgs/CocentricCircles';
 import TheCircleLoading from '../../components/svgs/TheCircleLoading';
+import ReactNativeModal from 'react-native-modal';
+import ModalCardView from '../../components/ModalCardView';
+import AvatarCircle from '../../components/AvatarCircle';
 
 const HomeScreen = props => {
   const userState = useSelector(state => state.user);
@@ -37,7 +40,9 @@ const HomeScreen = props => {
   const {signingUp, loadingAd} = loadingState;
   const {matchingStatus} = matchingState;
   const dispatch = useDispatch();
-
+  const isItsAMatchModalVisible = useSelector(
+    state => state.loading.isItsAMatchModalVisible,
+  );
   useEffect(() => {
     if (!signingUp) {
       dispatch(fetchUser());
@@ -152,6 +157,29 @@ const HomeScreen = props => {
   return (
     <View style={styles.rootView}>
       <CustomSafeAreaView style={styles.rootView}>
+        <ReactNativeModal
+          isVisible={isItsAMatchModalVisible}
+          backdropTransitionInTiming={0}
+          backdropTransitionOutTiming={0}
+          useNativeDriver={true}
+          hasBackdrop={true}
+          onBackdropPress={() => {
+            setIsModalVisible(false);
+          }}
+          onBackButtonPress={() => {
+            setIsModalVisible(false);
+          }}>
+          <ModalCardView>
+            {/* It's a match */}
+            <View></View>
+            <View style={{flexDirection: 'row'}}>
+              <AvatarCircle />
+              <AvatarCircle />
+            </View>
+            {/* See who it is */}
+            <View></View>
+          </ModalCardView>
+        </ReactNativeModal>
         {renderContent()}
       </CustomSafeAreaView>
     </View>
