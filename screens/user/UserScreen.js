@@ -42,7 +42,7 @@ const UserScreen = props => {
   };
 
   return (
-    <CustomSafeAreaView style={{...styles.rootView, backgroundColor: 'white'}}>
+    <View style={{...styles.rootView, backgroundColor: 'white'}}>
       <Modal
         style={{margin: 0}}
         swipeToClose={true}
@@ -153,7 +153,7 @@ const UserScreen = props => {
         </View>
       </View>
 
-    </CustomSafeAreaView>
+    </View>
   );
 };
 

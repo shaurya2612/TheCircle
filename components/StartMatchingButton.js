@@ -3,6 +3,7 @@ import {Button, Text, TouchableOpacity} from 'react-native';
 import {moderateScale, scale} from 'react-native-size-matters';
 import colors from '../constants/colors';
 import styles from '../styles';
+import AppText from './AppText';
 
 export const StartMatchingButton = ({title, ...props}) => {
   return (
@@ -18,13 +19,13 @@ export const StartMatchingButton = ({title, ...props}) => {
               ...props.style,
             }
       }>
-      <Text
+      <AppText
         style={{
           fontSize: scale(20, 0.4),
           color: props.disabled ? '#cccccc' : colors.accent,
         }}>
         {title}
-      </Text>
+      </AppText>
     </TouchableOpacity>
   );
 };

@@ -15,12 +15,13 @@ import styles from '../../styles';
 import LinearGadient from 'react-native-linear-gradient';
 import colors from '../../constants/colors';
 import StartMatchingButton from '../../components/StartMatchingButton';
-import TheCircleLogo from '../../assets/thecircle_logo_solid.svg';
+import CircleLogo from '../../assets/svgs/circle_logo_solid.svg';
 import ReactNativeModal from 'react-native-modal';
 import ModalCardView from '../../components/ModalCardView';
 import Icon from 'react-native-vector-icons/Feather';
 import {privacyPolicy, termsOfUse} from '../../constants/official';
 import CustomSafeAreaView from '../../components/CustomSafeAreaView';
+import Svg, {Polygon, Text as SvgText, TextPath} from 'react-native-svg';
 
 const LoginScreen = props => {
   const [
@@ -77,15 +78,15 @@ const LoginScreen = props => {
         <Animatable.View
           style={{...styles.centerView, flex: 1, justifyContent: 'flex-end'}}
           animation={'slideInDown'}>
-          <TheCircleLogo width={scale(175)} height={scale(175)} fill="#fff" />
+          <CircleLogo width={scale(175)} height={scale(175)} fill="#fff" />
           <AppText
             style={{
-              ...styles.titleText,
+              fontSize: scale(40),
               color: 'white',
               textAlign: 'center',
-              fontWeight: 'bold',
+              fontFamily: 'Quicksand-Bold',
             }}>
-            The Circle
+            {"Circle"}
           </AppText>
         </Animatable.View>
         <Animatable.View

@@ -55,6 +55,7 @@ export const MatchProfileScreen = ({
   }, [matchId]);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [imageLoading, setImageLoading] = useState(false);
   const photoTabs = () => {
     let arr = [];
     var i;
@@ -163,6 +164,15 @@ export const MatchProfileScreen = ({
                 <ImageBackground
                   imageStyle={{resizeMode: 'cover'}}
                   style={{flexDirection: 'row', flex: 1}}
+                  onLoadStart={() => {
+                    setImageLoading(true);
+                  }}
+                  onLoadEnd={() => {
+                    setImageLoading(false);
+                  }}
+                  onLoad={() => {
+                    setImageLoading(false);
+                  }}
                   source={{uri: userPhotos[selectedIndex]}}>
                   <View style={{flexDirection: 'row', flex: 1}}>
                     {/* /////////Left and right click to change picture////// */}
@@ -175,7 +185,12 @@ export const MatchProfileScreen = ({
                       style={{flex: 1}}>
                       <View style={{flex: 1}}></View>
                     </TouchableWithoutFeedback>
-
+                    {imageLoading ? (
+                      <ActivityIndicator
+                        color={colors.primary}
+                        size="large"
+                      />
+                    ) : null}
                     <TouchableWithoutFeedback
                       onPress={() => {
                         setSelectedIndex(

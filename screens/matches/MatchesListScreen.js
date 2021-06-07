@@ -37,25 +37,25 @@ import CustomSafeAreaView from '../../components/CustomSafeAreaView';
 //   {
 //     name: "Mila",
 //     dp:
-//       "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80",
+//       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=668&q=80",
 //     lastMessage: null,
 //   },
 //   {
 //     name: "Marilyn",
 //     dp:
-//       "https://images.unsplash.com/photo-1599200786358-4a661fb85b1e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+//       "https://images.unsplash.com/photo-1542131596-91a634bfc5e7?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
 //     lastMessage: null,
 //   },
 //   {
 //     name: "Andrea",
 //     dp:
-//       "https://images.unsplash.com/photo-1488716820095-cbe80883c496?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=666&q=80",
+//       "https://images.unsplash.com/photo-1536331307320-5316320e97cc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=766&q=80",
 //     lastMessage: null,
 //   },
 //   {
 //     name: "Mila",
 //     dp:
-//       "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80",
+//       "https://images.unsplash.com/photo-1592085550638-e6bc180a731e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80",
 //     lastMessage: null,
 //   },
 //   {
@@ -69,41 +69,43 @@ import CustomSafeAreaView from '../../components/CustomSafeAreaView';
 //     dp:
 //       "https://images.unsplash.com/photo-1488716820095-cbe80883c496?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=666&q=80",
 //     lastMessage: null,
+//   },
+//   {
+//     name: "Jack",
+//     dp:
+//       "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80",
+//     lastMessage: "Maybe if you do ;)",
+//   },
+//   {
+//     name: "Marilyn",
+//     dp:
+//       "https://images.unsplash.com/photo-1599200786358-4a661fb85b1e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+//     lastMessage: "Dinner at 9 then?",
+//     unseen: 1
+//   },
+//   {
+//     name: "Zed",
+//     dp:
+//       "https://images.unsplash.com/photo-1520409364224-63400afe26e5?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=716&q=80",
+//     lastMessage: "Hey",
 //   },
 //   {
 //     name: "Mila",
 //     dp:
 //       "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80",
-//     lastMessage: "The quick brown fox jumps over",
-//   },
-//   {
-//     name: "Marilyn",
-//     dp:
-//       "https://images.unsplash.com/photo-1599200786358-4a661fb85b1e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-//     lastMessage: "The quick brown fox jumps over",
+//     lastMessage: "Let's do art together",
 //   },
 //   {
 //     name: "Andrea",
 //     dp:
 //       "https://images.unsplash.com/photo-1488716820095-cbe80883c496?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=666&q=80",
-//     lastMessage: "The quick brown fox jumps over",
-//   },
-//   {
-//     name: "Mila",
-//     dp:
-//       "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80",
-//     lastMessage: "The quick brown fox jumps over",
+//     lastMessage: "Hahahaha",
+//     unseen: 2
 //   },
 //   {
 //     name: "Marilyn",
 //     dp:
 //       "https://images.unsplash.com/photo-1599200786358-4a661fb85b1e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-//     lastMessage: "The quick brown fox jumps over",
-//   },
-//   {
-//     name: "Andrea",
-//     dp:
-//       "https://images.unsplash.com/photo-1488716820095-cbe80883c496?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=666&q=80",
 //     lastMessage: "The quick brown fox jumps over",
 //   },
 // ];
@@ -144,7 +146,8 @@ export const MatchesListScreen = props => {
 
   if (!matches?.length) {
     return (
-      <CustomSafeAreaView style={{...styles.rootView, backgroundColor: 'white'}}>
+      <CustomSafeAreaView
+        style={{...styles.rootView, backgroundColor: 'white'}}>
         <View
           style={{
             paddingHorizontal: scale(10),
@@ -162,7 +165,7 @@ export const MatchesListScreen = props => {
   }
 
   return (
-    <CustomSafeAreaView style={{...styles.rootView, backgroundColor: 'white'}}>
+    <View style={{...styles.rootView, backgroundColor: 'white'}}>
       {/* Actions Modal */}
       <ReactNativeModal
         style={{justifyContent: 'flex-end', margin: 0}}
@@ -299,11 +302,19 @@ export const MatchesListScreen = props => {
                     lastMessage={
                       item.hasPhoto ? (
                         <View style={{flexDirection: 'row'}}>
-                          <Icon
-                            style={{marginRight: scale(5)}}
-                            name={'camera'}
-                            size={15}
-                          />
+                          <View
+                            style={{
+                              ...styles.centerView,
+                              height: '100%',
+                            }}>
+                            <Icon
+                              style={{
+                                marginRight: scale(5),
+                              }}
+                              name={'camera'}
+                              size={scale(15)}
+                            />
+                          </View>
                           <AppText>Photo</AppText>
                         </View>
                       ) : item.lastMessage.length > 15 ? (
@@ -319,7 +330,7 @@ export const MatchesListScreen = props => {
           />
         </View>
       </ScrollView>
-    </CustomSafeAreaView>
+    </View>
   );
 };
 

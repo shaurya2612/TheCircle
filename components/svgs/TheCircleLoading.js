@@ -1,7 +1,7 @@
 import React from 'react';
 import {View as AnimatableView} from 'react-native-animatable';
 import {scale} from 'react-native-size-matters';
-import TheCircleLogo from '../../assets/thecircle_logo_solid.svg';
+import TheCircleLogo from '../../assets/svgs/circle_logo_solid.svg';
 const TheCircleLoading = ({height, width}) => {
   return (
     <AnimatableView animation={'rotate'} iterationCount={'infinite'} useNativeDriver={true} >

@@ -7,7 +7,7 @@ export const faqs = [
     question:
       'I clicked on the start matching button but didn’t match with anyone. Why is that?',
     answer:
-      'Circle works in the way that it connects you with your friends friends. So check if you’ve added your friends. Sometimes the case maybe if you have a small pool that your potential matches are talking to someone and aren’t available. In that case you might be in the waiting list till someone is free. You can increase your circle in that case. Add more friends. This is a rare case though.',
+      'Circle works in the way that it connects you with your friend\'s friends. Sometimes the case maybe if you have a small pool that your potential matches are talking to someone and aren’t available. In that case you might be in the waiting list till someone is free. You can increase your friends in that case so you have a larger dating pool to search from.',
   },
   {
     question: 'How do I increase my dating pool?',
@@ -28,12 +28,12 @@ export const faqs = [
   {
     question: 'Can I talk to my friends on the app?',
     answer:
-      'No, you won’t be able to talk to your friends on the app as they will strictly act as matchmakers',
+      'No, you won’t be able to talk to your friends on the app as they will strictly act as matchmakers.',
   },
   {
     question: 'Can I match with my friends on the app?',
     answer:
-      'No, you won’t match with your friends on the app as they act as your matchmakers. So our advice, if you like someone, don’t add them as your friend! You will just end up friend zoning yourself',
+      'No, you won’t match with your friends on the app as they act as your matchmakers. So our advice, if you like someone, don’t add them as your friend! You will just end up friend zoning yourself.',
   },
 ];
 
@@ -53,7 +53,7 @@ export const termsOfUse = [
       <Text>
         These terms of use apply to your use of the Circle mobile application
         (iOS application / Android application - hereafter the "App"), provided
-        by __________ (hereafter "we" or "us" or "our" or "Circle"). Please go
+        by Cherry Pi Pvt Ltd (hereafter "we" or "us" or "our" or "Circle"). Please go
         through them carefully. If you object to anything in the terms of use or
         our privacy policy, please do not use the app.
       </Text>
@@ -446,7 +446,7 @@ export const termsOfUse = [
     text: (
       <View>
         <Bullet>
-          Circle or _________ can be acquired for a part or in whole by another
+          Circle or Cherry Pi Pvt Ltd can be acquired for a part or in whole by another
           company. This will be done without (written) notice.
         </Bullet>
         <Bullet>
@@ -483,8 +483,8 @@ export const privacyPolicy = [
     heading: 'Privacy Policy',
     text: (
       <Text>
-        Geniushut built the Circle app as an Ad Supported app. This SERVICE is
-        provided by Geniushut at no cost and is intended for use as is. This
+        Cherry Pi Pvt Ltd built the Circle app as an Ad Supported app. This SERVICE is
+        provided by Cherry Pi Pvt Ltd at no cost and is intended for use as is. This
         page is used to inform visitors regarding our policies with the
         collection, use, and disclosure of Personal Information if anyone
         decided to use our Service. If you choose to use our Service, then you

@@ -12,7 +12,6 @@ const CustomSend = ({
     <Send {...props}>
       <View
         style={{
-        //   backgroundColor: "#00C6FF",
           justifyContent: "center",
           alignItems: "center",
           height: "100%",

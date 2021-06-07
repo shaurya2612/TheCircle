@@ -15,7 +15,6 @@ const ImageChatFooter = ({onDismiss, text, imageUri,...props}) => {
         height: scale(footerHeight),
         flexDirection: 'row',
         ...styles.centerView,
-        ...styles.elevation_medium
       }}>
       <View
         style={{
