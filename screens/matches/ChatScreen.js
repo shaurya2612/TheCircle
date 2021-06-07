@@ -213,7 +213,9 @@ const ChatScreen = props => {
                       setAttachedImage(null);
                     }}
                   />
-                ) : null}
+                ) : (
+                  <View style={{height: verticalScale(5)}} />
+                )}
               </View>
             );
           }}
@@ -279,7 +281,7 @@ const ChatScreen = props => {
                 backgroundColor: 'white',
                 // borderTopColor: 'black',
                 marginTop: 0,
-                paddingTop: scale(2),
+                paddingTop: scale(5),
                 paddingBottom: scale(5),
                 overflow: 'hidden',
               }}

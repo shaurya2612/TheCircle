@@ -31,7 +31,7 @@ import AppText from '../../components/AppText';
 import ReactNativeModal from 'react-native-modal';
 import IconCircle from '../../components/IconCircle';
 import colors from '../../constants/colors';
-import {scale} from 'react-native-size-matters';
+import {scale, verticalScale} from 'react-native-size-matters';
 import Modal from 'react-native-modalbox';
 import CueCardsScreen from '../CueCardsScreen';
 import {setUserIsTyping} from '../../firebase/utils';
@@ -40,7 +40,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import ImageChatFooter from '../../components/chat/ImageChatFooter';
 import LinearGradient from 'react-native-linear-gradient';
 import TheCircleLoading from '../../components/svgs/TheCircleLoading';
-import { setErrorMessage } from '../../store/actions/error';
+import {setErrorMessage} from '../../store/actions/error';
 
 const AnonymousChatScreen = props => {
   const matchingState = useSelector(state => state.matching);
@@ -278,7 +278,9 @@ const AnonymousChatScreen = props => {
                     setAttachedImage(null);
                   }}
                 />
-              ) : null}
+              ) : (
+                <View style={{height: verticalScale(5)}} />
+              )}
             </View>
           );
         }}
