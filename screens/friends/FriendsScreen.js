@@ -19,6 +19,7 @@ import {listenForFriends, loadMoreFriends} from '../../store/actions/user';
 import {unfriend} from '../../firebase/utils';
 import colors from '../../constants/colors';
 import LinearGradient from 'react-native-linear-gradient';
+import AvatarCircle from '../../components/AvatarCircle';
 
 const dummyData = [
   {
@@ -41,7 +42,9 @@ const FriendsScreen = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalUser, setModalUser] = useState(null);
 
-  const {friends, canLoadMoreFriends, listeningForFriends} = useSelector(state => state.user);
+  const {friends, canLoadMoreFriends, listeningForFriends} = useSelector(
+    state => state.user,
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -58,6 +61,8 @@ const FriendsScreen = () => {
 
   return (
     <View style={{...styles.rootView, backgroundColor: 'white'}}>
+
+      {/* Actions Modal  */}
       <ReactNativeModal
         style={{justifyContent: 'flex-end', margin: 0}}
         onBackdropPress={() => setIsModalVisible(false)}
@@ -72,6 +77,35 @@ const FriendsScreen = () => {
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
               <AppText style={styles.titleText}>Actions</AppText>
             </View>
+            {/* <FriendsListItem
+                onPress={() => {
+                  setModalUser(item);
+                  setIsModalVisible(true);
+                }}
+                imageUri={modalUser?.dp}
+                name={modalUser?.name}
+                userId={modalUser?.id}
+                username={'@' + modalUser?.username}
+              /> */}
+            <View
+              style={{
+                width: '100%',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <AvatarCircle
+                disabled={true}
+                source={{uri: modalUser?.dp}}
+                size={scale(100)}
+                style={{marginRight: scale(15)}}
+              />
+              <View>
+                <NameText>{modalUser?.name}</NameText>
+                <AppText style={styles.usernameText}>
+                  {'@' + modalUser?.username}
+                </AppText>
+              </View>
+            </View>
             <TouchableOpacity
               onPress={async () => {
                 if (!modalUser) return;
@@ -84,6 +118,7 @@ const FriendsScreen = () => {
           </View>
         </ModalCardView>
       </ReactNativeModal>
+
       {(friends || []).length > 0 ? (
         <FlatList
           data={friends}
