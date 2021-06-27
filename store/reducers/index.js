@@ -6,10 +6,12 @@ import loadingReducer from "./loading";
 import errorReducer from "./error";
 import matchingReducer from "./matching";
 import chatReducer from "./chat";
+import streams from "./streams";
 const reducers = {
   signupForm: signupFormReducer,
   photoGrid: photoGridReducer,
   user: userReducer,
+  streams: streams,
   matching: matchingReducer,
   chat: chatReducer,
   loading: loadingReducer,

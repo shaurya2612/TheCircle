@@ -186,7 +186,7 @@ const SearchFriendsScreen = () => {
         onChangeText={newUsername => {
           setNameOrUsername(newUsername);
         }}
-        placeholder="Name or username"
+        placeholder="Type name or username"
       />
       <View
         style={{

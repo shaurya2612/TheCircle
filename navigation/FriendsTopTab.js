@@ -10,6 +10,7 @@ import FriendRequestsScreen from "../screens/friends/FriendRequestsScreen";
 import FriendsScreen from "../screens/friends/FriendsScreen";
 import CustomSafeAreaView from "../components/CustomSafeAreaView";
 import styles from "../styles";
+import StreamsListScreen from "../screens/streams/StreamsListScreen";
 
 const FriendsTopTabNavigator = createMaterialTopTabNavigator();
 
@@ -20,6 +21,10 @@ export default FriendsTopTab = () => {
         <FriendsTopTabNavigator.Screen
           name="Friends"
           component={FriendsScreen}
+        />
+        <FriendsTopTabNavigator.Screen
+          name="Streams"
+          component={StreamsListScreen}
         />
         <FriendsTopTabNavigator.Screen
           name="Requests"
