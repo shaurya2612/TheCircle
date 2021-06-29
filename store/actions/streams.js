@@ -8,12 +8,12 @@ export const fetchAllStreams = () => {
     try {
       const db = database();
       let streams = await db.ref('/streams').once('value');
-      streams = streams.val();  
+      streams = streams.val();
       //Converting fetched object to array
       let streamsArr = Object.keys(streams).map(streamId => {
         return {streamId, ...streams[streamId]};
       });
-      dispatch({type: FETCH_ALL_STREAMS, payload: streamsArr})
+      dispatch({type: FETCH_ALL_STREAMS, payload: streamsArr});
     } catch (err) {
       dispatch(setErrorMessage(err.message));
     }

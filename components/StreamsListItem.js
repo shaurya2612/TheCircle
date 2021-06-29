@@ -7,7 +7,13 @@ import styles from '../styles';
 import AppText from './AppText';
 import NameText from './NameText';
 
-export const StreamsListItemIcon = ({size, borderColor, iconSize, icon, ...props}) => {
+export const StreamsListItemIcon = ({
+  size,
+  borderColor,
+  iconSize,
+  icon,
+  ...props
+}) => {
   return (
     <View
       style={{
@@ -17,7 +23,7 @@ export const StreamsListItemIcon = ({size, borderColor, iconSize, icon, ...props
         borderWidth: scale(1),
         borderRadius: scale(100),
         ...styles.centerView,
-        ...props.style
+        ...props.style,
       }}>
       <FontAwesome5Icon name={icon} size={iconSize} />
     </View>
@@ -37,7 +43,12 @@ const StreamsListItem = ({icon, name, onPress, members}) => {
       <View
         style={{...styles.expandedCenterView, paddingHorizontal: scale(10)}}>
         {/* Stream Icon */}
-        <StreamsListItemIcon size={scale(65)} iconSize={scale(30)} borderColor={'black'} icon={icon}/>
+        <StreamsListItemIcon
+          size={scale(65)}
+          iconSize={scale(32.5)}
+          borderColor={'black'}
+          icon={icon}
+        />
       </View>
 
       <View
@@ -48,8 +59,8 @@ const StreamsListItem = ({icon, name, onPress, members}) => {
         }}>
         {/* Name */}
         <NameText>{name}</NameText>
-        <AppText style={styles.usernameText}>{`${
-          members ?? '999'
+        <AppText style={{...styles.usernameText, fontSize: scale(12)}}>{`${
+          members ?? 'No'
         } Members`}</AppText>
       </View>
     </TouchableOpacity>

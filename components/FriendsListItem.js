@@ -42,7 +42,7 @@ export const FriendsListItem = ({
       >
         {/* Name */}
         <NameText>{name}</NameText>
-        <AppText style={styles.usernameText}>{username}</AppText>
+        <AppText style={{...styles.usernameText, fontSize: scale(12)}}>{username}</AppText>
       </View>
     </TouchableOpacity>
   );

@@ -158,6 +158,7 @@ const ChatScreen = props => {
             if (attachedImage) newMessages[0].image = attachedImage.uri;
             customOnSend(newMessages);
           }}
+          lightboxProps={{springConfig: {tension: 900000, friction: 90000}}}
           alwaysShowSend={attachedImage ? true : false}
           isTyping={isMatchTyping}
           scrollToBottom

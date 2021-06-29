@@ -302,3 +302,34 @@ export const sendNotification = async (receiverId, title, body) => {
     });
   }
 };
+
+export const joinStream = async streamId => {
+  const db = database();
+  const uid = auth().currentUser.uid;
+
+  await db.ref('/streamsubs').child(uid).child(streamId).set('true');
+  
+  await db
+    .ref('/streams')
+    .child(streamId)
+    .child('members')
+    .transaction(currentMembers => {
+      if (currentMembers === null) return 1;
+      else return currentMembers + 1;
+    });
+};
+
+export const leaveStream = async streamId => {
+  const db = database();
+  const uid = auth().currentUser.uid;
+
+  await db.ref('/streamsubs').child(uid).child(streamId).remove();
+  await db
+    .ref('/streams')
+    .child(streamId)
+    .child('members')
+    .transaction(currentMembers => {
+      if (currentMembers === null) return 0;
+      else return currentMembers - 1;
+    });
+};
