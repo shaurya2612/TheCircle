@@ -15,7 +15,7 @@ const AnonymousChatHeader = ({
   onPressCards,
   onPressEllipsis,
   FOF,
-  viaFriend,
+  via,
   online,
   ...props
 }) => {
@@ -27,7 +27,7 @@ const AnonymousChatHeader = ({
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <AppText>via {viaFriend.name}</AppText>
+        <AppText>via {via.name}</AppText>
       </View>
       {FOF.nonBinary ? (
         <LinearGradient

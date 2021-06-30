@@ -16,7 +16,7 @@ import {
 const initialState = {
   matchingStatus: null,
   FOF: null,
-  viaFriend: null,
+  via: null,
   listeningForUserMatchingStatus: false,
   messages: null,
   canLoadEarlierMessages: null,
@@ -41,7 +41,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         FOF: payload.FOF,
-        viaFriend: payload.viaFriend,
+        via: payload.via,
       };
 
     case SET_CAN_LOAD_EARLIER_MESSAGES_IN_ANONYMOUS_CHAT_ROOM:
@@ -97,7 +97,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         FOF: null,
-        viaFriend: null,
+        via: null,
         messages: null,
         isFOFOnline: null,
         isFOFTyping: null,

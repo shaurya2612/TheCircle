@@ -1,6 +1,7 @@
 import {
   declineRequest,
   fetchNameAgeUsernameDpById,
+  leaveStream,
   unfriend,
   unmatch,
   uploadUserPhotos,
@@ -13,7 +14,7 @@ import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import messaging from '@react-native-firebase/messaging';
-import {skipThisFOF} from './matching';
+import {changeUserMatchingStatus, skipThisFOF} from './matching';
 import {Alert} from 'react-native';
 
 export const SET_USER_STATE = 'SET_USER_STATE';
@@ -676,12 +677,7 @@ export const deleteUser = () => {
       const existingToken = await messaging().getToken();
 
       //deleting fcm token
-      await firestore()
-        .collection('tokens')
-        .doc(uid)
-        .update({
-          tokens: firestore.FieldValue.arrayRemove(existingToken),
-        });
+      await firestore().collection('tokens').doc(uid).delete();
 
       // await auth().signOut();
 
@@ -690,16 +686,8 @@ export const deleteUser = () => {
 
       //Stop chat room listeners
       if (matchingState.FOF !== null) {
-        let FOF = matchingState.FOF;
-
-        db.ref('/chatRooms').child(FOF.id).off();
-        db.ref('/matchingStatus').child(FOF.id).off();
-        const refString =
-          uid < FOF.id ? uid + '@' + FOF.id : FOF.id + '@' + uid;
-        db.ref('/messages').child(refString).off();
-        db.ref('/isOnline').child(FOF.id).off();
-        db.ref('/isTyping').child(FOF.id).off();
         dispatch(skipThisFOF());
+        dispatch(changeUserMatchingStatus(0));
       }
 
       //Stop match chat listeners
@@ -774,6 +762,20 @@ export const deleteUser = () => {
           }
         }
       }
+
+      //Leave all streams
+      const streamsubs = await db.ref('/streamsubs').child(uid).once('value');
+      const streamIds = Object.keys(streamsubs.val());
+      for (var i = 0; i < streamIds.length; i++) {
+        try {
+          leaveStream(streamIds[i]);
+        } catch (err) {
+          //handled so loop doesn't break
+        }
+      }
+
+      //delete cue cards
+      await firestore().collection('cueCards').doc(uid).delete();
 
       //delete matches
       const matches = await db.ref('/matches').child(uid).once('value');

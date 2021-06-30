@@ -45,7 +45,7 @@ import {setErrorMessage} from '../../store/actions/error';
 const AnonymousChatScreen = props => {
   const matchingState = useSelector(state => state.matching);
   const {
-    viaFriend,
+    via,
     messages,
     matchingStatus,
     canLoadEarlierMessages,
@@ -197,7 +197,7 @@ const AnonymousChatScreen = props => {
 
       {/* Header */}
       <AnonymousChatHeader
-        viaFriend={viaFriend}
+        via={via}
         FOF={FOF}
         online={isFOFOnline}
         onPressCards={() => {

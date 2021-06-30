@@ -239,7 +239,7 @@ export const changeUserMatchingStatus = newStatus => {
             dispatch({
               type: SET_CHAT_ROOM,
               payload: {
-                viaFriend: {
+                via: {
                   name: viaFriendOrStreamName,
                   id: viaFriendOrStreamId,
                   type: viaType,
@@ -376,7 +376,7 @@ export const configureAnonymousChatRoom = () => {
     dispatch({
       type: SET_CHAT_ROOM,
       payload: {
-        viaFriend: {
+        via: {
           name: viaFriendOrStreamName,
           id: viaFriendOrStreamId,
           type: viaType,
