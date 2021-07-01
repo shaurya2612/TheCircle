@@ -99,6 +99,8 @@ const ChatScreen = props => {
         swipeArea={verticalScale(25)} // The height in pixels of the swipeable area, window height by default
         swipeThreshold={0} // The threshold to reach in pixels to close the modal
         isOpen={isModalVisible}
+        backButtonClose={true}
+        coverScreen={true}
         onClosed={() => {
           setIsModalVisible(false);
         }}
@@ -280,11 +282,11 @@ const ChatScreen = props => {
               {...props}
               containerStyle={{
                 backgroundColor: 'white',
-                // borderTopColor: 'black',
                 marginTop: 0,
                 paddingTop: scale(5),
                 paddingBottom: scale(5),
                 overflow: 'hidden',
+                borderTopWidth: 0
               }}
             />
           )}

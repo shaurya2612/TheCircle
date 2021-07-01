@@ -204,6 +204,8 @@ export const MatchesListScreen = props => {
         onClosed={() => {
           setIsProfileModalVisible(false);
         }}
+        backButtonClose={true}
+        coverScreen={true}
         backdropOpacity={0}
         isVisible={isProfileModalVisible}>
         <MatchProfileScreen

@@ -10,10 +10,12 @@ import AvatarCircle from '../AvatarCircle';
 import CustomHeader from '../CustomHeader';
 import IconCircle from '../IconCircle';
 import colors from '../../constants/colors';
+import { Fragment } from 'react';
 
 const AnonymousChatHeader = ({
   onPressCards,
   onPressEllipsis,
+  onPressName,
   FOF,
   via,
   online,
@@ -23,15 +25,26 @@ const AnonymousChatHeader = ({
     <View>
       <View
         style={{
-          backgroundColor: '#cccccc',
+          backgroundColor: via.type === 'stream' ? '#cccccc' : '#3490dc',
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <AppText>via {via.name}</AppText>
+        <AppText style={{color: via.type === 'stream' ? 'black' : 'white'}}>
+          via {via.name}
+        </AppText>
       </View>
       {FOF.nonBinary ? (
         <LinearGradient
-          colors={['blue', 'red', 'yellow', 'green']}
+          colors={[
+            '#4245f5',
+            '#3490dc',
+            '#42f584',
+            '#f5f542',
+            '#f59e42',
+            '#f70d05',
+          ]}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}
           style={{
             justifyContent: 'center',
             alignItems: 'center',
@@ -54,7 +67,7 @@ const AnonymousChatHeader = ({
           backgroundColor: 'white',
           overflow: 'visible',
           ...(Platform.OS === 'android'
-            ? styles.elevation_small
+            ? {elevation: 2}
             : {borderBottomWidth: scale(0.5), borderColor: 'grey'}),
         }}>
         <View
@@ -63,14 +76,20 @@ const AnonymousChatHeader = ({
             paddingHorizontal: scale(10),
             overflow: 'hidden',
           }}>
-          <View
+          <TouchableOpacity
+            disabled={via.type === 'friend'}
+            onPress={via.type === 'friend' ? () => {} : onPressName}
             style={{
               flexDirection: 'row',
               // justifyContent: "center",
               alignItems: 'center',
               overflow: 'scroll',
             }}>
-            <Icon name={'user'} size={scale(20)} color={'black'} />
+            {via.type === 'stream' ? (
+              <AvatarCircle disabled source={{uri: FOF.dp}} size={scale(30)} />
+            ) : (
+              <Icon name={'user'} size={scale(20)} color={'black'} />
+            )}
             <View
               style={{
                 flexWrap: 'nowrap',
@@ -85,7 +104,9 @@ const AnonymousChatHeader = ({
                   marginHorizontal: scale(10),
                   color: 'black',
                 }}>
-                {`${FOF.nonBinary ?? FOF.gender}, ${FOF.age}`}
+                {`${
+                  via.type === 'stream' ? FOF.name : FOF.nonBinary ?? FOF.gender
+                }, ${FOF.age}`}
               </AppText>
               {online ? (
                 <View
@@ -102,7 +123,7 @@ const AnonymousChatHeader = ({
                 <FontAwesome5Icon name={'circle'} solid color={'green'} />
               ) : null} */}
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
 
         {/* Right Section */}

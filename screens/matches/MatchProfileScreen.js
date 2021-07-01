@@ -38,7 +38,7 @@ export const MatchProfileScreen = ({
   onPressX,
 }) => {
   const insets = useSafeAreaInsets();
-  let {height, width} = Dimensions.get('window');
+  let {height, width} = Dimensions.get('screen');
   height -= insets.top + insets.bottom;
   width -= insets.left + insets.right;
 

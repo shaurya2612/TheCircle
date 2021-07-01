@@ -203,6 +203,24 @@ export const changeUserMatchingStatus = newStatus => {
             }
             viaFriendOrStreamName = viaFriendOrStreamName.val();
 
+            [FOFName, FOFDp] = await Promise.all([
+              viaType === 'stream'
+                ? db
+                    .ref('/users')
+                    .child(chosenFOF.id)
+                    .child('name')
+                    .once('value')
+                : null,
+              viaType === 'stream'
+                ? storage().ref(`/profiles/${chosenFOF.id}/0`).getDownloadURL()
+                : null,
+            ]);
+
+            FOFName = FOFName?.val();
+            //FOFDp is a string returned from storage
+
+            chosenFOF = {...chosenFOF, name: FOFName, dp: FOFDp};
+
             //Add in via
             await Promise.all([
               db
@@ -350,11 +368,19 @@ export const configureAnonymousChatRoom = () => {
       FOFBd,
       FOFGender,
       FOFNonBinary,
+      FOFName,
+      FOFDp,
       viaFriendOrStreamName,
     ] = await Promise.all([
       db.ref('/users').child(FOFId).child('bd').once('value'),
       db.ref('/genders').child(FOFId).once('value'),
       db.ref('/nonBinary').child(FOFId).once('value'),
+      viaType === 'stream'
+        ? db.ref('/users').child(FOFId).child('name').once('value')
+        : null,
+      viaType === 'stream'
+        ? storage().ref(`/profiles/${FOFId}/0`).getDownloadURL()
+        : null,
       viaType === 'friend'
         ? db
             .ref('/users')
@@ -371,6 +397,8 @@ export const configureAnonymousChatRoom = () => {
     FOFBd = FOFBd.val();
     FOFGender = FOFGender.val();
     FOFNonBinary = FOFNonBinary.val();
+    FOFName = FOFName?.val();
+    //FOFDp is a string from storage
     viaFriendOrStreamName = viaFriendOrStreamName.val();
 
     dispatch({
@@ -386,6 +414,8 @@ export const configureAnonymousChatRoom = () => {
           age: bdToAge(FOFBd),
           gender: FOFGender,
           nonBinary: FOFNonBinary,
+          dp: FOFDp,
+          name: FOFName,
         },
       },
     });

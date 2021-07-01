@@ -50,10 +50,12 @@ const UserScreen = props => {
         swipeThreshold={50} // The threshold to reach in pixels to close the modal
         isOpen={isProfileVisible}
         ref={modalRef}
+        backButtonClose={true}
         onClosed={() => {
           setIsProfileVisible(false);
         }}
         backdropOpacity={0}
+        coverScreen={true}
         isVisible={isProfileVisible}>
         <UserProfileScreen
           onPressX={() => {
@@ -152,7 +154,6 @@ const UserScreen = props => {
           />
         </View>
       </View>
-
     </View>
   );
 };

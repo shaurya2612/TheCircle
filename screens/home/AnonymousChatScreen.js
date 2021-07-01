@@ -41,18 +41,18 @@ import ImageChatFooter from '../../components/chat/ImageChatFooter';
 import LinearGradient from 'react-native-linear-gradient';
 import TheCircleLoading from '../../components/svgs/TheCircleLoading';
 import {setErrorMessage} from '../../store/actions/error';
+import MatchProfileScreen from '../matches/MatchProfileScreen';
+import {setItsAMatchModalVisible} from '../../store/actions/loading';
 
 const AnonymousChatScreen = props => {
   const matchingState = useSelector(state => state.matching);
-  const {
-    via,
-    messages,
-    matchingStatus,
-    canLoadEarlierMessages,
-  } = matchingState;
+  const {via, messages, matchingStatus, canLoadEarlierMessages} = matchingState;
   const FOF = useSelector(state => state.matching.FOF);
   const dispatch = useDispatch();
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isActionsModalVisible, setIsActionsModalVisible] = useState(false);
+  const [isFOFProfileModalVisible, setIsFOFProfileModalVisible] = useState(
+    false,
+  );
   const [areCueCardsVisible, setAreCueCardsVisible] = useState(false);
   const [userLikes, setUserLikes] = useState(matchingStatus === 3);
   const isFOFOnline = useSelector(state => state.matching.isFOFOnline);
@@ -79,6 +79,15 @@ const AnonymousChatScreen = props => {
     }
   }, [FOF]);
 
+  useEffect(() => {
+    return () => {
+      setIsActionsModalVisible(false);
+      setAreCueCardsVisible(false);
+      setIsFOFProfileModalVisible(false);
+      setItsAMatchModalVisible(false);
+    };
+  }, []);
+
   const customOnSend = (newMessages = []) => {
     // setMessages((previousState) => GiftedChat.append(previousState, messages));
     dispatch(sendMessageInAnonymousChatRoom(newMessages));
@@ -102,16 +111,16 @@ const AnonymousChatScreen = props => {
     <View style={{...styles.rootView, backgroundColor: 'white'}}>
       {/* Modal */}
       <ReactNativeModal
-        isVisible={isModalVisible}
+        isVisible={isActionsModalVisible}
         backdropTransitionInTiming={0}
         backdropTransitionOutTiming={0}
         useNativeDriver={true}
         hasBackdrop={true}
         onBackdropPress={() => {
-          setIsModalVisible(false);
+          setIsActionsModalVisible(false);
         }}
         onBackButtonPress={() => {
-          setIsModalVisible(false);
+          setIsActionsModalVisible(false);
         }}>
         <View
           style={{
@@ -124,7 +133,7 @@ const AnonymousChatScreen = props => {
               setUserLikes(prev => !prev);
               if (matchingStatus === 3) dispatch(changeUserMatchingStatus(2));
               else dispatch(changeUserMatchingStatus(3));
-              setIsModalVisible(false);
+              setIsActionsModalVisible(false);
             }}>
             <IconCircle
               style={{borderColor: 'white'}}
@@ -174,6 +183,30 @@ const AnonymousChatScreen = props => {
         </View>
       </ReactNativeModal>
 
+      {/* Profile Modal */}
+      <Modal
+        style={{margin: 0, elevation: 5}}
+        swipeToClose={true}
+        swipeArea={verticalScale(25)} // The height in pixels of the swipeable area, window height by default
+        swipeThreshold={0} // The threshold to reach in pixels to close the modal
+        onClosed={() => {
+          setIsFOFProfileModalVisible(false);
+        }}
+        backButtonClose={true}
+        isOpen={isFOFProfileModalVisible}
+        onOpened={() => {
+          Keyboard.dismiss();
+        }}
+        coverScreen={true}
+        backdropOpacity={0}>
+        <MatchProfileScreen
+          matchId={FOF?.id}
+          onPressX={() => {
+            setIsFOFProfileModalVisible(false);
+          }}
+        />
+      </Modal>
+
       {/* CueCards Modal */}
       <ReactNativeModal
         isVisible={areCueCardsVisible}
@@ -200,12 +233,19 @@ const AnonymousChatScreen = props => {
         via={via}
         FOF={FOF}
         online={isFOFOnline}
+        onPressName={
+          via.type === 'stream'
+            ? () => {
+                setIsFOFProfileModalVisible(true);
+              }
+            : null
+        }
         onPressCards={() => {
           Keyboard.dismiss();
           setAreCueCardsVisible(true);
         }}
         onPressEllipsis={() => {
-          setIsModalVisible(true);
+          setIsActionsModalVisible(true);
         }}
         onPressX={() => {
           Keyboard.dismiss();
@@ -352,6 +392,7 @@ const AnonymousChatScreen = props => {
               paddingTop: scale(2),
               paddingBottom: scale(5),
               overflow: 'hidden',
+              borderTopWidth: 0,
             }}
           />
         )}

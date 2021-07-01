@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   },
   appText: {
     color: colors.appText,
-    fontFamily:'Quicksand-Medium'
+    fontFamily: 'Quicksand-Medium',
   },
   countryCodeInputView: {
     height: moderateScale(30, 0.4),
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     borderWidth: scale(3),
     borderColor: colors.accent,
     borderRadius: scale(40),
-    flexWrap:"nowrap",
+    flexWrap: 'nowrap',
     // width:"100%"
   },
   nameText: {fontSize: scale(17)},
@@ -172,6 +172,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 2,
     elevation: 5,
+  },
+  inputToolBarContainerStyle: {
+    backgroundColor: 'white',
+    marginTop: 0,
+    paddingTop: scale(5),
+    paddingBottom: scale(5),
+    overflow: 'hidden',
+    borderTopWidth: 0
   },
 });
 
