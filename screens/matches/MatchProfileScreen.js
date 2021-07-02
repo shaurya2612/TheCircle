@@ -8,6 +8,7 @@ import {
   FlatList,
   ActivityIndicator,
   Platform,
+  TouchableOpacity,
 } from 'react-native';
 import {scale, verticalScale} from 'react-native-size-matters';
 import colors from '../../constants/colors';
@@ -151,12 +152,16 @@ export const MatchProfileScreen = ({
                     alignItems: 'flex-end',
                     ...styles.elevation_small,
                   }}>
-                  <Icon
-                    style={{marginHorizontal: scale(2)}}
+                  <TouchableOpacity
                     onPress={onPressX}
-                    name={'x'}
-                    size={scale(20)}
-                  />
+                    style={{
+                      width: scale(40),
+                      justifyContent: 'center',
+                      height: '100%',
+                      alignItems: 'center',
+                    }}>
+                    <Icon color={'black'} name={'x'} size={scale(20)} />
+                  </TouchableOpacity>
                 </View>
 
                 {photoTabs()}
@@ -186,10 +191,7 @@ export const MatchProfileScreen = ({
                       <View style={{flex: 1}}></View>
                     </TouchableWithoutFeedback>
                     {imageLoading ? (
-                      <ActivityIndicator
-                        color={colors.primary}
-                        size="large"
-                      />
+                      <ActivityIndicator color={colors.primary} size="large" />
                     ) : null}
                     <TouchableWithoutFeedback
                       onPress={() => {
