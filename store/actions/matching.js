@@ -119,7 +119,7 @@ export const changeUserMatchingStatus = newStatus => {
             //if user is interested in everyone
             if (userState.interestedIn === 'Everyone') {
               chosenFOF = await firestoreDb
-                .collection(`waitingUsers`)
+                .collection('waitingUsers')
                 .where('friends', 'array-contains', chosenFriendOrStreamId)
                 .where('interestedIn', 'in', [userState.gender, 'Everyone'])
                 .orderBy('timestamp', 'asc')
@@ -127,7 +127,7 @@ export const changeUserMatchingStatus = newStatus => {
                 .get();
             } else {
               chosenFOF = await firestoreDb
-                .collection(`waitingUsers`)
+                .collection('waitingUsers')
                 .where('friends', 'array-contains', chosenFriendOrStreamId)
                 .where('gender', '==', userState.interestedIn)
                 .where('interestedIn', 'in', [userState.gender, 'Everyone'])
@@ -203,7 +203,7 @@ export const changeUserMatchingStatus = newStatus => {
             }
             viaFriendOrStreamName = viaFriendOrStreamName.val();
 
-            [FOFName, FOFDp] = await Promise.all([
+            let [FOFName, FOFDp] = await Promise.all([
               viaType === 'stream'
                 ? db
                     .ref('/users')

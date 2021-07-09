@@ -15,8 +15,8 @@ exports.match = functions
     //User is not authenticated
     if (!context.auth) {
       throw new functions.https.HttpsError(
-        'failed-precondition',
-        'The function must be called while authenticated.',
+        'unauthenticated',
+        'Endpoint requires authentication.',
       );
     }
 
