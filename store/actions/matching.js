@@ -102,8 +102,9 @@ export const changeUserMatchingStatus = newStatus => {
             .httpsCallable('match')();
           console.warn(res.data);
         } catch (err) {
-          setErrorMessage(err.description);
-          changeUserMatchingStatus(0);
+          console.warn('Error');
+          dispatch(setErrorMessage(err.message));
+          dispatch(changeUserMatchingStatus(0));
         }
       }
 

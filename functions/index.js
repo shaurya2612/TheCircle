@@ -19,245 +19,241 @@ exports.match = functions
         'Endpoint requires authentication!.',
       );
     }
+    try {
+      const uid = context.auth.uid;
+      const db = admin.database();
+      const firestore = admin.firestore();
 
-    const uid = context.auth.uid;
-    const db = admin.database();
-    const firestore = admin.firestore();
+      await db.ref('/matchingStatus').child(uid).set(1);
+      var chosenFOF = null; //FOF chosen
+      let foundFOF = false; //is FOF found or not (since chosenFOF !== null is not a sufficient condition)
+      let viaFriendOrStreamId = null; //Friend via which final fof is chosen
 
-    await db.ref('/matchingStatus').child(uid).set(1);
-    var chosenFOF = null; //FOF chosen
-    let foundFOF = false; //is FOF found or not (since chosenFOF !== null is not a sufficient condition)
-    let viaFriendOrStreamId = null; //Friend via which final fof is chosen
+      //GET all friends
+      const friendsSnapshot = await db.ref('/friends').child(uid).once('value');
 
-    //GET all friends
-    const friendsSnapshot = await db.ref('/friends').child(uid).once('value');
+      //GET all subscribed streams
+      const streamsubsSnapshot = await db
+        .ref('/streamsubs')
+        .child(uid)
+        .once('value');
 
-    //GET all subscribed streams
-    const streamsubsSnapshot = await db
-      .ref('/streamsubs')
-      .child(uid)
-      .once('value');
-
-    //Check if user does not have friends or streamsubs yet
-    if (!friendsSnapshot.exists() && !streamsubsSnapshot.exists()) {
-      //TODO Handle on client by changing user matching status to 0
-      throw new functions.https.HttpsError(
-        'no-friends-and-streamsubs',
-        'No friends and stream subscriptions to match from.',
-      );
-    }
-
-    let friendsAndStreamsIds = Object.keys({
-      ...(friendsSnapshot.val() || {}),
-      ...(streamsubsSnapshot.val() || {}),
-    });
-
-    // for later use during adding users name in every friends waitingList
-    let copyOfFriendsAndStreamsIds = Object.keys({
-      ...(friendsSnapshot.val() || {}),
-      ...(streamsubsSnapshot.val() || {}),
-    });
-
-    let [userInterestedIn, userGender] = await Promise.all([
-      db.ref('/interestedIn').child(uid).once('value'),
-      db.ref('/genders').child(uid).once('value'),
-    ]);
-
-    userInterestedIn = userInterestedIn.val();
-    userGender = userGender.val();
-
-    while (friendsAndStreamsIds.length > 0) {
-      functions.logger.log('Started loop');
-      //select a random friend from friendsIds array
-      const randomFriendOrStreamIdIndex = Math.floor(
-        Math.random() * friendsAndStreamsIds.length,
-      );
-
-      var chosenFriendOrStreamId =
-        friendsAndStreamsIds[randomFriendOrStreamIdIndex];
-
-      var query;
-      if (userInterestedIn === 'Everyone') {
-        query = firestore
-          .collection(`waitingUsers`)
-          .where('friends', 'array-contains', chosenFriendOrStreamId)
-          .where('interestedIn', 'in', [userGender, 'Everyone'])
-          .orderBy('timestamp', 'asc')
-          .limit(1);
-      } else {
-        query = firestore
-          .collection(`waitingUsers`)
-          .where('friends', 'array-contains', chosenFriendOrStreamId)
-          .where('gender', '==', userInterestedIn)
-          .where('interestedIn', 'in', [userGender, 'Everyone'])
-          .orderBy('timestamp', 'asc')
-          .limit(1);
-      }
-
-      var skip = false;
-      //find a potential match via a transaction
-      await firestore.runTransaction(async transaction => {
-        functions.logger.log('c1');
-        chosenFOF = await transaction.get(query);
-        if (chosenFOF.empty) {
-          skip = true;
-          return;
-        }
-        functions.logger.log('c2');
-        //check if the chosen fof is in your matches
-        let matchesRes = await db
-          .ref('/matches')
-          .child(uid)
-          .child(chosenFOF.docs[0].id)
-          .once('value');
-        if (matchesRes.exists()) {
-          skip = true;
-          return;
-        }
-        functions.logger.log('c3');
-        //check if the chosen fof is in your friends
-        let friendsRes = await db
-          .ref('/friends')
-          .child(uid)
-          .child(chosenFOF.docs[0].id)
-          .once('value');
-        if (friendsRes.exists()) {
-          skip = true;
-          return;
-        }
-        functions.logger.log('c4');
-        transaction.delete(
-          firestore.collection('waitingUsers').doc(chosenFOF.docs[0].id),
+      //Check if user does not have friends or streamsubs yet
+      if (!friendsSnapshot.exists() && !streamsubsSnapshot.exists()) {
+        throw new functions.https.HttpsError(
+          'failed-precondition',
+          'No friends or stream subscriptions to match from.',
         );
-        functions.logger.log('c5');
-      });
-      if (skip) {
-        functions.logger.log('skip section');
-        friendsAndStreamsIds.splice(randomFriendOrStreamIdIndex, 1);
-        continue;
-      } else {
-        functions.logger.log('break section');
-        foundFOF = true;
-        break;
       }
-    }
-    functions.logger.log('found and chosen', foundFOF, chosenFOF);
-    //make an anonymous chat room with the chosenFOF and change the matching status
-    if (foundFOF && chosenFOF !== null) {
-      //change the data structure of chosenFOF to {id, gender, timestamp, interestedIn}
-      chosenFOF = {
-        ...chosenFOF.docs[0].data(),
-        id: chosenFOF.docs[0].id,
-      };
 
-      viaFriendOrStreamId = chosenFriendOrStreamId;
-      //Add in chat rooms
-      await Promise.all([
-        db.ref('/chatRooms').child(uid).set(chosenFOF.id),
-        db.ref('/chatRooms').child(chosenFOF.id).set(uid),
+      let friendsAndStreamsIds = Object.keys({
+        ...(friendsSnapshot.val() || {}),
+        ...(streamsubsSnapshot.val() || {}),
+      });
+
+      // for later use during adding users name in every friends waitingList
+      let copyOfFriendsAndStreamsIds = Object.keys({
+        ...(friendsSnapshot.val() || {}),
+        ...(streamsubsSnapshot.val() || {}),
+      });
+
+      let [userInterestedIn, userGender] = await Promise.all([
+        db.ref('/interestedIn').child(uid).once('value'),
+        db.ref('/genders').child(uid).once('value'),
       ]);
 
-      var viaType = 'friend';
-      //get the name of via friend
-      var viaFriendOrStreamName = await db
-        .ref('/users')
-        .child(viaFriendOrStreamId)
-        .child('name')
-        .once('value');
-      if (!viaFriendOrStreamName.exists()) {
-        viaFriendOrStreamName = await db
-          .ref('/streams')
+      userInterestedIn = userInterestedIn.val();
+      userGender = userGender.val();
+
+      while (friendsAndStreamsIds.length > 0) {
+        //select a random friend from friendsIds array
+        const randomFriendOrStreamIdIndex = Math.floor(
+          Math.random() * friendsAndStreamsIds.length,
+        );
+
+        var chosenFriendOrStreamId =
+          friendsAndStreamsIds[randomFriendOrStreamIdIndex];
+
+        var query;
+        if (userInterestedIn === 'Everyone') {
+          query = firestore
+            .collection(`waitingUsers`)
+            .where('friends', 'array-contains', chosenFriendOrStreamId)
+            .where('interestedIn', 'in', [userGender, 'Everyone'])
+            .orderBy('timestamp', 'asc')
+            .limit(1);
+        } else {
+          query = firestore
+            .collection(`waitingUsers`)
+            .where('friends', 'array-contains', chosenFriendOrStreamId)
+            .where('gender', '==', userInterestedIn)
+            .where('interestedIn', 'in', [userGender, 'Everyone'])
+            .orderBy('timestamp', 'asc')
+            .limit(1);
+        }
+
+        var skip = false;
+        //find a potential match via a transaction
+        await firestore.runTransaction(async transaction => {
+          chosenFOF = await transaction.get(query);
+          if (chosenFOF.empty) {
+            skip = true;
+            return;
+          }
+          //check if the chosen fof is in your matches
+          let matchesRes = await db
+            .ref('/matches')
+            .child(uid)
+            .child(chosenFOF.docs[0].id)
+            .once('value');
+          if (matchesRes.exists()) {
+            skip = true;
+            return;
+          }
+          //check if the chosen fof is in your friends
+          let friendsRes = await db
+            .ref('/friends')
+            .child(uid)
+            .child(chosenFOF.docs[0].id)
+            .once('value');
+          if (friendsRes.exists()) {
+            skip = true;
+            return;
+          }
+          transaction.delete(
+            firestore.collection('waitingUsers').doc(chosenFOF.docs[0].id),
+          );
+        });
+        if (skip) {
+          friendsAndStreamsIds.splice(randomFriendOrStreamIdIndex, 1);
+          continue;
+        } else {
+          foundFOF = true;
+          break;
+        }
+      }
+      //make an anonymous chat room with the chosenFOF and change the matching status
+      if (foundFOF && chosenFOF !== null) {
+        //change the data structure of chosenFOF to {id, gender, timestamp, interestedIn}
+        chosenFOF = {
+          ...chosenFOF.docs[0].data(),
+          id: chosenFOF.docs[0].id,
+        };
+
+        viaFriendOrStreamId = chosenFriendOrStreamId;
+        //Add in chat rooms
+        await Promise.all([
+          db.ref('/chatRooms').child(uid).set(chosenFOF.id),
+          db.ref('/chatRooms').child(chosenFOF.id).set(uid),
+        ]);
+
+        var viaType = 'friend';
+        //get the name of via friend
+        var viaFriendOrStreamName = await db
+          .ref('/users')
           .child(viaFriendOrStreamId)
           .child('name')
           .once('value');
+        if (!viaFriendOrStreamName.exists()) {
+          viaFriendOrStreamName = await db
+            .ref('/streams')
+            .child(viaFriendOrStreamId)
+            .child('name')
+            .once('value');
 
-        viaType = 'stream';
-      }
-
-      viaFriendOrStreamName = viaFriendOrStreamName.val();
-
-      //Fetch the name and dp of chat room partner if via stream
-      let [FOFName, FOFDp] = await Promise.all([
-        viaType === 'stream'
-          ? db.ref('/users').child(chosenFOF.id).child('name').once('value')
-          : null,
-        viaType === 'stream'
-          ? admin
-              .storage()
-              .bucket(STORAGE_BUCKET_NAME)
-              .file(`/profiles/${chosenFOF.id}/0`)
-              .getSignedUrl({action: 'read', expires: '03-09-2491'})
-          : null,
-      ]);
-
-      FOFName = FOFName?.val();
-      FOFDp = FOFDp[0];
-
-      chosenFOF = {...chosenFOF, name: FOFName, dp: FOFDp};
-
-      //Add in via
-      await Promise.all([
-        db.ref('/via').child(uid).set({id: viaFriendOrStreamId, type: viaType}),
-        db
-          .ref('/via')
-          .child(chosenFOF.id)
-          .set({id: viaFriendOrStreamId, type: viaType}),
-      ]);
-
-      //get the age of FOF
-      let FOFbd = await db
-        .ref('/users')
-        .child(chosenFOF.id)
-        .child('bd')
-        .once('value');
-      FOFbd = FOFbd.val();
-
-      const bdToAge = DOB => {
-        var today = new Date();
-        var birthDate = new Date(DOB);
-        var age = today.getFullYear() - birthDate.getFullYear();
-        var m = today.getMonth() - birthDate.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-          age = age - 1;
+          viaType = 'stream';
         }
 
-        return age;
-      };
+        viaFriendOrStreamName = viaFriendOrStreamName.val();
 
-      chosenFOF['age'] = bdToAge(FOFbd);
+        //Fetch the name and dp of chat room partner if via stream
+        let [FOFName, FOFDp] = await Promise.all([
+          viaType === 'stream'
+            ? db.ref('/users').child(chosenFOF.id).child('name').once('value')
+            : null,
+          viaType === 'stream'
+            ? admin
+                .storage()
+                .bucket(STORAGE_BUCKET_NAME)
+                .file(`/profiles/${chosenFOF.id}/0`)
+                .getSignedUrl({action: 'read', expires: '03-09-2491'})
+            : null,
+        ]);
 
-      //check if partner is nonbinary
-      let FOFNonBinary = await db
-        .ref('/nonBinary')
-        .child(chosenFOF.id)
-        .once('value');
+        FOFName = FOFName?.val();
+        FOFDp = FOFDp[0];
 
-      if (FOFNonBinary.exists()) {
-        FOFNonBinary = FOFNonBinary.val();
-        chosenFOF['nonBinary'] = FOFNonBinary;
+        chosenFOF = {...chosenFOF, name: FOFName, dp: FOFDp};
+
+        //Add in via
+        await Promise.all([
+          db
+            .ref('/via')
+            .child(uid)
+            .set({id: viaFriendOrStreamId, type: viaType}),
+          db
+            .ref('/via')
+            .child(chosenFOF.id)
+            .set({id: viaFriendOrStreamId, type: viaType}),
+        ]);
+
+        //get the age of FOF
+        let FOFbd = await db
+          .ref('/users')
+          .child(chosenFOF.id)
+          .child('bd')
+          .once('value');
+        FOFbd = FOFbd.val();
+
+        const bdToAge = DOB => {
+          var today = new Date();
+          var birthDate = new Date(DOB);
+          var age = today.getFullYear() - birthDate.getFullYear();
+          var m = today.getMonth() - birthDate.getMonth();
+          if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age = age - 1;
+          }
+
+          return age;
+        };
+
+        chosenFOF['age'] = bdToAge(FOFbd);
+
+        //check if partner is nonbinary
+        let FOFNonBinary = await db
+          .ref('/nonBinary')
+          .child(chosenFOF.id)
+          .once('value');
+
+        if (FOFNonBinary.exists()) {
+          FOFNonBinary = FOFNonBinary.val();
+          chosenFOF['nonBinary'] = FOFNonBinary;
+        }
+
+        //change Matching Status of both the users
+        await Promise.all([
+          db.ref('/matchingStatus').child(uid).set(2),
+          db.ref('/matchingStatus').child(chosenFOF.id).set(2),
+        ]);
+      } else {
+        //push current user to waiting users
+        await firestore.collection(`waitingUsers`).doc(uid).set({
+          gender: userGender,
+          interestedIn: userInterestedIn,
+          timestamp: admin.firestore.FieldValue.serverTimestamp(),
+          friends: copyOfFriendsAndStreamsIds,
+        });
       }
 
-      //change Matching Status of both the users
-      await Promise.all([
-        db.ref('/matchingStatus').child(uid).set(2),
-        db.ref('/matchingStatus').child(chosenFOF.id).set(2),
-      ]);
-    } else {
-      //push current user to waiting users
-      await firestore.collection(`waitingUsers`).doc(uid).set({
-        gender: userGender,
-        interestedIn: userInterestedIn,
-        timestamp: admin.firestore.FieldValue.serverTimestamp(),
-        friends: copyOfFriendsAndStreamsIds,
-      });
+      return {
+        via: {
+          name: viaFriendOrStreamName,
+          id: viaFriendOrStreamId,
+          type: viaType,
+        },
+        FOF: chosenFOF,
+      };
+    } catch (err) {
+      throw new functions.https.HttpsError('internal', err.message);
     }
-
-    return {
-      via: {
-        name: viaFriendOrStreamName,
-        id: viaFriendOrStreamId,
-        type: viaType,
-      },
-      FOF: chosenFOF,
-    };
   });
