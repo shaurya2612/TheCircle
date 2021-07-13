@@ -4,7 +4,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 const ASIA_SOUTH1 = 'asia-south1';
-
+const STORAGE_BUCKET_NAME = 'gs://thecircle-native.appspot.com';
 /**
  *matches a user with a potential match
  * @returns {Object} Object having via and FOF fields
@@ -16,7 +16,7 @@ exports.match = functions
     if (!context.auth) {
       throw new functions.https.HttpsError(
         'unauthenticated',
-        'Endpoint requires authentication.',
+        'Endpoint requires authentication!.',
       );
     }
 
@@ -25,7 +25,7 @@ exports.match = functions
     const firestore = admin.firestore();
 
     await db.ref('/matchingStatus').child(uid).set(1);
-    let chosenFOF = null; //FOF chosen
+    var chosenFOF = null; //FOF chosen
     let foundFOF = false; //is FOF found or not (since chosenFOF !== null is not a sufficient condition)
     let viaFriendOrStreamId = null; //Friend via which final fof is chosen
 
@@ -63,13 +63,17 @@ exports.match = functions
       db.ref('/genders').child(uid).once('value'),
     ]);
 
+    userInterestedIn = userInterestedIn.val();
+    userGender = userGender.val();
+
     while (friendsAndStreamsIds.length > 0) {
+      functions.logger.log('Started loop');
       //select a random friend from friendsIds array
       const randomFriendOrStreamIdIndex = Math.floor(
         Math.random() * friendsAndStreamsIds.length,
       );
 
-      const chosenFriendOrStreamId =
+      var chosenFriendOrStreamId =
         friendsAndStreamsIds[randomFriendOrStreamIdIndex];
 
       var query;
@@ -84,19 +88,22 @@ exports.match = functions
         query = firestore
           .collection(`waitingUsers`)
           .where('friends', 'array-contains', chosenFriendOrStreamId)
-          .where('gender', '==', userState.interestedIn)
+          .where('gender', '==', userInterestedIn)
           .where('interestedIn', 'in', [userGender, 'Everyone'])
           .orderBy('timestamp', 'asc')
           .limit(1);
       }
+
       var skip = false;
       //find a potential match via a transaction
-      firestore.runTransaction(async transaction => {
-        let chosenFOF = await transaction.get(query);
+      await firestore.runTransaction(async transaction => {
+        functions.logger.log('c1');
+        chosenFOF = await transaction.get(query);
         if (chosenFOF.empty) {
           skip = true;
           return;
         }
+        functions.logger.log('c2');
         //check if the chosen fof is in your matches
         let matchesRes = await db
           .ref('/matches')
@@ -107,6 +114,7 @@ exports.match = functions
           skip = true;
           return;
         }
+        functions.logger.log('c3');
         //check if the chosen fof is in your friends
         let friendsRes = await db
           .ref('/friends')
@@ -117,26 +125,32 @@ exports.match = functions
           skip = true;
           return;
         }
+        functions.logger.log('c4');
+        transaction.delete(
+          firestore.collection('waitingUsers').doc(chosenFOF.docs[0].id),
+        );
+        functions.logger.log('c5');
       });
       if (skip) {
+        functions.logger.log('skip section');
         friendsAndStreamsIds.splice(randomFriendOrStreamIdIndex, 1);
         continue;
-      } else break;
+      } else {
+        functions.logger.log('break section');
+        foundFOF = true;
+        break;
+      }
     }
-
-    //change the data structure of chosenFOF to {id, gender, timestamp, interestedIn}
-    chosenFOF = {
-      ...chosenFOF.docs[0].data(),
-      id: chosenFOF.docs[0].id,
-    };
-    foundFOF = true;
-    viaFriendOrStreamId = chosenFriendOrStreamId;
-    break;
-
+    functions.logger.log('found and chosen', foundFOF, chosenFOF);
     //make an anonymous chat room with the chosenFOF and change the matching status
-    if (foundFOF) {
-      await firestore.collection('waitingUsers').doc(chosenFOF.id).delete();
+    if (foundFOF && chosenFOF !== null) {
+      //change the data structure of chosenFOF to {id, gender, timestamp, interestedIn}
+      chosenFOF = {
+        ...chosenFOF.docs[0].data(),
+        id: chosenFOF.docs[0].id,
+      };
 
+      viaFriendOrStreamId = chosenFriendOrStreamId;
       //Add in chat rooms
       await Promise.all([
         db.ref('/chatRooms').child(uid).set(chosenFOF.id),
@@ -163,17 +177,21 @@ exports.match = functions
       viaFriendOrStreamName = viaFriendOrStreamName.val();
 
       //Fetch the name and dp of chat room partner if via stream
-      [FOFName, FOFDp] = await Promise.all([
+      let [FOFName, FOFDp] = await Promise.all([
         viaType === 'stream'
           ? db.ref('/users').child(chosenFOF.id).child('name').once('value')
           : null,
         viaType === 'stream'
-          ? storage().ref(`/profiles/${chosenFOF.id}/0`).getDownloadURL()
+          ? admin
+              .storage()
+              .bucket(STORAGE_BUCKET_NAME)
+              .file(`/profiles/${chosenFOF.id}/0`)
+              .getSignedUrl({action: 'read', expires: '03-09-2491'})
           : null,
       ]);
 
       FOFName = FOFName?.val();
-      //FOFDp is a string returned from storage
+      FOFDp = FOFDp[0];
 
       chosenFOF = {...chosenFOF, name: FOFName, dp: FOFDp};
 
@@ -193,6 +211,18 @@ exports.match = functions
         .child('bd')
         .once('value');
       FOFbd = FOFbd.val();
+
+      const bdToAge = DOB => {
+        var today = new Date();
+        var birthDate = new Date(DOB);
+        var age = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age = age - 1;
+        }
+
+        return age;
+      };
 
       chosenFOF['age'] = bdToAge(FOFbd);
 
@@ -215,9 +245,9 @@ exports.match = functions
     } else {
       //push current user to waiting users
       await firestore.collection(`waitingUsers`).doc(uid).set({
-        gender: userState.gender,
-        interestedIn: userState.interestedIn,
-        timestamp: firestore.FieldValue.serverTimestamp(),
+        gender: userGender,
+        interestedIn: userInterestedIn,
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
         friends: copyOfFriendsAndStreamsIds,
       });
     }
