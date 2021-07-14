@@ -20,6 +20,7 @@ import {fetchUser, listenForUserStats} from '../../store/actions/user';
 import {
   changeUserMatchingStatus,
   listenForUserMatchingStatus,
+  SET_USER_MATCHING_STATUS,
 } from '../../store/actions/matching';
 import SearchingScreen from './SearchingScreen';
 import ChatScreen from '../matches/ChatScreen';
@@ -115,6 +116,7 @@ const HomeScreen = props => {
                 <StartMatchingButton
                   title="START MATCHING !"
                   onPress={() => {
+                    dispatch({type: SET_USER_MATCHING_STATUS, payload: 0.5});
                     dispatch(changeUserMatchingStatus(1));
                   }}
                 />
@@ -133,7 +135,7 @@ const HomeScreen = props => {
         <LinearGradient
           colors={[colors.primary, colors.accent]}
           style={styles.expandedCenterView}>
-          <ActivityIndicator size="large" color={'white'} />
+          <TheCircleLoading height={scale(100)} width={scale(100)} />
         </LinearGradient>
       );
   };

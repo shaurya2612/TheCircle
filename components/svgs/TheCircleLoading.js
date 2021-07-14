@@ -4,7 +4,10 @@ import {scale} from 'react-native-size-matters';
 import TheCircleLogo from '../../assets/svgs/circle_logo_solid.svg';
 const TheCircleLoading = ({height, width}) => {
   return (
-    <AnimatableView animation={'rotate'} iterationCount={'infinite'} useNativeDriver={true} >
+    <AnimatableView
+      animation={'rotate'}
+      iterationCount={'infinite'}
+      useNativeDriver={true}>
       <TheCircleLogo
         height={height ?? scale(100)}
         width={width ?? scale(100)}
