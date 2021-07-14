@@ -224,7 +224,6 @@ const ChatScreen = props => {
           }}
           user={{
             _id: auth().currentUser.uid,
-            name: 'Shaurya',
           }}
           renderComposer={props => <CustomComposer {...props} />}
           renderActions={props => (
@@ -286,7 +285,7 @@ const ChatScreen = props => {
                 paddingTop: scale(5),
                 paddingBottom: scale(5),
                 overflow: 'hidden',
-                borderTopWidth: 0
+                borderTopWidth: 0,
               }}
             />
           )}

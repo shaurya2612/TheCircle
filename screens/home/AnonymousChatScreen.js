@@ -327,10 +327,6 @@ const AnonymousChatScreen = props => {
         }}
         user={{
           _id: auth().currentUser.uid,
-          name: 'Shaurya',
-        }}
-        user={{
-          _id: auth().currentUser.uid,
         }}
         renderComposer={props => <CustomComposer {...props} />}
         renderActions={props => (
@@ -359,7 +355,8 @@ const AnonymousChatScreen = props => {
                 );
               },
               Cancel: () => {},
-            }}></Actions>
+            }}
+          />
         )}
         renderSend={({onSend, text, sendButtonProps, ...props}) => (
           <CustomSend
