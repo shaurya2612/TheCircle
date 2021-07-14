@@ -147,6 +147,7 @@ const AnonymousChatScreen = props => {
 
           <TouchableOpacity
             onPress={() => {
+              dispatch(changeUserMatchingStatus(0.5));
               dispatch(skipThisFOF());
               dispatch(changeUserMatchingStatus(1));
             }}

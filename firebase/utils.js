@@ -240,18 +240,17 @@ export const unmatch = async unmatchId => {
   //update user matches stat
   const userMatchesStatRef = db.ref('/stats').child(uid).child('matches');
   await userMatchesStatRef.transaction(currentMatches => {
-    if (currentMatches == null) return;
+    if (currentMatches === null) return;
     return currentMatches - 1;
   });
 
-  console.warn(unmatchId);
   //update match matches stat
   const matchMatchesStatRef = db
     .ref('/stats')
     .child(unmatchId)
     .child('matches');
   await matchMatchesStatRef.transaction(currentMatches => {
-    if (currentMatches == null) return;
+    if (currentMatches === null) return;
     return currentMatches - 1;
   });
 };
