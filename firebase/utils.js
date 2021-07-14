@@ -239,7 +239,7 @@ export const unmatch = async unmatchId => {
 
   //update user matches stat
   const userMatchesStatRef = db.ref('/stats').child(uid).child('matches');
-  userMatchesStatRef.transaction(currentMatches => {
+  await userMatchesStatRef.transaction(currentMatches => {
     if (currentMatches == null) return;
     return currentMatches - 1;
   });
@@ -250,7 +250,7 @@ export const unmatch = async unmatchId => {
     .ref('/stats')
     .child(unmatchId)
     .child('matches');
-  matchMatchesStatRef.transaction(currentMatches => {
+  await matchMatchesStatRef.transaction(currentMatches => {
     if (currentMatches == null) return;
     return currentMatches - 1;
   });
@@ -308,7 +308,7 @@ export const joinStream = async streamId => {
   const uid = auth().currentUser.uid;
 
   await db.ref('/streamsubs').child(uid).child(streamId).set('true');
-  
+
   await db
     .ref('/streams')
     .child(streamId)

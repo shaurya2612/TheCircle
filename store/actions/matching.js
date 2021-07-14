@@ -137,77 +137,94 @@ export const changeUserMatchingStatus = newStatus => {
 
 export const configureAnonymousChatRoom = () => {
   return async (dispatch, getState) => {
-    const uid = auth().currentUser.uid;
-    const db = database();
+    try {
+      const uid = auth().currentUser.uid;
+      const db = database();
 
-    let [FOFId, via] = await Promise.all([
-      db.ref('/chatRooms').child(uid).once('value'),
-      db.ref('/via').child(uid).once('value'),
-    ]);
+      let [FOFId, via] = await Promise.all([
+        db.ref('/chatRooms').child(uid).once('value'),
+        db.ref('/via').child(uid).once('value'),
+      ]);
 
-    //When matched
-    if (!FOFId.exists()) {
-      dispatch(changeUserMatchingStatus(1));
-      return;
+      //Not matched previously
+      if (!FOFId.exists()) {
+        dispatch(changeUserMatchingStatus(1));
+        return;
+      }
+
+      //Matched previously
+      FOFId = FOFId.val();
+      ({id: viaFriendOrStreamId, type: viaType} = via.val());
+
+      //Check if user has been skipped while they were offline
+      let FOFPairedWithId = await db
+        .ref('/chatRooms')
+        .child(FOFId)
+        .once('value');
+      FOFPairedWithId = FOFPairedWithId.val();
+      if (FOFPairedWithId !== uid) {
+        dispatch(changeUserMatchingStatus(0));
+        return;
+      }
+
+      let [
+        FOFBd,
+        FOFGender,
+        FOFNonBinary,
+        FOFName,
+        FOFDp,
+        viaFriendOrStreamName,
+      ] = await Promise.all([
+        db.ref('/users').child(FOFId).child('bd').once('value'),
+        db.ref('/genders').child(FOFId).once('value'),
+        db.ref('/nonBinary').child(FOFId).once('value'),
+        viaType === 'stream'
+          ? db.ref('/users').child(FOFId).child('name').once('value')
+          : null,
+        viaType === 'stream'
+          ? storage().ref(`/profiles/${FOFId}/0`).getDownloadURL()
+          : null,
+        viaType === 'friend'
+          ? db
+              .ref('/users')
+              .child(viaFriendOrStreamId)
+              .child('name')
+              .once('value')
+          : db
+              .ref('/streams')
+              .child(viaFriendOrStreamId)
+              .child('name')
+              .once('value'),
+      ]);
+
+      FOFBd = FOFBd.val();
+      FOFGender = FOFGender.val();
+      FOFNonBinary = FOFNonBinary.val();
+      FOFName = FOFName?.val();
+      //FOFDp is a string from storage
+      viaFriendOrStreamName = viaFriendOrStreamName.val();
+
+      dispatch({
+        type: SET_CHAT_ROOM,
+        payload: {
+          via: {
+            name: viaFriendOrStreamName,
+            id: viaFriendOrStreamId,
+            type: viaType,
+          },
+          FOF: {
+            id: FOFId,
+            age: bdToAge(FOFBd),
+            gender: FOFGender,
+            nonBinary: FOFNonBinary,
+            dp: FOFDp,
+            name: FOFName,
+          },
+        },
+      });
+    } catch (err) {
+      dispatch(setErrorMessage(err.message));
     }
-    FOFId = FOFId.val();
-    ({id: viaFriendOrStreamId, type: viaType} = via.val());
-
-    let [
-      FOFBd,
-      FOFGender,
-      FOFNonBinary,
-      FOFName,
-      FOFDp,
-      viaFriendOrStreamName,
-    ] = await Promise.all([
-      db.ref('/users').child(FOFId).child('bd').once('value'),
-      db.ref('/genders').child(FOFId).once('value'),
-      db.ref('/nonBinary').child(FOFId).once('value'),
-      viaType === 'stream'
-        ? db.ref('/users').child(FOFId).child('name').once('value')
-        : null,
-      viaType === 'stream'
-        ? storage().ref(`/profiles/${FOFId}/0`).getDownloadURL()
-        : null,
-      viaType === 'friend'
-        ? db
-            .ref('/users')
-            .child(viaFriendOrStreamId)
-            .child('name')
-            .once('value')
-        : db
-            .ref('/streams')
-            .child(viaFriendOrStreamId)
-            .child('name')
-            .once('value'),
-    ]);
-
-    FOFBd = FOFBd.val();
-    FOFGender = FOFGender.val();
-    FOFNonBinary = FOFNonBinary.val();
-    FOFName = FOFName?.val();
-    //FOFDp is a string from storage
-    viaFriendOrStreamName = viaFriendOrStreamName.val();
-
-    dispatch({
-      type: SET_CHAT_ROOM,
-      payload: {
-        via: {
-          name: viaFriendOrStreamName,
-          id: viaFriendOrStreamId,
-          type: viaType,
-        },
-        FOF: {
-          id: FOFId,
-          age: bdToAge(FOFBd),
-          gender: FOFGender,
-          nonBinary: FOFNonBinary,
-          dp: FOFDp,
-          name: FOFName,
-        },
-      },
-    });
   };
 };
 
@@ -367,6 +384,12 @@ export const skipThisFOF = (keepChats = false) => {
     const db = database();
     const matchingState = getState().matching;
     const {FOF} = matchingState;
+
+    //User was skipped when they were offline
+    if (!FOF) {
+      await db.ref('/chatRooms').child(uid).remove();
+      return;
+    }
 
     //check if FOF is in matches
     let FOFInMatches = await db

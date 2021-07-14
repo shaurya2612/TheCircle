@@ -14,8 +14,9 @@ import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import messaging from '@react-native-firebase/messaging';
-import {changeUserMatchingStatus, skipThisFOF} from './matching';
+import {ASIA_SOUTH1, changeUserMatchingStatus, skipThisFOF} from './matching';
 import {Alert} from 'react-native';
+import functions from '@react-native-firebase/functions';
 
 export const SET_USER_STATE = 'SET_USER_STATE';
 export const CLEAR_USER_STATE = 'CLEAR_USER_STATE';
@@ -674,14 +675,8 @@ export const deleteUser = () => {
     try {
       const db = database();
       const uid = auth().currentUser.uid;
-      const existingToken = await messaging().getToken();
 
-      //deleting fcm token
-      await firestore().collection('tokens').doc(uid).delete();
-
-      // await auth().signOut();
-
-      //detach all possible matching status listeners
+      //TURN OFF ALL LISTENERS
       db.ref('/matchingStatus').child(uid).off();
 
       //Stop chat room listeners
@@ -714,88 +709,13 @@ export const deleteUser = () => {
       //Stop listening for matches
       db.ref('/matches').child(uid).off();
 
-      //delete main nodes
-      db.ref('/users').child(uid).remove();
-      db.ref('/genders').child(uid).remove();
-      db.ref('/interestedIn').child(uid).remove();
-      db.ref('/stats').child(uid).remove();
-      db.ref('/profiles').child(uid).remove();
-      db.ref('/isOnline').child(uid).remove();
-      let username = await db
-        .ref('/usernames')
-        .orderByValue()
-        .equalTo(uid)
-        .once('value');
-      username = Object.keys(username.val())[0];
-      db.ref('/usernames').child(username).remove();
-      db.ref('/matchingStatus').child(uid).remove();
-      const storageList = await storage().ref(`/profiles`).child(uid).listAll();
-      storageList.items.forEach(item => {
-        item.delete();
-      });
-
-      //delete requests
-      const requests = await db.ref('/requests').child(uid).once('value');
-      if (requests.exists()) {
-        const requestKeys = Object.keys(requests.val());
-        for (var i = 0; i < requestKeys.length; i++) {
-          try {
-            //reject request
-            declineRequest(requestKeys[i]);
-          } catch (err) {
-            //handled so loop doesn't break
-          }
-        }
-      }
-
-      //delete friends
-      const friends = await db.ref('/friends').child(uid).once('value');
-      if (friends.exists()) {
-        const friendKeys = Object.keys(friends.val());
-
-        for (var i = 0; i < friendKeys.length; i++) {
-          try {
-            //unfriend
-            unfriend(friendKeys[i]);
-          } catch (err) {
-            //handled so loop doesn't break
-          }
-        }
-      }
-
-      //Leave all streams
-      const streamsubs = await db.ref('/streamsubs').child(uid).once('value');
-      const streamIds = Object.keys(streamsubs.val());
-      for (var i = 0; i < streamIds.length; i++) {
-        try {
-          leaveStream(streamIds[i]);
-        } catch (err) {
-          //handled so loop doesn't break
-        }
-      }
-
-      //delete cue cards
-      await firestore().collection('cueCards').doc(uid).delete();
-
-      //delete matches
-      const matches = await db.ref('/matches').child(uid).once('value');
-      if (matches.exists()) {
-        const matchKeys = Object.keys(matches.val());
-        for (var i = 0; i < matchKeys.length; i++) {
-          try {
-            //unmatch
-            unmatch(matchKeys[i]);
-          } catch (err) {
-            //handled so loop doesn't break
-          }
-        }
-      }
-
-      await auth().currentUser.delete();
+      await functions()
+        .app.functions(ASIA_SOUTH1)
+        .httpsCallable('deleteUser')();
 
       dispatch({type: CLEAR_REDUX_STATE});
     } catch (err) {
-      dispatch(setErrorMessage(err));
+      dispatch(setErrorMessage(err.message));
     }
     dispatch(stopAppLoading());
     Alert.alert('Your account was deleted');

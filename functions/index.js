@@ -16,7 +16,7 @@ exports.match = functions
     if (!context.auth) {
       throw new functions.https.HttpsError(
         'unauthenticated',
-        'Endpoint requires authentication!.',
+        'Endpoint requires authentication.',
       );
     }
     try {
@@ -254,6 +254,160 @@ exports.match = functions
         FOF: chosenFOF,
       };
     } catch (err) {
+      functions.logger.error(err.message);
+      throw new functions.https.HttpsError('internal', err.message);
+    }
+  });
+
+exports.deleteUser = functions
+  .region(ASIA_SOUTH1)
+  .https.onCall(async (data, context) => {
+    //User is not authenticated
+    if (!context.auth) {
+      throw new functions.https.HttpsError(
+        'unauthenticated',
+        'Endpoint requires authentication.',
+      );
+    }
+
+    try {
+      const uid = context.auth.uid;
+      const db = admin.database();
+      const firestore = admin.firestore();
+      const auth = admin.auth();
+      const storage = admin.storage();
+      //deleting fcm token
+      await firestore.collection('tokens').doc(uid).delete();
+
+      //delete main nodes
+      db.ref('/users').child(uid).remove();
+      db.ref('/genders').child(uid).remove();
+      db.ref('/interestedIn').child(uid).remove();
+      db.ref('/stats').child(uid).remove();
+      db.ref('/profiles').child(uid).remove();
+      db.ref('/isOnline').child(uid).remove();
+      let username = await db
+        .ref('/usernames')
+        .orderByValue()
+        .equalTo(uid)
+        .once('value');
+      username = Object.keys(username.val())[0];
+      db.ref('/usernames').child(username).remove();
+      db.ref('/matchingStatus').child(uid).remove();
+      await storage
+        .bucket(STORAGE_BUCKET_NAME)
+        .deleteFiles({prefix: `profiles/${uid}/`});
+
+      //delete requests
+      await db.ref('/requests').child(uid).remove();
+
+      //delete friends
+      const friends = await db.ref('/friends').child(uid).once('value');
+      if (friends.exists()) {
+        const friendKeys = Object.keys(friends.val());
+
+        for (var i = 0; i < friendKeys.length; i++) {
+          try {
+            //unfriend
+            await Promise.all([
+              db.ref('/friends').child(uid).child(friendKeys[i]).remove(),
+              db.ref('/friends').child(friendKeys[i]).child(uid).remove(),
+            ]);
+
+            //update user friends stat
+            const userFriendsStatRef = db
+              .ref('/stats')
+              .child(uid)
+              .child('friends');
+            await userFriendsStatRef.transaction(currentFriends => {
+              if (currentFriends == null) return;
+              return currentFriends - 1;
+            });
+
+            //update friends friend stat
+            const friendFriendsStatRef = db
+              .ref('/stats')
+              .child(friendKeys[i])
+              .child('friends');
+            await friendFriendsStatRef.transaction(currentFriends => {
+              if (currentFriends == null) return;
+              return currentFriends - 1;
+            });
+          } catch (err) {
+            //handled so loop doesn't break
+          }
+        }
+      }
+      //Leave all streams
+      const streamsubs = await db.ref('/streamsubs').child(uid).once('value');
+      const streamIds = Object.keys(streamsubs.val());
+      for (var i = 0; i < streamIds.length; i++) {
+        try {
+          await db.ref('/streamsubs').child(uid).child(streamIds[i]).remove();
+          await db
+            .ref('/streams')
+            .child(streamIds[i])
+            .child('members')
+            .transaction(currentMembers => {
+              if (currentMembers === null) return 0;
+              else return currentMembers - 1;
+            });
+        } catch (err) {
+          //handled so loop doesn't break
+        }
+      }
+
+      //delete cue cards
+      await firestore.collection('cueCards').doc(uid).delete();
+
+      //delete matches
+      const matches = await db.ref('/matches').child(uid).once('value');
+      if (matches.exists()) {
+        const matchKeys = Object.keys(matches.val());
+        for (var i = 0; i < matchKeys.length; i++) {
+          //unmatch
+          const refString =
+            uid < matchKeys[i]
+              ? uid + '@' + matchKeys[i]
+              : matchKeys[i] + '@' + uid;
+          await Promise.all([
+            db.ref('/matches').child(uid).child(matchKeys[i]).remove(),
+            db.ref('/matches').child(matchKeys[i]).child(uid).remove(),
+            db.ref('/messages').child(refString).remove(),
+          ]);
+          try {
+            await storage
+              .bucket(STORAGE_BUCKET_NAME)
+              .file(`/messages/${refString}`)
+              .delete();
+          } catch (err) {
+            //Prevent unhandled promise rejection
+          }
+
+          //update user matches stat
+          const userMatchesStatRef = db
+            .ref('/stats')
+            .child(uid)
+            .child('matches');
+          await userMatchesStatRef.transaction(currentMatches => {
+            if (currentMatches == null) return;
+            return currentMatches - 1;
+          });
+
+          //update match matches stat
+          const matchMatchesStatRef = db
+            .ref('/stats')
+            .child(matchKeys[i])
+            .child('matches');
+          await matchMatchesStatRef.transaction(currentMatches => {
+            if (currentMatches == null) return;
+            return currentMatches - 1;
+          });
+        }
+      }
+      await auth.deleteUser(uid);
+    } catch (err) {
+      functions.logger.error(err.message);
       throw new functions.https.HttpsError('internal', err.message);
     }
   });

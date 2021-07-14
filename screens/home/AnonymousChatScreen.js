@@ -101,7 +101,7 @@ const AnonymousChatScreen = props => {
         style={styles.expandedCenterView}>
         <TheCircleLoading />
         <AppText style={{color: 'white', textAlign: 'center'}}>
-          {'Loading Chat Room...'}
+          {'Loading...'}
         </AppText>
       </LinearGradient>
     );
