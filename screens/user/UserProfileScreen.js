@@ -90,9 +90,7 @@ export const UserProfileScreen = ({
           key={i.toString()}
           style={{
             flex: 1,
-            height: '100%',
-            backgroundColor: colors.primary,
-            marginHorizontal: scale(0.5),
+            backgroundColor: 'white',
           }}></View>,
       );
     }
@@ -102,22 +100,11 @@ export const UserProfileScreen = ({
           key={(i + j + 1).toString()}
           style={{
             flex: 1,
-            height: '100%',
             backgroundColor: '#cccccc',
-            marginHorizontal: scale(0.5),
           }}></View>,
       );
     }
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          height: verticalScale(5),
-          backgroundColor: 'white',
-        }}>
-        {arr}
-      </View>
-    );
+    return arr;
   };
 
   const generateInfoPills = useCallback(() => {
@@ -157,8 +144,26 @@ export const UserProfileScreen = ({
             }}>
             {userPhotos ? (
               <View style={styles.rootView}>
+                <Icon
+                  style={{
+                    marginHorizontal: scale(2),
+                    position: 'absolute',
+                    zIndex: 1,
+                    right: '2%',
+                    top: '1%',
+                    alignSelf: 'center',
+                    shadowOpacity: 2,
+                    textShadowRadius: 10,
+                    textShadowOffset: {width: 0, height: 3},
+                  }}
+                  onPress={onPressX}
+                  name={'x'}
+                  color="white"
+                  size={scale(25)}
+                />
+
                 {/* Notch */}
-                <View
+                {/* <View
                   style={{
                     height: verticalScale(25),
                     width: '100%',
@@ -173,9 +178,7 @@ export const UserProfileScreen = ({
                     name={'x'}
                     size={scale(20)}
                   />
-                </View>
-
-                {photoTabs()}
+                </View> */}
 
                 <ImageBackground
                   imageStyle={{resizeMode: 'cover'}}
@@ -202,10 +205,7 @@ export const UserProfileScreen = ({
                       <View style={{flex: 1}}></View>
                     </TouchableWithoutFeedback>
                     {imageLoading ? (
-                      <ActivityIndicator
-                        color={colors.primary}
-                        size="large"
-                      />
+                      <ActivityIndicator color={colors.primary} size="large" />
                     ) : null}
                     <TouchableWithoutFeedback
                       onPress={() => {
@@ -219,6 +219,22 @@ export const UserProfileScreen = ({
                       <View style={{flex: 1}}></View>
                     </TouchableWithoutFeedback>
                     {/* ////////////////////////////////////////// */}
+                  </View>
+                  <View
+                    style={{
+                      width: '40%',
+                      height: '1%',
+                      zIndex: 1,
+                      position: 'absolute',
+                      backgroundColor: 'red',
+                      top: '97%',
+                      left: '30%',
+                      flexDirection: 'row',
+                      borderRadius: scale(100),
+                      overflow: 'hidden',
+                      ...styles.elevation_small,
+                    }}>
+                    {photoTabs()}
                   </View>
                 </ImageBackground>
               </View>
