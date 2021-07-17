@@ -58,12 +58,7 @@ const valueOptions = {
   ],
   Drinks: ['Never', 'Sometimes', 'Frequently', 'Socially'],
   Smokes: ['Never', 'Sometimes', 'Frequently', 'Socially'],
-  'Looking For': [
-    'Something casual',
-    'Marriage',
-    'Friendship',
-    "Don't know yet",
-  ],
+  'Looking For': ['Something casual', 'Marriage', 'Friends', "Don't know yet"],
   Political: ['Conservative', 'Liberal', 'Moderate', 'Apolitical'],
   Food: ['Indian', 'Italian', 'Continental', 'Chinese'],
 };
