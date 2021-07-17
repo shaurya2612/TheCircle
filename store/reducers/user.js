@@ -58,7 +58,7 @@ const initialState = {
   currentMatchProfile: null,
   fetchedMatchProfile: false,
   isAuthenticated: false,
-  isProfileCompleted: false,
+  isProfileCompleted: null,
 };
 
 export default (state = initialState, action) => {

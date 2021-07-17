@@ -53,10 +53,13 @@ const AppNavigator = () => {
       if (initialAppLoading) setInitialAppLoading(false);
       dispatch(stopAppLoading());
     };
-    fn();
+    fn().then(x => {
+      console.log(2);
+    });
   }, [isAuthenticated]);
 
-  if (initialAppLoading) return <LoadingScreen />;
+  if (initialAppLoading || isProfileCompleted === null)
+    return <LoadingScreen />;
 
   return (
     <View style={styles.rootView}>
