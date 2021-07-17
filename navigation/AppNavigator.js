@@ -58,8 +58,7 @@ const AppNavigator = () => {
     });
   }, [isAuthenticated]);
 
-  if (initialAppLoading || isProfileCompleted === null)
-    return <LoadingScreen />;
+  if (initialAppLoading) return <LoadingScreen />;
 
   return (
     <View style={styles.rootView}>
