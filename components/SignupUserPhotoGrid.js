@@ -17,7 +17,7 @@ import {
 } from 'react-native-size-matters';
 import Icon from 'react-native-vector-icons/Feather';
 import {useDispatch, useSelector} from 'react-redux';
-import { setErrorMessage } from '../store/actions/error';
+import {setErrorMessage} from '../store/actions/error';
 import {setSignupFormData} from '../store/actions/signupForm';
 
 const {height, width} = Dimensions.get('window');
@@ -117,12 +117,20 @@ export const SignupUserPhotoGrid = () => {
           if (item) setIsDeleteMode(!isDeleteMode);
           else {
             launchImageLibrary({mediaType: 'photo', quality: 0.8}, response => {
+              if (response.errorMessage) {
+                console.log('====================================');
+                console.log(response.errorMessage);
+                console.log('====================================');
+                return;
+              }
               if (response.didCancel) return;
               const newImage = response.uri;
               // console.log('new Image', newImage);
               if (newImage) {
                 if (response.fileSize / 1048576 > 10) {
-                  dispatch(setErrorMessage('Max file size for upload is 10 MB'));
+                  dispatch(
+                    setErrorMessage('Max file size for upload is 10 MB'),
+                  );
                   return;
                 }
                 for (var i = 0; i < 6; i++) {

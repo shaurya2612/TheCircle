@@ -6052,10 +6052,10 @@ react-native-communications@^2.2.1:
   resolved "https://registry.yarnpkg.com/react-native-communications/-/react-native-communications-2.2.1.tgz#7883b56b20a002eeb790c113f8616ea8692ca795"
   integrity sha1-eIO1ayCgAu63kMET+GFuqGksp5U=
 
-react-native-drag-sort@^2.4.2:
-  version "2.4.2"
-  resolved "https://registry.yarnpkg.com/react-native-drag-sort/-/react-native-drag-sort-2.4.2.tgz#bf27a70f80b59d6f77e3caa2160fb0426a3f8627"
-  integrity sha512-7f74endMVpYdxXsOY20Z8SfAy7HcLmmFWvYy9RrfzyZGnXhv3VjIMkMeSoOdBRJO4jRjaZSNIW6GdTE49bhuNg==
+react-native-drag-sort@^2.4.3:
+  version "2.4.3"
+  resolved "https://registry.yarnpkg.com/react-native-drag-sort/-/react-native-drag-sort-2.4.3.tgz#730ba5dc641e66a8b38fbae5c4ce9272c3bed45d"
+  integrity sha512-9hpK2HHI0sd4t/LXQ2jnGzcq313e4lGxDG2zZ4YbMpo4xElYB0QGTiGLwqGToLXnfk12eL/NQ4YWIXMS1KWwXQ==
 
 react-native-gesture-handler@^1.10.3:
   version "1.10.3"
@@ -6084,9 +6084,9 @@ react-native-gifted-chat@^0.16.3:
     uuid "3.4.0"
 
 react-native-image-picker@^3.3.2:
-  version "3.3.2"
-  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-3.3.2.tgz#dde494ce4fbb5c36a4ea56346b751b85223d6b25"
-  integrity sha512-7z902J7a7j2rUM6zzyLSGpBSDfXy/V9ssSDKV0QyoQpr7COZs3zsJye2PU1Z4TRqmuNtREIeG5m1NdwtpcXBkg==
+  version "3.8.1"
+  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-3.8.1.tgz#6e830e9b69c882ad5f1160e10592a84963a7f2c9"
+  integrity sha512-Q7qaJ7Zkt8ipIkkF+7UcuRbI0cxaNwsHBcnDLZdlpHnxuMaLhS/xp6v/om/kBYhMg6BeT+NcncynZQoKz7dQqw==
 
 react-native-iphone-x-helper@^1.2.1, react-native-iphone-x-helper@^1.3.0:
   version "1.3.1"
