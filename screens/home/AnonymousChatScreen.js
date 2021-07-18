@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
   Keyboard,
+  PermissionsAndroid,
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -336,24 +337,29 @@ const AnonymousChatScreen = props => {
             iconTextStyle={{color: '#cccccc'}}
             wrapperStyle={{borderColor: '#cccccc'}}
             options={{
-              'Send Image': props => {
-                launchImageLibrary(
-                  {mediaType: 'photo', quality: 0.8},
-                  response => {
-                    if (response.didCancel) return;
-                    if (response.fileSize / 1048576 > 10) {
-                      dispatch(
-                        setErrorMessage('Max file size for upload is 10 MB'),
-                      );
-                      return;
-                    }
-                    const pickedImage = {
-                      uri: response.uri,
-                      extension: response.type,
-                    };
-                    setAttachedImage(pickedImage);
-                  },
+              'Send Image': async props => {
+                const granted = await PermissionsAndroid.request(
+                  PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
                 );
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                  launchImageLibrary(
+                    {mediaType: 'photo', quality: 0.8},
+                    response => {
+                      if (response.didCancel) return;
+                      if (response.fileSize / 1048576 > 10) {
+                        dispatch(
+                          setErrorMessage('Max file size for upload is 10 MB'),
+                        );
+                        return;
+                      }
+                      const pickedImage = {
+                        uri: response.uri,
+                        extension: response.type,
+                      };
+                      setAttachedImage(pickedImage);
+                    },
+                  );
+                }
               },
               Cancel: () => {},
             }}

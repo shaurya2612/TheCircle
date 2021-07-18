@@ -6,6 +6,8 @@ import {
   View,
   StyleSheet,
   TouchableHighlight,
+  PermissionsAndroid,
+  Alert,
 } from 'react-native';
 import {AutoDragSortableView, DragSortableView} from 'react-native-drag-sort';
 import {launchImageLibrary} from 'react-native-image-picker';
@@ -116,37 +118,43 @@ export const SignupUserPhotoGrid = () => {
         onClickItem={async (data, item, index) => {
           if (item) setIsDeleteMode(!isDeleteMode);
           else {
-            launchImageLibrary({mediaType: 'photo', quality: 0.8}, response => {
-              if (response.errorMessage) {
-                console.log('====================================');
-                console.log(response.errorMessage);
-                console.log('====================================');
-                return;
-              }
-              if (response.didCancel) return;
-              const newImage = response.uri;
-              // console.log('new Image', newImage);
-              if (newImage) {
-                if (response.fileSize / 1048576 > 10) {
-                  dispatch(
-                    setErrorMessage('Max file size for upload is 10 MB'),
-                  );
-                  return;
-                }
-                for (var i = 0; i < 6; i++) {
-                  if (data[i] === null) {
-                    data[i] = newImage;
-                    break;
+            const granted = await PermissionsAndroid.request(
+              PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+              launchImageLibrary(
+                {mediaType: 'photo', quality: 0.8},
+                response => {
+                  if (response.errorMessage) {
+                    dispatch(setErrorMessage(response.errorMessage));
+                    return;
                   }
-                }
-                dispatch(
-                  setSignupFormData({
-                    ...signUpFormData,
-                    userPhotos: data,
-                  }),
-                );
-              }
-            });
+                  if (response.didCancel) return;
+                  const newImage = response.uri;
+                  // console.log('new Image', newImage);
+                  if (newImage) {
+                    if (response.fileSize / 1048576 > 10) {
+                      dispatch(
+                        setErrorMessage('Max file size for upload is 10 MB'),
+                      );
+                      return;
+                    }
+                    for (var i = 0; i < 6; i++) {
+                      if (data[i] === null) {
+                        data[i] = newImage;
+                        break;
+                      }
+                    }
+                    dispatch(
+                      setSignupFormData({
+                        ...signUpFormData,
+                        userPhotos: data,
+                      }),
+                    );
+                  }
+                },
+              );
+            }
           }
         }}
         fixedItems={calculateFixedArray()}

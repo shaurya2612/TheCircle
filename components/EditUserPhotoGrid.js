@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableHighlight,
   ActivityIndicator,
+  PermissionsAndroid,
 } from 'react-native';
 import {AutoDragSortableView, DragSortableView} from 'react-native-drag-sort';
 import {
@@ -149,23 +150,33 @@ export const EditUserPhotoGrid = forwardRef(({onDragStart, onDragEnd}, ref) => {
             if (data.filter(i => i !== null).length !== 1)
               setIsDeleteMode(!isDeleteMode);
           } else {
-            launchImageLibrary({mediaType: 'photo', quality: 0.8}, response => {
-              if (response.didCancel) return;
-              if (response.uri) {
-                console.warn(response.fileSize);
-                if (response.fileSize / 1048576 > 10) {
-                  dispatch(setErrorMessage('Max file size for upload is 10 MB'));
-                  return;
-                }
-                for (var i = 0; i < 6; i++) {
-                  if (data[i] === null) {
-                    data[i] = response.uri;
-                    break;
+            const granted = await PermissionsAndroid.request(
+              PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+              launchImageLibrary(
+                {mediaType: 'photo', quality: 0.8},
+                response => {
+                  if (response.didCancel) return;
+                  if (response.uri) {
+                    console.warn(response.fileSize);
+                    if (response.fileSize / 1048576 > 10) {
+                      dispatch(
+                        setErrorMessage('Max file size for upload is 10 MB'),
+                      );
+                      return;
+                    }
+                    for (var i = 0; i < 6; i++) {
+                      if (data[i] === null) {
+                        data[i] = response.uri;
+                        break;
+                      }
+                    }
+                    setData(data);
                   }
-                }
-                setData(data);
-              }
-            });
+                },
+              );
+            }
           }
         }}
         fixedItems={calculateFixedArray()}
