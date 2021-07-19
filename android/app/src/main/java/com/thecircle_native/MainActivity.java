@@ -2,6 +2,7 @@ package com.thecircle_native;
 
 import com.facebook.react.ReactActivity;
 import android.os.Bundle;
+import com.zoontek.rnbootsplash.RNBootSplash;
 
 public class MainActivity extends ReactActivity {
 
@@ -13,10 +14,11 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "TheCircle_Native";
   }
-
+  
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(null);
+    super.onCreate(savedInstanceState);
+    RNBootSplash.init(R.drawable.bootsplash, MainActivity.this); // <- display the generated bootsplash.xml drawable over our MainActivity
   }
 }
 

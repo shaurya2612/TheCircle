@@ -10,7 +10,7 @@ import AppNavigator from './navigation/AppNavigator';
 import Icon from 'react-native-vector-icons/Feather';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 // import admob, {MaxAdContentRating} from '@react-native-firebase/admob';
-import functions from '@react-native-firebase/functions';
+
 Icon.loadFont();
 FontAwesome5Icon.getStyledIconSet('brand').loadFont();
 FontAwesome5Icon.getStyledIconSet('light').loadFont();
