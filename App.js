@@ -10,6 +10,8 @@ import AppNavigator from './navigation/AppNavigator';
 import Icon from 'react-native-vector-icons/Feather';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 // import admob, {MaxAdContentRating} from '@react-native-firebase/admob';
+import functions from '@react-native-firebase/functions';
+import RNBootSplash from 'react-native-bootsplash';
 
 Icon.loadFont();
 FontAwesome5Icon.getStyledIconSet('brand').loadFont();
@@ -43,7 +45,7 @@ export default function App() {
       />
       <SafeAreaProvider>
         <Provider store={store}>
-          <NavigationContainer>
+          <NavigationContainer onReady={() => RNBootSplash.hide()}>
             <AppNavigator />
           </NavigationContainer>
         </Provider>

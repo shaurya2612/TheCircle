@@ -18,7 +18,6 @@ import {startAppLoading, stopAppLoading} from '../store/actions/loading';
 import auth from '@react-native-firebase/auth';
 import {PhoneAuthStack} from './PhoneAuthStack';
 import database from '@react-native-firebase/database';
-import RNBootSplash from 'react-native-bootsplash';
 
 const AppNavigator = () => {
   const userState = useSelector(state => state.user);
@@ -53,7 +52,6 @@ const AppNavigator = () => {
       }
       if (initialAppLoading) setInitialAppLoading(false);
       dispatch(stopAppLoading());
-      await RNBootSplash.hide();
     };
     fn().then(x => {
       console.log(2);

@@ -254,8 +254,8 @@ exports.match = functions
         FOF: chosenFOF,
       };
     } catch (err) {
-      functions.logger.error(err.message);
-      throw new functions.https.HttpsError('internal', err.message);
+      functions.logger.error(err.stack);
+      throw new functions.https.HttpsError('internal', 'Internal server error');
     }
   });
 
@@ -340,20 +340,22 @@ exports.deleteUser = functions
       }
       //Leave all streams
       const streamsubs = await db.ref('/streamsubs').child(uid).once('value');
-      const streamIds = Object.keys(streamsubs.val());
-      for (var i = 0; i < streamIds.length; i++) {
-        try {
-          await db.ref('/streamsubs').child(uid).child(streamIds[i]).remove();
-          await db
-            .ref('/streams')
-            .child(streamIds[i])
-            .child('members')
-            .transaction(currentMembers => {
-              if (currentMembers === null) return 0;
-              else return currentMembers - 1;
-            });
-        } catch (err) {
-          //handled so loop doesn't break
+      if (streamsubs.exists()) {
+        const streamIds = Object.keys(streamsubs.val());
+        for (var i = 0; i < streamIds.length; i++) {
+          try {
+            await db.ref('/streamsubs').child(uid).child(streamIds[i]).remove();
+            await db
+              .ref('/streams')
+              .child(streamIds[i])
+              .child('members')
+              .transaction(currentMembers => {
+                if (currentMembers === null) return 0;
+                else return currentMembers - 1;
+              });
+          } catch (err) {
+            //handled so loop doesn't break
+          }
         }
       }
 
@@ -407,7 +409,7 @@ exports.deleteUser = functions
       }
       await auth.deleteUser(uid);
     } catch (err) {
-      functions.logger.error(err.message);
-      throw new functions.https.HttpsError('internal', err.message);
+      functions.logger.error(err.stack);
+      throw new functions.https.HttpsError('internal', 'Internal server error');
     }
   });
