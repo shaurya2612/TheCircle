@@ -61,7 +61,7 @@ const SignupGenderScreen = props => {
 
   return (
     <SafeAreaView style={{...styles.rootView, backgroundColor: 'white'}}>
-      <CocentricCircles
+      {/* <CocentricCircles
         innerCircleColor={colors.primary}
         outerCircleColor={'pink'}
         animatableViewProps={{
@@ -76,7 +76,7 @@ const SignupGenderScreen = props => {
             top: isKeyboardVisible ? '-33%' : '-22%',
           },
         }}
-      />
+      /> */}
       <ProgressLine
         style={{
           width: '85.8%',

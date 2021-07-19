@@ -21,6 +21,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import {useDispatch, useSelector} from 'react-redux';
 import {setErrorMessage} from '../store/actions/error';
 import {setSignupFormData} from '../store/actions/signupForm';
+import styles from '../styles';
 
 const {height, width} = Dimensions.get('window');
 const parentWidth = width;
@@ -86,7 +87,12 @@ export const SignupUserPhotoGrid = () => {
             ) : null}
           </ImageBackground>
         ) : (
-          <View style={{...localStyles.item_children, ...localStyles.add_icon}}>
+          <View
+            style={{
+              ...localStyles.item_children,
+              ...localStyles.add_icon,
+              ...styles.elevation_medium,
+            }}>
             <Icon name="plus" size={moderateScale(30, 0.4)} color="black" />
           </View>
         )}

@@ -111,7 +111,7 @@ const PhoneVerificationScreen = props => {
       }}
       style={styles.rootView}>
       <SafeAreaView style={{...styles.rootView, backgroundColor: 'white'}}>
-        <CocentricCircles
+        {/* <CocentricCircles
           innerCircleColor={colors.primary}
           outerCircleColor={'pink'}
           animatableViewProps={{
@@ -126,7 +126,7 @@ const PhoneVerificationScreen = props => {
               top: isKeyboardVisible ? '-33%' : '-22%',
             },
           }}
-        />
+        /> */}
         <StackHeader backIconColor={'black'} navigation={props.navigation} />
         <View style={{...styles.expandedCenterView}}>
           <AppText style={{color: colors.primary, fontSize: scale(20)}}>

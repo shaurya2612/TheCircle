@@ -255,7 +255,15 @@ exports.match = functions
       };
     } catch (err) {
       functions.logger.error(err.stack);
-      throw new functions.https.HttpsError('internal', 'Internal server error');
+
+      //Unknown error
+      if (err.code === 'internal')
+        throw new functions.https.HttpsError(
+          'internal',
+          'Internal server error',
+        );
+      //Known error (not internal probably client's fault)
+      else throw new functions.https.HttpsError(err.code, err.message);
     }
   });
 
@@ -400,6 +408,13 @@ exports.deleteUser = functions
       await auth.deleteUser(uid);
     } catch (err) {
       functions.logger.error(err.stack);
-      throw new functions.https.HttpsError('internal', 'Internal server error');
+      //Unknown error
+      if (err.code === 'internal')
+        throw new functions.https.HttpsError(
+          'internal',
+          'Internal server error',
+        );
+      //Known error (not internal probably client's fault)
+      else throw new functions.https.HttpsError(err.code, err.message);
     }
   });

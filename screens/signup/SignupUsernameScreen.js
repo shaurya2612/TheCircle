@@ -75,7 +75,7 @@ const SignupUsernameScreen = props => {
 
   return (
     <View style={{...styles.rootView, backgroundColor: 'white'}}>
-      <CocentricCircles
+      {/* <CocentricCircles
         innerCircleColor={colors.primary}
         outerCircleColor={'pink'}
         animatableViewProps={{
@@ -90,7 +90,7 @@ const SignupUsernameScreen = props => {
             top: isKeyboardVisible ? '-33%' : '-22%',
           },
         }}
-      />
+      /> */}
       <ProgressLine
         style={{
           width: '57.2%',

@@ -70,7 +70,7 @@ const SignupNameScreen = props => {
 
   return (
     <SafeAreaView style={{...styles.rootView, backgroundColor: "white"}}>
-      <CocentricCircles
+      {/* <CocentricCircles
         innerCircleColor={colors.primary}
         outerCircleColor={'pink'}
         animatableViewProps={{
@@ -85,7 +85,7 @@ const SignupNameScreen = props => {
             top: isKeyboardVisible ? '-33%' : '-22%',
           },
         }}
-      />
+      /> */}
       <View style={{...styles.rootView}}>
         <ProgressLine
           style={{
