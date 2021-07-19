@@ -386,16 +386,6 @@ exports.deleteUser = functions
             //Prevent unhandled promise rejection
           }
 
-          //update user matches stat
-          const userMatchesStatRef = db
-            .ref('/stats')
-            .child(uid)
-            .child('matches');
-          await userMatchesStatRef.transaction(currentMatches => {
-            if (currentMatches == null) return;
-            return currentMatches - 1;
-          });
-
           //update match matches stat
           const matchMatchesStatRef = db
             .ref('/stats')
