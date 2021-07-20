@@ -264,6 +264,19 @@ export const sendMessageInAnonymousChatRoom = messages => {
       );
     }
     await Promise.all(promisesArr);
+    try {
+      await functions()
+        .app.functions(ASIA_SOUTH1)
+        .httpsCallable('sendNotification')({
+        receiverId: FOF.id,
+        payload: {
+          notification: {
+            title: 'New Message 💬',
+            body: 'New message in chat room',
+          },
+        },
+      });
+    } catch (err) {}
   };
 };
 
@@ -414,15 +427,23 @@ export const skipThisFOF = (keepChats = false) => {
       db.ref('/via').child(uid).remove(),
     ]);
 
-    // if (keepChats) {
-    //   await sendNotification(
-    //     FOF.id,
-    //     "It's a perfect match! 😍",
-    //     'Press to check who it is!',
-    //   );
-    // } else {
-    //   await sendNotification(FOF.id, 'Woops! 😳', 'Someone just skipped you');
-    // }
+    if (!keepChats) {
+      try {
+        await functions()
+          .app.functions(ASIA_SOUTH1)
+          .httpsCallable('sendNotification')({
+          receiverId: FOF.id,
+          payload: {
+            notification: {
+              title: 'Woops! 😳',
+              body: 'Someone left the chat room',
+            },
+          },
+        });
+      } catch (err) {
+        //Do nothing here
+      }
+    }
 
     dispatch({type: REMOVE_CHAT_ROOM});
     dispatch({type: SET_LISTENING_FOR_ANONYMOUS_CHAT_ROOM, payload: false});

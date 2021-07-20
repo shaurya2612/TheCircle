@@ -270,7 +270,7 @@ exports.match = functions
       };
     } catch (err) {
       //Unknown error
-      if (err.code === 'internal') {
+      if (err.message === 'INTERNAL') {
         functions.logger.error(err.stack);
         throw new functions.https.HttpsError(
           'internal',
@@ -393,7 +393,7 @@ exports.deleteUser = functions
       await auth.deleteUser(uid);
     } catch (err) {
       //Unknown error
-      if (err.code === 'internal') {
+      if (err.message === 'INTERNAL') {
         functions.logger.error(err.stack);
         throw new functions.https.HttpsError(
           'internal',
@@ -426,15 +426,15 @@ exports.onMatchAdded = functions
 
       const payload = {
         notification: {
-          title: 'You have a new match!',
-          body: `Open to find out who it is`,
+          title: 'You have a new match 💞',
+          body: `Open to find out who it is!`,
         },
       };
 
       await messaging.sendToDevice(token, payload);
     } catch (err) {
       //Unknown error
-      if (err.code === 'internal') {
+      if (err.message === 'INTERNAL') {
         functions.logger.error(err.stack);
         throw new functions.https.HttpsError(
           'internal',
@@ -461,7 +461,7 @@ exports.onUnmatch = functions
         .transaction(currentMatches => currentMatches - 1);
     } catch (err) {
       //Unknown error
-      if (err.code === 'internal') {
+      if (err.message === 'INTERNAL') {
         functions.logger.error(err.stack);
         throw new functions.https.HttpsError(
           'internal',
@@ -487,7 +487,7 @@ exports.onFriendRequestAdded = functions
 
       const payload = {
         notification: {
-          title: 'New friend request',
+          title: 'New friend request 👽',
           body: `Someone sent you a friend request`,
         },
       };
@@ -495,7 +495,7 @@ exports.onFriendRequestAdded = functions
       await messaging.sendToDevice(token, payload);
     } catch (err) {
       //Unknown error
-      if (err.code === 'internal') {
+      if (err.message === 'INTERNAL') {
         functions.logger.error(err.stack);
         throw new functions.https.HttpsError(
           'internal',
@@ -522,7 +522,7 @@ exports.onFriendAdded = functions
         .transaction(currentFriends => currentFriends + 1);
     } catch (err) {
       //Unknown error
-      if (err.code === 'internal') {
+      if (err.message === 'INTERNAL') {
         functions.logger.error(err.stack);
         throw new functions.https.HttpsError(
           'internal',
@@ -549,7 +549,45 @@ exports.onUnfriend = functions
         .transaction(currentFriends => currentFriends - 1);
     } catch (err) {
       //Unknown error
-      if (err.code === 'internal') {
+      if (err.message === 'INTERNAL') {
+        functions.logger.error(err.stack);
+        throw new functions.https.HttpsError(
+          'internal',
+          'Internal server error',
+        );
+      }
+      //Known error (not internal probably client's fault)
+      else throw new functions.https.HttpsError(err.code, err.message);
+    }
+  });
+
+exports.sendNotification = functions
+  .region(ASIA_SOUTH1)
+  .https.onCall(async (data, context) => {
+    try {
+      //User is not authenticated
+      if (!context.auth) {
+        throw new functions.https.HttpsError(
+          'unauthenticated',
+          'Endpoint requires authentication.',
+        );
+      }
+      const receiverId = data.receiverId;
+      let payload = data.payload;
+
+      const firestore = admin.firestore();
+      const messaging = admin.messaging();
+
+      const tokenDoc = await firestore
+        .collection('tokens')
+        .doc(receiverId)
+        .get();
+      const token = tokenDoc.data().token;
+
+      await messaging.sendToDevice(token, payload);
+    } catch (err) {
+      //Unknown error
+      if (err.message === 'INTERNAL') {
         functions.logger.error(err.stack);
         throw new functions.https.HttpsError(
           'internal',
