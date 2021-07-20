@@ -81,7 +81,6 @@ const SettingsScreen = props => {
       return;
     }
     try {
-      console.log(confirm.verificationId);
       const credential = auth.PhoneAuthProvider.credential(
         confirm.verificationId,
         Object.values(verificationCode).join(''),
@@ -89,10 +88,10 @@ const SettingsScreen = props => {
       await auth().currentUser.reauthenticateWithCredential(credential);
       dispatch(deleteUser());
     } catch (error) {
-      if (error.code == 'auth/invalid-verification-code') {
-        console.log('Invalid code.');
+      if (error.code === 'auth/invalid-verification-code') {
+        dispatch(setErrorMessage('Invalid Code.'));
       } else {
-        console.log(error.message);
+        dispatch(setErrorMessage(error.message));
       }
     }
   }

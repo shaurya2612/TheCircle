@@ -59,10 +59,8 @@ const PhoneVerificationScreen = props => {
   async function confirmCode() {
     try {
       const code = Object.values(verificationCode).join('');
-      console.warn(code);
       await confirm.confirm(code);
     } catch (error) {
-      console.warn('os');
       dispatch(setErrorMessage(error.message));
     }
   }

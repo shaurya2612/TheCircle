@@ -140,10 +140,6 @@ const HomeScreen = props => {
       );
   };
 
-  useEffect(() => {
-    console.log('matchingStatus', matchingStatus);
-  }, [matchingStatus]);
-
   if (loadingAd)
     return (
       <LinearGradient

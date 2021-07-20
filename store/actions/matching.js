@@ -100,9 +100,7 @@ export const changeUserMatchingStatus = newStatus => {
           const res = await functions()
             .app.functions(ASIA_SOUTH1)
             .httpsCallable('match')();
-          console.warn(res.data);
         } catch (err) {
-          console.warn('Error');
           dispatch(setErrorMessage(err.message));
           dispatch(changeUserMatchingStatus(0));
         }
@@ -128,7 +126,6 @@ export const changeUserMatchingStatus = newStatus => {
         await db.ref('/matchingStatus').child(uid).set(3);
       }
     } catch (err) {
-      console.log(err.message);
       dispatch(setErrorMessage(err.message));
       dispatch(changeUserMatchingStatus(0)); //set matching back to off
     }

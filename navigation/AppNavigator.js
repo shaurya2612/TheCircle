@@ -53,9 +53,7 @@ const AppNavigator = () => {
       if (initialAppLoading) setInitialAppLoading(false);
       dispatch(stopAppLoading());
     };
-    fn().then(x => {
-      console.log(2);
-    });
+    fn();
   }, [isAuthenticated]);
 
   if (initialAppLoading) return <LoadingScreen />;

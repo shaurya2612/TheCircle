@@ -123,7 +123,6 @@ export const MatchesListScreen = props => {
   const scrollViewRef = createRef();
   const modalRef = createRef();
   const insets = useSafeAreaInsets();
-  // console.warn(JSON.stringify(matches));
   useEffect(() => {
     dispatch(listenForMatches(20));
   }, []);

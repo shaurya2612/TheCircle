@@ -65,14 +65,9 @@ const AnonymousChatScreen = props => {
   );
   const [userIsAlreadyTyping, setUserIsAlreadyTyping] = useState(null);
   useEffect(() => {
-    console.warn('Ran useEffect', FOF);
     if (FOF === null) {
       dispatch(configureAnonymousChatRoom());
     } else {
-      console.warn(
-        'listeningForAnonymousChatRoom',
-        listeningForAnonymousChatRoom,
-      );
       if (!listeningForAnonymousChatRoom) {
         dispatch(paginateMessagesInAnonymousChatRoomQuery());
         dispatch(startListeningForAnonymousChatRoom());

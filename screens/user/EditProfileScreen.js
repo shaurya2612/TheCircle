@@ -83,10 +83,6 @@ const EditProfileScreen = props => {
     setAbout(profile?.about ? profile.about : null);
   }, [profile?.about]);
 
-  useEffect(() => {
-    console.warn('p', profile);
-  }, [profile]);
-
   const save = () => {
     //Save About/////////////////////////
     let comparisonText = profile ? (profile.about ? profile.about : '') : '';

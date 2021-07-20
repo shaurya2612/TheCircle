@@ -62,7 +62,6 @@ export const fetchUser = () => {
     if (userState.name) return;
 
     try {
-      console.warn('fetching user');
       const db = database();
       const uid = auth().currentUser.uid;
       let [
@@ -95,7 +94,6 @@ export const fetchUser = () => {
 
       //Setting dp from storage
       const dp = await storage().ref(`/profiles/${uid}/0`).getDownloadURL();
-      console.warn(dp);
       dispatch({type: SET_DP, payload: dp});
     } catch (err) {
       dispatch(setErrorMessage(err.message));
@@ -135,11 +133,9 @@ export const fetchUserPhotos = () => {
   return async (dispatch, getState) => {
     const userState = getState().user;
     if (userState.userPhotosUpdated) {
-      console.warn('did not fetch photos');
       return;
     }
     try {
-      console.warn('fetching photos');
       const {uid} = auth().currentUser;
       // get an array of refs of all the objects inside the folder
       const result = await storage().ref(`profiles/${uid}`).listAll();
@@ -188,7 +184,6 @@ export const updateUserPhotos = photos => {
       userPhotos = await Promise.all(
         userPhotos.map(async (item, index) => {
           if (!item) return null;
-          console.warn(item.metadata.fullPath);
           return storage().ref(item.metadata.fullPath).getDownloadURL();
         }),
       );
@@ -221,7 +216,6 @@ export const fetchUserProfile = () => {
     const userState = getState().user;
     if (userState.profileUpdated) return;
     try {
-      console.warn('fetching userProfile');
       const db = database();
       const {uid} = auth().currentUser;
       await db
@@ -303,7 +297,6 @@ export const fetchUserCueCards = () => {
   return async (dispatch, getState) => {
     const currentCueCards = getState().user.cueCards;
     if (currentCueCards !== null) return; //cueCardsAlready fetched
-    console.warn('Fetched CueCards');
     const firestoreDb = firestore();
     const {uid} = auth().currentUser;
     const cueCardsSnapshot = await firestoreDb
@@ -569,7 +562,6 @@ export const fetchMatchProfile = matchId => {
     //Already fetched this result
     if (matchId === getState().user.currentMatchProfile?.id) return;
 
-    console.warn('fetched match profile');
     dispatch({type: SET_FETCHED_MATCH_PROFILE, payload: false});
     const db = database();
     let [name, bd, profile] = await Promise.all([
@@ -589,7 +581,6 @@ export const fetchMatchProfile = matchId => {
     while (userPhotos.length !== 6) {
       userPhotos.push(null);
     }
-    console.log(userPhotos);
     dispatch({
       type: SET_CURRENT_MATCH_PROFILE,
       payload: {id: matchId, name, age: bdToAge(bd), profile, userPhotos},
