@@ -61,6 +61,9 @@ const PhoneVerificationScreen = props => {
       const code = Object.values(verificationCode).join('');
       await confirm.confirm(code);
     } catch (error) {
+      if (error.code === 'auth/invalid-verification-code') {
+        error.message = 'Invalid code.';
+      }
       dispatch(setErrorMessage(error.message));
     }
   }
