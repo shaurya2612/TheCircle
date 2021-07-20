@@ -46,9 +46,6 @@ export const signupUser = () => {
       const db = database();
 
       //Setting array for tokens (notifications)
-      //having null instead of array throws error in update
-      await firestore().collection('tokens').doc(uid).set({tokens: []});
-
       if (!isUsernameValid(username))
         throw {
           msg: 'There was an error while signing up, please try again',

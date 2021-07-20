@@ -25,12 +25,9 @@ async function saveTokenToDatabase(token) {
   const userId = auth().currentUser.uid;
 
   // Add the token to firestore
-  await firestore()
-    .collection('tokens')
-    .doc(userId)
-    .update({
-      tokens: firestore.FieldValue.arrayUnion(token),
-    });
+  await firestore().collection('tokens').doc(userId).set({
+    token,
+  });
 }
 
 const MainAppBottomTab = () => {

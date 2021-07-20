@@ -235,6 +235,21 @@ exports.match = functions
           db.ref('/matchingStatus').child(uid).set(2),
           db.ref('/matchingStatus').child(chosenFOF.id).set(2),
         ]);
+
+        let tokenDocs = await Promise.all([
+          firestore.collection('tokens').doc(uid).get(),
+          firestore.collection('tokens').doc(chosenFOF.id).get(),
+        ]);
+        let tokens = tokenDocs.map(tokenDoc => tokenDoc.data().token);
+
+        const payload = {
+          notification: {
+            title: 'We found someone 😍',
+            body: `New chat room created!`,
+          },
+        };
+
+        await admin.messaging().sendToDevice(tokens, payload);
       } else {
         //push current user to waiting users
         await firestore.collection(`waitingUsers`).doc(uid).set({
@@ -321,26 +336,6 @@ exports.deleteUser = functions
               db.ref('/friends').child(uid).child(friendKeys[i]).remove(),
               db.ref('/friends').child(friendKeys[i]).child(uid).remove(),
             ]);
-
-            //update user friends stat
-            const userFriendsStatRef = db
-              .ref('/stats')
-              .child(uid)
-              .child('friends');
-            await userFriendsStatRef.transaction(currentFriends => {
-              if (currentFriends == null) return;
-              return currentFriends - 1;
-            });
-
-            //update friends friend stat
-            const friendFriendsStatRef = db
-              .ref('/stats')
-              .child(friendKeys[i])
-              .child('friends');
-            await friendFriendsStatRef.transaction(currentFriends => {
-              if (currentFriends == null) return;
-              return currentFriends - 1;
-            });
           } catch (err) {
             //handled so loop doesn't break
           }
@@ -393,19 +388,165 @@ exports.deleteUser = functions
           } catch (err) {
             //Prevent unhandled promise rejection
           }
-
-          //update match matches stat
-          const matchMatchesStatRef = db
-            .ref('/stats')
-            .child(matchKeys[i])
-            .child('matches');
-          await matchMatchesStatRef.transaction(currentMatches => {
-            if (currentMatches == null) return;
-            return currentMatches - 1;
-          });
         }
       }
       await auth.deleteUser(uid);
+    } catch (err) {
+      //Unknown error
+      if (err.code === 'internal') {
+        functions.logger.error(err.stack);
+        throw new functions.https.HttpsError(
+          'internal',
+          'Internal server error',
+        );
+      }
+      //Known error (not internal probably client's fault)
+      else throw new functions.https.HttpsError(err.code, err.message);
+    }
+  });
+
+exports.onMatchAdded = functions
+  .region(ASIA_SOUTH1)
+  .database.ref('/matches/{uid}')
+  .onCreate(async (snapshot, context) => {
+    try {
+      const uid = context.params.uid;
+
+      const db = admin.database();
+      const firestore = admin.firestore();
+      const messaging = admin.messaging();
+      await db
+        .ref('/stats')
+        .child(uid)
+        .child('matches')
+        .transaction(currentMatches => currentMatches + 1);
+
+      let tokenDoc = await firestore.collection('tokens').doc(uid).get();
+      let token = tokenDoc.data().token;
+
+      const payload = {
+        notification: {
+          title: 'You have a new match!',
+          body: `Open to find out who it is`,
+        },
+      };
+
+      await messaging.sendToDevice(token, payload);
+    } catch (err) {
+      //Unknown error
+      if (err.code === 'internal') {
+        functions.logger.error(err.stack);
+        throw new functions.https.HttpsError(
+          'internal',
+          'Internal server error',
+        );
+      }
+      //Known error (not internal probably client's fault)
+      else throw new functions.https.HttpsError(err.code, err.message);
+    }
+  });
+
+exports.onUnmatch = functions
+  .region(ASIA_SOUTH1)
+  .database.ref('/matches/{uid}')
+  .onDelete(async (snapshot, context) => {
+    try {
+      const uid = context.params.uid;
+
+      const db = admin.database();
+      await db
+        .ref('/stats')
+        .child(uid)
+        .child('matches')
+        .transaction(currentMatches => currentMatches - 1);
+    } catch (err) {
+      //Unknown error
+      if (err.code === 'internal') {
+        functions.logger.error(err.stack);
+        throw new functions.https.HttpsError(
+          'internal',
+          'Internal server error',
+        );
+      }
+      //Known error (not internal probably client's fault)
+      else throw new functions.https.HttpsError(err.code, err.message);
+    }
+  });
+
+exports.onFriendRequestAdded = functions
+  .region(ASIA_SOUTH1)
+  .database.ref('/requests/{uid}')
+  .onCreate(async (snapshot, context) => {
+    try {
+      const uid = context.params.uid;
+      const firestore = admin.firestore();
+      const messaging = admin.messaging();
+
+      let tokenDoc = await firestore.collection('tokens').doc(uid).get();
+      let token = tokenDoc.data().token;
+
+      const payload = {
+        notification: {
+          title: 'New friend request',
+          body: `Someone sent you a friend request`,
+        },
+      };
+
+      await messaging.sendToDevice(token, payload);
+    } catch (err) {
+      //Unknown error
+      if (err.code === 'internal') {
+        functions.logger.error(err.stack);
+        throw new functions.https.HttpsError(
+          'internal',
+          'Internal server error',
+        );
+      }
+      //Known error (not internal probably client's fault)
+      else throw new functions.https.HttpsError(err.code, err.message);
+    }
+  });
+
+exports.onFriendAdded = functions
+  .region(ASIA_SOUTH1)
+  .database.ref('/friend/{uid}')
+  .onCreate(async (snapshot, context) => {
+    try {
+      const uid = context.params.uid;
+
+      const db = admin.database();
+      await db
+        .ref('/stats')
+        .child(uid)
+        .child('friends')
+        .transaction(currentFriends => currentFriends + 1);
+    } catch (err) {
+      //Unknown error
+      if (err.code === 'internal') {
+        functions.logger.error(err.stack);
+        throw new functions.https.HttpsError(
+          'internal',
+          'Internal server error',
+        );
+      }
+      //Known error (not internal probably client's fault)
+      else throw new functions.https.HttpsError(err.code, err.message);
+    }
+  });
+
+exports.onUnfriend = functions
+  .region(ASIA_SOUTH1)
+  .database.ref('/friends/{uid}')
+  .onDelete(async (snapshot, context) => {
+    try {
+      const uid = context.params.uid;
+
+      const db = admin.database();
+      await db
+        .ref('/stats')
+        .child(uid)
+        .child('friends')
+        .transaction(currentFriends => currentFriends - 1);
     } catch (err) {
       //Unknown error
       if (err.code === 'internal') {

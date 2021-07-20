@@ -4,7 +4,6 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import {Platform} from 'react-native';
-import {sendNotification} from '../../firebase/utils';
 
 export const SET_LISTENING_FOR_CHAT = 'SET_LISTENING_FOR_CHAT';
 export const ADD_MESSAGE_IN_CHAT = 'ADD_MESSAGE_IN_CHAT';
@@ -167,11 +166,6 @@ export const sendMessageToMatch = messages => {
     );
 
     await Promise.all(promisesArr);
-    await sendNotification(
-      match.id,
-      'Someone just texted you 💞',
-      messages[0].text,
-    );
   };
 };
 

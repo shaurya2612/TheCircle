@@ -6,7 +6,6 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import {serverKey} from '../../firebase/config';
-import {sendNotification} from '../../firebase/utils';
 import functions from '@react-native-firebase/functions';
 // import {
 //   InterstitialAd,
@@ -265,11 +264,6 @@ export const sendMessageInAnonymousChatRoom = messages => {
       );
     }
     await Promise.all(promisesArr);
-    await sendNotification(
-      FOF.id,
-      'Someone just texted you 💞',
-      messages[0].text,
-    );
   };
 };
 
@@ -420,15 +414,15 @@ export const skipThisFOF = (keepChats = false) => {
       db.ref('/via').child(uid).remove(),
     ]);
 
-    if (keepChats) {
-      await sendNotification(
-        FOF.id,
-        "It's a perfect match! 😍",
-        'Press to check who it is!',
-      );
-    } else {
-      await sendNotification(FOF.id, 'Woops! 😳', 'Someone just skipped you');
-    }
+    // if (keepChats) {
+    //   await sendNotification(
+    //     FOF.id,
+    //     "It's a perfect match! 😍",
+    //     'Press to check who it is!',
+    //   );
+    // } else {
+    //   await sendNotification(FOF.id, 'Woops! 😳', 'Someone just skipped you');
+    // }
 
     dispatch({type: REMOVE_CHAT_ROOM});
     dispatch({type: SET_LISTENING_FOR_ANONYMOUS_CHAT_ROOM, payload: false});
@@ -469,21 +463,6 @@ export const addFOFToMatches = () => {
           lastMessage: lastMessage ?? null,
         }),
     ]);
-
-    //update user matches stat
-    const userMatchesStatRef = db.ref('/stats').child(uid).child('matches');
-    userMatchesStatRef.transaction(currentMatches => {
-      if (currentMatches == null) return 1;
-      return currentMatches + 1;
-    });
-
-    //update match matches stat
-    const matchMatchesStatRef = db.ref('/stats').child(FOF.id).child('matches');
-    matchMatchesStatRef.transaction(currentMatches => {
-      if (currentMatches == null) return 1;
-      return currentMatches + 1;
-    });
-
     dispatch(skipThisFOF(true));
   };
 };
@@ -492,7 +471,6 @@ export const fetchFOFCueCards = () => {
   return async (dispatch, getState) => {
     const FOF = getState().matching.FOF;
     const firestoreDb = firestore();
-    const {uid} = auth().currentUser;
     const cueCardsRef = firestoreDb.collection('cueCards').doc(FOF.id);
     const cards = await cueCardsRef.get();
     dispatch({

@@ -159,11 +159,6 @@ export const sendFriendRequest = async receiverId => {
     .child(receiverId)
     .child(uid)
     .set(database.ServerValue.TIMESTAMP);
-  await sendNotification(
-    receiverId,
-    'New friend request',
-    'Someone sent you a friend request',
-  );
 };
 
 export const fetchNameAgeUsernameDpById = async id => {
@@ -202,23 +197,6 @@ export const unfriend = async unfriendId => {
     db.ref('/friends').child(uid).child(unfriendId).remove(),
     db.ref('/friends').child(unfriendId).child(uid).remove(),
   ]);
-
-  //update user friends stat
-  const userFriendsStatRef = db.ref('/stats').child(uid).child('friends');
-  userFriendsStatRef.transaction(currentFriends => {
-    if (currentFriends == null) return;
-    return currentFriends - 1;
-  });
-
-  //update friends friend stat
-  const friendFriendsStatRef = db
-    .ref('/stats')
-    .child(unfriendId)
-    .child('friends');
-  friendFriendsStatRef.transaction(currentFriends => {
-    if (currentFriends == null) return;
-    return currentFriends - 1;
-  });
 };
 
 export const unmatch = async unmatchId => {
@@ -236,23 +214,6 @@ export const unmatch = async unmatchId => {
   } catch (err) {
     //Prevent unhandled promise rejection
   }
-
-  //update user matches stat
-  const userMatchesStatRef = db.ref('/stats').child(uid).child('matches');
-  await userMatchesStatRef.transaction(currentMatches => {
-    if (currentMatches === null) return;
-    return currentMatches - 1;
-  });
-
-  //update match matches stat
-  const matchMatchesStatRef = db
-    .ref('/stats')
-    .child(unmatchId)
-    .child('matches');
-  await matchMatchesStatRef.transaction(currentMatches => {
-    if (currentMatches === null) return;
-    return currentMatches - 1;
-  });
 };
 
 export const setUserIsTyping = async (chatPartnerId, userIsTyping) => {
@@ -269,37 +230,6 @@ export const setUserIsTyping = async (chatPartnerId, userIsTyping) => {
       .remove();
     db.ref('/isTyping').child(refString).child(uid).set(true);
   } else db.ref('/isTyping').child(refString).child(uid).remove();
-};
-
-export const sendNotification = async (receiverId, title, body) => {
-  const tokensSnapshot = await firestore()
-    .collection('tokens')
-    .doc(receiverId)
-    .get();
-  const tokens = tokensSnapshot.data().tokens;
-
-  for (var i = 0; i < tokens.length; i++) {
-    await fetch('https://fcm.googleapis.com/fcm/send', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `key=${serverKey}`,
-      },
-      body: JSON.stringify({
-        to: tokens[i],
-        notification: {
-          title,
-          body,
-          mutable_content: true,
-          sound: 'Tri-tone',
-        },
-        android: {
-          priority: 'high',
-        },
-        priority: 10,
-      }),
-    });
-  }
 };
 
 export const joinStream = async streamId => {
