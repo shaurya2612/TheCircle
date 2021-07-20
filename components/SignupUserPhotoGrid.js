@@ -137,7 +137,6 @@ export const SignupUserPhotoGrid = () => {
                   }
                   if (response.didCancel) return;
                   const newImage = response.uri;
-                  // console.log('new Image', newImage);
                   if (newImage) {
                     if (response.fileSize / 1048576 > 10) {
                       dispatch(

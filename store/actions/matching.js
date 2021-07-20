@@ -267,7 +267,7 @@ export const sendMessageInAnonymousChatRoom = messages => {
     await Promise.all(promisesArr);
     await sendNotification(
       FOF.id,
-      'Your FOF just texted you 💞',
+      'Someone just texted you 💞',
       messages[0].text,
     );
   };
@@ -423,7 +423,7 @@ export const skipThisFOF = (keepChats = false) => {
     if (keepChats) {
       await sendNotification(
         FOF.id,
-        "BOOM! It's a perfect match! 😍",
+        "It's a perfect match! 😍",
         'Press to check who it is!',
       );
     } else {
