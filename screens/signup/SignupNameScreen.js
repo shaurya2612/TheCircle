@@ -25,7 +25,9 @@ import CocentricCircles from '../../components/svgs/CocentricCircles';
 const SignupNameScreen = props => {
   const signupFormData = useSelector(state => state.signupForm);
   const firstName = signupFormData.name;
-  // const [firstName, setFirstName] = useState("");
+  const isProfileCompleted = useSelector(
+    state => state.user.isProfileCompleted,
+  );
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [isErrShown, setIsErrShown] = useState(false);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
@@ -68,8 +70,12 @@ const SignupNameScreen = props => {
     };
   }, []);
 
+  if (isProfileCompleted !== false) {
+    return null;
+  }
+
   return (
-    <SafeAreaView style={{...styles.rootView, backgroundColor: "white"}}>
+    <SafeAreaView style={{...styles.rootView, backgroundColor: 'white'}}>
       {/* <CocentricCircles
         innerCircleColor={colors.primary}
         outerCircleColor={'pink'}
