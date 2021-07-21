@@ -42,7 +42,7 @@ exports.match = functions
       if (!friendsSnapshot.exists() && !streamsubsSnapshot.exists()) {
         throw new functions.https.HttpsError(
           'failed-precondition',
-          'No friends or stream subscriptions to match from.',
+          'Please add some friends or join some streams first',
         );
       }
 
