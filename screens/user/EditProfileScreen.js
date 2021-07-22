@@ -60,7 +60,20 @@ const valueOptions = {
   Smokes: ['Never', 'Sometimes', 'Frequently', 'Socially'],
   'Looking For': ['Something casual', 'Marriage', 'Friends', "Don't know yet"],
   Political: ['Conservative', 'Liberal', 'Moderate', 'Apolitical'],
-  Food: ['Indian', 'Italian', 'Continental', 'Chinese'],
+  Food: [
+    'Chinese',
+    'Continental',
+    'French',
+    'Greek',
+    'Indian',
+    'Italian',
+    'Japanese',
+    'Lebanese',
+    'Mexican',
+    'Mughlai',
+    'Thai',
+    'Turkish',
+  ],
 };
 
 const EditProfileScreen = props => {

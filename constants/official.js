@@ -4,20 +4,15 @@ import {scale} from 'react-native-size-matters';
 
 export const faqs = [
   {
-    question:
-      'I clicked on the start matching button but didn’t match with anyone. Why is that?',
-    answer:
-      'Circle works in the way that it connects you with your friend\'s friends. Sometimes the case maybe if you have a small pool that your potential matches are talking to someone and aren’t available. In that case you might be in the waiting list till someone is free. You can increase your friends in that case so you have a larger dating pool to search from.',
+    question: 'How do I start matching?',
+    answer: 'Just add more of your friends or join streams',
   },
-  {
-    question: 'How do I increase my dating pool?',
-    answer: 'Just add more of your friends',
-  },
+
   {
     question:
-      'I liked the person I am talking to. How should I get to know their identity?',
+      'Why are some profiles in chat rooms visible while some are not?',
     answer:
-      'If you like the person you are talking to and want to know them further press the 3 dots on the top and click on the like button. If both of you have liked each other your identities will be revealed. Your chat will be moved to the matches section (heart button).',
+      'Profiles matched via a common friend remain anonymous until both the users like the conversation. Profiles matched via streams are visible.',
   },
   {
     question:
