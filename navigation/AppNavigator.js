@@ -18,15 +18,34 @@ import {startAppLoading, stopAppLoading} from '../store/actions/loading';
 import auth from '@react-native-firebase/auth';
 import {PhoneAuthStack} from './PhoneAuthStack';
 import database from '@react-native-firebase/database';
+import {checkVersion} from 'react-native-check-version';
+import {setErrorMessage} from '../store/actions/error';
+import NeedsUpdateScreen from '../screens/NeedsUpdateScreen';
 
 const AppNavigator = () => {
   const userState = useSelector(state => state.user);
   const {isAuthenticated, isProfileCompleted} = userState;
   const [initialAppLoading, setInitialAppLoading] = useState(true);
+  const [updateNeeded, setUpdateNeeded] = useState(false);
+  const [needsUpdateScreenProps, setNeedsUpdateScreenProps] = useState(null);
   const loadingState = useSelector(state => state.loading);
   const {appLoading} = loadingState;
   const {errorMessage} = useSelector(state => state.error);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const checkForUpdate = async () => {
+      const version = await checkVersion({country: 'india'});
+      if (version.needsUpdate) {
+        setUpdateNeeded(true);
+        setNeedsUpdateScreenProps({
+          latestVersion: version.version,
+          url: version.url,
+        });
+      }
+    };
+    checkForUpdate();
+  }, [updateNeeded, dispatch]);
 
   useEffect(() => {
     auth().onAuthStateChanged(user => {
@@ -60,6 +79,14 @@ const AppNavigator = () => {
 
   return (
     <View style={styles.rootView}>
+      {/* update needed */}
+      <ReactNativeModal
+        backdropTransitionOutTiming={0}
+        style={{margin: 0}}
+        isVisible={updateNeeded}>
+        <NeedsUpdateScreen {...needsUpdateScreenProps} />
+      </ReactNativeModal>
+
       {/* loading screen */}
       <ReactNativeModal
         backdropTransitionOutTiming={0}

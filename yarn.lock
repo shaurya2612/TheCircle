@@ -6537,6 +6537,11 @@ react-native-bootsplash@^3.2.4:
     fs-extra "^9.1.0"
     jimp "^0.16.1"
 
+react-native-check-version@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/react-native-check-version/-/react-native-check-version-1.0.9.tgz#6943bedf2d39efeada5d65b609e6dfe2f4c94a60"
+  integrity sha512-UeNT40L6rmbnEpv0dkjDy7xVZE1ucOojX218EsEcQlLjpzsa42YZ45+UK7x/6RYyvUiAKpYIrbwxzmKA03iqaQ==
+
 react-native-codegen@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/react-native-codegen/-/react-native-codegen-0.0.6.tgz#b3173faa879cf71bfade8d030f9c4698388f6909"
@@ -6550,6 +6555,11 @@ react-native-communications@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/react-native-communications/-/react-native-communications-2.2.1.tgz#7883b56b20a002eeb790c113f8616ea8692ca795"
   integrity sha1-eIO1ayCgAu63kMET+GFuqGksp5U=
+
+react-native-device-info@^8.1.4:
+  version "8.1.4"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-8.1.4.tgz#709a424b64cd01b26e91000e9b7e2c36e8b832f0"
+  integrity sha512-PiYRJf3GBaVnGAUUB9YKzaGc5h6Rmn7NniD328JUXLeepKvLaDhK6EvFWU98YiZ2jePOF9/jg2cxfyN4jhZ2LA==
 
 react-native-drag-sort@^2.4.3:
   version "2.4.3"
