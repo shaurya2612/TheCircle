@@ -237,20 +237,24 @@ exports.match = functions
         firestore.collection('tokens').doc(uid).get(),
         firestore.collection('tokens').doc(chosenFOF.id).get(),
       ]);
-      let tokens = tokenDocs.map(tokenDoc => tokenDoc.data().token);
 
-      const payload = {
-        notification: {
-          title: 'We found someone 😍',
-          body: `New chat room created!`,
-        },
-      };
+      tokenDocs = tokenDocs.filter(docSnap => docSnap.exists);
+      if (tokenDocs.length > 0) {
+        let tokens = tokenDocs.map(tokenDoc => tokenDoc.data().token);
 
-      try {
-        await admin.messaging().sendToDevice(tokens, payload);
-      } catch (err) {
-        if (err.code !== 'messaging/invalid-recipient') {
-          functions.logger.error(err.stack);
+        const payload = {
+          notification: {
+            title: 'We found someone 😍',
+            body: `New chat room created!`,
+          },
+        };
+
+        try {
+          await admin.messaging().sendToDevice(tokens, payload);
+        } catch (err) {
+          if (err.code !== 'messaging/invalid-recipient') {
+            functions.logger.error(err.stack);
+          }
         }
       }
     } else {
@@ -399,20 +403,22 @@ exports.onMatchAdded = functions
       .transaction(currentMatches => currentMatches + 1);
 
     let tokenDoc = await firestore.collection('tokens').doc(uid).get();
-    let token = tokenDoc.data().token;
+    if (tokenDoc.exists) {
+      let token = tokenDoc.data().token;
 
-    const payload = {
-      notification: {
-        title: 'You have a new match 💞',
-        body: `Open to find out who it is!`,
-      },
-    };
+      const payload = {
+        notification: {
+          title: 'You have a new match 💞',
+          body: `Open to find out who it is!`,
+        },
+      };
 
-    try {
-      await messaging.sendToDevice(token, payload);
-    } catch (err) {
-      if (err.code !== 'messaging/invalid-recipient') {
-        functions.logger.error(err.stack);
+      try {
+        await messaging.sendToDevice(token, payload);
+      } catch (err) {
+        if (err.code !== 'messaging/invalid-recipient') {
+          functions.logger.error(err.stack);
+        }
       }
     }
   });
@@ -440,20 +446,23 @@ exports.onFriendRequestAdded = functions
     const messaging = admin.messaging();
 
     let tokenDoc = await firestore.collection('tokens').doc(uid).get();
-    let token = tokenDoc.data().token;
 
-    const payload = {
-      notification: {
-        title: 'New friend request 👽',
-        body: `Someone sent you a friend request`,
-      },
-    };
+    if (tokenDoc.exists) {
+      let token = tokenDoc.data().token;
 
-    try {
-      await messaging.sendToDevice(token, payload);
-    } catch (err) {
-      if (err.code !== 'messaging/invalid-recipient') {
-        functions.logger.error(err.stack);
+      const payload = {
+        notification: {
+          title: 'New friend request 👽',
+          body: `Someone sent you a friend request`,
+        },
+      };
+
+      try {
+        await messaging.sendToDevice(token, payload);
+      } catch (err) {
+        if (err.code !== 'messaging/invalid-recipient') {
+          functions.logger.error(err.stack);
+        }
       }
     }
   });
@@ -503,13 +512,16 @@ exports.sendNotification = functions
     const messaging = admin.messaging();
 
     const tokenDoc = await firestore.collection('tokens').doc(receiverId).get();
-    const token = tokenDoc.data().token;
 
-    try {
-      await messaging.sendToDevice(token, payload);
-    } catch (err) {
-      if (err.code !== 'messaging/invalid-recipient') {
-        functions.logger.error(err.stack);
+    if (tokenDoc.exists) {
+      const token = tokenDoc.data().token;
+
+      try {
+        await messaging.sendToDevice(token, payload);
+      } catch (err) {
+        if (err.code !== 'messaging/invalid-recipient') {
+          functions.logger.error(err.stack);
+        }
       }
     }
   });
