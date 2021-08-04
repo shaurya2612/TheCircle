@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {Text, TouchableOpacity} from 'react-native';
-import {moderateScale} from 'react-native-size-matters';
+import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
 import styles from '../styles';
 
 const SelectionButton = props => {
@@ -16,7 +16,7 @@ const SelectionButton = props => {
       }>
       <Text
         style={{
-          fontSize: moderateScale(22, 0.4),
+          fontSize: scale(22),
           color: props.disabled ? '#cccccc' : props.textColor ?? 'black',
         }}>
         {props.title}

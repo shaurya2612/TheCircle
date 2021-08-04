@@ -167,7 +167,6 @@ const SignupAgeScreen = props => {
                 }}
                 style={{
                   ...styles.selectedFormTextInput,
-                  fontSize: moderateScale(20, 0.4),
                   color: colors.primary,
                   borderColor: isDateTextInputFocused
                     ? colors.primary
@@ -208,7 +207,6 @@ const SignupAgeScreen = props => {
                 }}
                 style={{
                   ...styles.selectedFormTextInput,
-                  fontSize: moderateScale(20, 0.4),
                   color: colors.primary,
                   borderColor: isMonthTextInputFocused
                     ? colors.primary
@@ -250,7 +248,6 @@ const SignupAgeScreen = props => {
                 }}
                 style={{
                   ...styles.selectedFormTextInput,
-                  fontSize: moderateScale(20, 0.4),
                   color: colors.primary,
                   borderColor: isYearTextInputFocused
                     ? colors.primary

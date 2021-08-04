@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   },
   labelText: {fontSize: scale(10), textAlign: 'center'},
   formTextInput: {
-    height: verticalScale(40),
+    height: verticalScale(42),
     borderColor: '#cccccc',
     borderBottomWidth: 1,
     width: '90%',
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#cccccc',
   },
   selectedFormTextInput: {
-    height: verticalScale(40),
+    height: verticalScale(42),
     borderColor: colors.primary,
     borderBottomWidth: 1,
     width: '90%',
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Quicksand-Medium',
   },
   countryCodeInputView: {
-    height: moderateScale(30, 0.4),
+    height: verticalScale(30),
     justifyContent: 'center',
     alignItems: 'center',
     // width: "100%"
@@ -111,8 +111,7 @@ const styles = StyleSheet.create({
   modalCardView: {
     padding: scale(10),
     backgroundColor: 'white',
-    borderRadius: moderateScale(10, 0.4),
-    padding: moderateScale(10, 0.4),
+    borderRadius: scale(10),
   },
   smallStatBoxView: {
     paddingHorizontal: scale(10),
@@ -179,7 +178,7 @@ const styles = StyleSheet.create({
     paddingTop: scale(5),
     paddingBottom: scale(5),
     overflow: 'hidden',
-    borderTopWidth: 0
+    borderTopWidth: 0,
   },
 });
 

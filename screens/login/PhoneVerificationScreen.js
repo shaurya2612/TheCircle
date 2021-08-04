@@ -146,7 +146,6 @@ const PhoneVerificationScreen = props => {
               style={{
                 ...styles.selectedFormTextInput,
                 borderColor: '#cccccc',
-                fontSize: moderateScale(20, 0.4),
                 color: colors.primary,
                 width: '16.66%',
                 textAlign: 'center',
@@ -166,7 +165,6 @@ const PhoneVerificationScreen = props => {
               style={{
                 ...styles.selectedFormTextInput,
                 borderColor: '#cccccc',
-                fontSize: moderateScale(20, 0.4),
                 color: colors.primary,
                 width: '16.66%',
                 textAlign: 'center',
@@ -186,7 +184,6 @@ const PhoneVerificationScreen = props => {
               style={{
                 ...styles.selectedFormTextInput,
                 borderColor: '#cccccc',
-                fontSize: moderateScale(20, 0.4),
                 color: colors.primary,
                 width: '16.66%',
                 textAlign: 'center',
@@ -206,7 +203,6 @@ const PhoneVerificationScreen = props => {
               style={{
                 ...styles.selectedFormTextInput,
                 borderColor: '#cccccc',
-                fontSize: moderateScale(20, 0.4),
                 color: colors.primary,
                 width: '16.66%',
                 textAlign: 'center',
@@ -226,7 +222,6 @@ const PhoneVerificationScreen = props => {
               style={{
                 ...styles.selectedFormTextInput,
                 borderColor: '#cccccc',
-                fontSize: moderateScale(20, 0.4),
                 color: colors.primary,
                 width: '16.66%',
                 textAlign: 'center',
@@ -246,7 +241,6 @@ const PhoneVerificationScreen = props => {
               style={{
                 ...styles.selectedFormTextInput,
                 borderColor: '#cccccc',
-                fontSize: moderateScale(20, 0.4),
                 color: colors.primary,
                 width: '16.66%',
                 textAlign: 'center',

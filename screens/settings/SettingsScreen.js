@@ -227,7 +227,6 @@ const SettingsScreen = props => {
                       style={{
                         ...styles.selectedFormTextInput,
                         borderColor: 'black',
-                        fontSize: moderateScale(20, 0.4),
                         color: 'black',
                         width: '10%',
                         textAlign: 'center',
@@ -247,7 +246,6 @@ const SettingsScreen = props => {
                       style={{
                         ...styles.selectedFormTextInput,
                         borderColor: 'black',
-                        fontSize: moderateScale(20, 0.4),
                         color: 'black',
                         width: '10%',
                         textAlign: 'center',
@@ -267,7 +265,6 @@ const SettingsScreen = props => {
                       style={{
                         ...styles.selectedFormTextInput,
                         borderColor: 'black',
-                        fontSize: moderateScale(20, 0.4),
                         color: 'black',
                         width: '10%',
                         textAlign: 'center',
@@ -287,7 +284,6 @@ const SettingsScreen = props => {
                       style={{
                         ...styles.selectedFormTextInput,
                         borderColor: 'black',
-                        fontSize: moderateScale(20, 0.4),
                         color: 'black',
                         width: '10%',
                         textAlign: 'center',
@@ -307,7 +303,6 @@ const SettingsScreen = props => {
                       style={{
                         ...styles.selectedFormTextInput,
                         borderColor: 'black',
-                        fontSize: moderateScale(20, 0.4),
                         color: 'black',
                         width: '10%',
                         textAlign: 'center',
@@ -327,7 +322,6 @@ const SettingsScreen = props => {
                       style={{
                         ...styles.selectedFormTextInput,
                         borderColor: 'black',
-                        fontSize: moderateScale(20, 0.4),
                         color: 'black',
                         width: '10%',
                         textAlign: 'center',

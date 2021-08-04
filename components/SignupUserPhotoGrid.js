@@ -93,7 +93,7 @@ export const SignupUserPhotoGrid = () => {
               ...localStyles.add_icon,
               ...styles.elevation_medium,
             }}>
-            <Icon name="plus" size={moderateScale(30, 0.4)} color="black" />
+            <Icon name="plus" size={scale(30)} color="black" />
           </View>
         )}
       </View>

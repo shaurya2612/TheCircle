@@ -116,7 +116,7 @@ const SignupUsernameScreen = props => {
         <FormTextInput
           maxLength={20}
           selectedBorderColor={colors.primary}
-          style={{fontSize: moderateScale(20, 0.4), color: colors.primary}}
+          style={{color: colors.primary}}
           selectionColor={'#cccccc'}
           autoCorrect={false}
           autoCapitalize="none"

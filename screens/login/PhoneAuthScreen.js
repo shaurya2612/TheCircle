@@ -126,7 +126,7 @@ const PhoneAuthScreen = props => {
                 value={phoneNumber}
                 selectedBorderColor={colors.primary}
                 style={{
-                  fontSize: moderateScale(20, 0.4),
+                  fontSize: verticalScale(20),
                   color: colors.primary,
                 }}
                 selectionColor={"#cccccc"}

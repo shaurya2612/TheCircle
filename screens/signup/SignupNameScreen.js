@@ -111,7 +111,7 @@ const SignupNameScreen = props => {
           <FormTextInput
             value={firstName}
             selectedBorderColor={colors.primary}
-            style={{fontSize: moderateScale(20, 0.4), color: colors.primary}}
+            style={{color: colors.primary}}
             selectionColor={'#cccccc'}
             onChangeText={text => {
               dispatch(setSignupFormData({...signupFormData, name: text}));
