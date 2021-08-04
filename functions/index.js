@@ -377,8 +377,7 @@ exports.deleteUser = functions
         try {
           await storage
             .bucket(STORAGE_BUCKET_NAME)
-            .file(`/messages/${refString}`)
-            .delete();
+            .deleteFiles({prefix: `/messages/${refString}/`});
         } catch (err) {
           //Prevent unhandled promise rejection
         }
@@ -524,4 +523,28 @@ exports.sendNotification = functions
         }
       }
     }
+  });
+
+exports.deleteFilesInStorage = functions
+  .region(ASIA_SOUTH1)
+  .https.onCall(async (data, context) => {
+    //User is not authenticated
+    if (!context.auth) {
+      throw new functions.https.HttpsError(
+        'unauthenticated',
+        'Endpoint requires authentication.',
+      );
+    }
+    // try {
+    await admin
+      .storage()
+      .bucket(STORAGE_BUCKET_NAME)
+      .deleteFiles({prefix: data.prefix, force: true});
+    // } catch (err) {
+    // if (err.code === 'storage/object-not-found') {
+    //   return;
+    // } else {
+    //   functions.logger.error(err.stack);
+    // }
+    // }
   });

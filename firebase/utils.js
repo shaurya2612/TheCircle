@@ -5,6 +5,8 @@ import storage from '@react-native-firebase/storage';
 import {Platform} from 'react-native';
 import {serverKey} from './config';
 import firestore from '@react-native-firebase/firestore';
+import functions from '@react-native-firebase/functions';
+import {ASIA_SOUTH1} from '../store/actions/matching';
 
 export const isUsernameValid = async username => {
   const db = database();
@@ -210,7 +212,10 @@ export const unmatch = async unmatchId => {
     db.ref('/messages').child(refString).remove(),
   ]);
   try {
-    await storage().ref('/messages').child(refString).delete();
+    const instance = functions()
+      .app.functions(ASIA_SOUTH1)
+      .httpsCallable('deleteFilesInStorage');
+    await instance({prefix: `messages/${refString}/`});
   } catch (err) {
     //Prevent unhandled promise rejection
   }

@@ -407,11 +407,16 @@ export const skipThisFOF = (keepChats = false) => {
     if (!keepChats) {
       const refString = uid < FOF.id ? uid + '@' + FOF.id : FOF.id + '@' + uid;
       await db.ref('/messages').child(refString).remove();
+
+      console.warn('trying to delete images', refString);
       try {
-        await storage().ref('/messages').child(refString).delete();
+        const instance = functions()
+          .app.functions(ASIA_SOUTH1)
+          .httpsCallable('deleteFilesInStorage');
+
+        await instance({prefix: `messages/${refString}/`});
       } catch (err) {
-        if (err.code !== 'storage/object-not-found')
-          dispatch(setErrorMessage(err.message));
+        dispatch(setErrorMessage(err.message));
       }
     }
 
