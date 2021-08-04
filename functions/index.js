@@ -2,9 +2,12 @@ const functions = require('firebase-functions');
 
 // The Firebase Admin SDK.
 const admin = require('firebase-admin');
-admin.initializeApp();
+admin.initializeApp({
+  databaseURL: 'https://thecircle-native.asia-southeast1.firebasedatabase.app/',
+});
 const ASIA_SOUTH1 = 'asia-south1';
 const STORAGE_BUCKET_NAME = 'gs://thecircle-native.appspot.com';
+const INSTANCE_NAME = 'thecircle-native';
 /**
  *matches a user with a potential match
  * @returns {Object} Object having via and FOF fields
@@ -388,7 +391,8 @@ exports.deleteUser = functions
 
 exports.onMatchAdded = functions
   .region(ASIA_SOUTH1)
-  .database.ref('/matches/{uid}')
+  .database.instance(INSTANCE_NAME)
+  .ref('/matches/{uid}')
   .onCreate(async (snapshot, context) => {
     const uid = context.params.uid;
 
@@ -424,7 +428,8 @@ exports.onMatchAdded = functions
 
 exports.onUnmatch = functions
   .region(ASIA_SOUTH1)
-  .database.ref('/matches/{uid}')
+  .database.instance(INSTANCE_NAME)
+  .ref('/matches/{uid}')
   .onDelete(async (snapshot, context) => {
     const uid = context.params.uid;
 
@@ -438,7 +443,8 @@ exports.onUnmatch = functions
 
 exports.onFriendRequestAdded = functions
   .region(ASIA_SOUTH1)
-  .database.ref('/requests/{uid}')
+  .database.instance(INSTANCE_NAME)
+  .ref('/requests/{uid}')
   .onCreate(async (snapshot, context) => {
     const uid = context.params.uid;
     const firestore = admin.firestore();
@@ -468,7 +474,8 @@ exports.onFriendRequestAdded = functions
 
 exports.onFriendAdded = functions
   .region(ASIA_SOUTH1)
-  .database.ref('/friend/{uid}')
+  .database.instance(INSTANCE_NAME)
+  .ref('/friend/{uid}')
   .onCreate(async (snapshot, context) => {
     const uid = context.params.uid;
 
@@ -482,7 +489,8 @@ exports.onFriendAdded = functions
 
 exports.onUnfriend = functions
   .region(ASIA_SOUTH1)
-  .database.ref('/friends/{uid}')
+  .database.instance(INSTANCE_NAME)
+  .ref('/friends/{uid}')
   .onDelete(async (snapshot, context) => {
     const uid = context.params.uid;
 
