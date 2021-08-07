@@ -438,7 +438,7 @@ exports.onUnmatch = functions
       .ref('/stats')
       .child(uid)
       .child('matches')
-      .transaction(currentMatches => currentMatches - 1);
+      .transaction(currentMatches => Math.max(currentMatches - 1, 0));
   });
 
 exports.onFriendRequestAdded = functions
@@ -499,7 +499,7 @@ exports.onUnfriend = functions
       .ref('/stats')
       .child(uid)
       .child('friends')
-      .transaction(currentFriends => currentFriends - 1);
+      .transaction(currentFriends => Math.max(currentFriends - 1, 0));
   });
 
 exports.sendNotification = functions
