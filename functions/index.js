@@ -302,6 +302,7 @@ exports.deleteUser = functions
     //delete main nodes
     db.ref('/users').child(uid).remove();
     db.ref('/genders').child(uid).remove();
+    db.ref('/nonBinary').child(uid).remove();
     db.ref('/interestedIn').child(uid).remove();
     db.ref('/stats').child(uid).remove();
     db.ref('/profiles').child(uid).remove();
