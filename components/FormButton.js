@@ -17,7 +17,7 @@ const FormButton = props => {
       }>
       <Text
         style={{
-          fontSize: scale(22, 0.4),
+          fontSize: props.textSize ?? scale(22, 0.4),
           color: props.disabled ? '#cccccc' : props.textColor ?? colors.primary,
         }}>
         {props.title}

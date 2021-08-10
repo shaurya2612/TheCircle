@@ -7,7 +7,7 @@ const OptionView = ({ onPress, title, style, fontStyle }) => {
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={{ padding: scale(10), ...style }}
+      style={{ padding: scale(7), ...style }}
     >
       <NameText style={fontStyle}>{title}</NameText>
     </TouchableOpacity>

@@ -10,6 +10,7 @@ import {
   TextInput,
 } from 'react-native';
 import ReactNativeModal from 'react-native-modal';
+import DeviceInfo from 'react-native-device-info';
 import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
 import Icon from 'react-native-vector-icons/Feather';
 import {useDispatch} from 'react-redux';
@@ -28,6 +29,7 @@ import {useRef} from 'react';
 import auth from '@react-native-firebase/auth';
 import {setErrorMessage} from '../../store/actions/error';
 import colors from '../../constants/colors';
+import NameText from '../../components/NameText';
 
 const SettingsScreen = props => {
   const data = [
@@ -97,7 +99,7 @@ const SettingsScreen = props => {
   }
 
   return (
-    <View style={{...styles.rootView, backgroundColor: 'white'}}>
+    <View style={styles.rootView}>
       <CustomSafeAreaView style={{flex: 1}}>
         {/* Modal */}
         <ReactNativeModal
@@ -368,53 +370,88 @@ const SettingsScreen = props => {
         <View
           style={{
             flex: 1,
-            justifyContent: 'space-between',
+            // justifyContent: 'space-between',
           }}>
-          <FlatList
-            data={data}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({item}) => (
-              <OptionView
-                title={item.title}
-                style={{
-                  backgroundColor: 'white',
-                  marginVertical: verticalScale(5),
-                }}
-                fontStyle={item.fontStyle || {}}
-                onPress={item.onPress}
-              />
-            )}
-          />
-          {/* <View style={{height:"50%", backgroundColor:"red"}}/> */}
-          <OptionView
-            title={'Log out'}
+          <View style={{marginVertical: verticalScale(5)}}>
+            <NameText>General</NameText>
+          </View>
+          <View
             style={{
               backgroundColor: 'white',
-              marginVertical: verticalScale(5),
-              ...styles.centerView,
-              ...styles.elevation_small,
-            }}
-            fontStyle={{color: 'red'}}
-            onPress={() => {
-              dispatch(logoutUser());
-            }}
-          />
-          <OptionView
-            title={'Delete Account'}
+              padding: scale(5),
+              borderRadius: scale(10),
+            }}>
+            <FlatList
+              data={data}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({item}) => (
+                <OptionView
+                  title={item.title}
+                  style={{
+                    backgroundColor: 'white',
+                    marginVertical: verticalScale(5),
+                    // borderBottomWidth: scale(0.1)
+                  }}
+                  fontStyle={item.fontStyle || {}}
+                  onPress={item.onPress}
+                />
+              )}
+            />
+          </View>
+          <View
             style={{
-              backgroundColor: 'red',
-              marginVertical: verticalScale(5),
-              ...styles.centerView,
-            }}
-            fontStyle={{color: 'white'}}
-            onPress={() => {
-              setIsVerificationCodeInputVisible(true);
-            }}
-          />
-          {/* <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-            <FormButton onPress={() => {}} title="Log Out" />
-            <FormButton style={{backgroundColor: '#ff3217'}} title="Delete" />
-          </View> */}
+              marginVertical: scale(20),
+              alignItems: 'center',
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+            }}>
+            <FormButton
+              onPress={() => {
+                dispatch(logoutUser());
+              }}
+              style={{
+                // backgroundColor: '#3490dc',
+                marginVertical: verticalScale(5),
+              }}
+              // textColor="white"
+              textSize={styles.nameText.fontSize}
+              title="Log Out"
+            />
+            <FormButton
+              onPress={() => {
+                setIsVerificationCodeInputVisible(true);
+              }}
+              style={{backgroundColor: '#ff3217'}}
+              textColor="white"
+              textSize={styles.nameText.fontSize}
+              title="Delete Account"
+            />
+          </View>
+        </View>
+        <View
+          style={{
+            alignSelf: 'flex-end',
+            width: '100%',
+            marginVertical: verticalScale(5),
+          }}>
+          <AppText
+            style={{
+              fontSize: scale(30),
+              color: '#cccccc',
+              textAlign: 'center',
+              fontFamily: 'Quicksand-Bold',
+            }}>
+            {'Circle'}
+          </AppText>
+          <AppText
+            style={{
+              fontSize: scale(10),
+              color: '#cccccc',
+              textAlign: 'center',
+              fontFamily: 'Quicksand-Bold',
+            }}>
+            {'v' + DeviceInfo.getVersion()}
+          </AppText>
         </View>
       </CustomSafeAreaView>
     </View>

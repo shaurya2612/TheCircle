@@ -1,4 +1,5 @@
 import React, {Fragment, useEffect} from 'react';
+import {Text, TextInput} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Provider, useSelector} from 'react-redux';
 import {applyMiddleware, createStore} from 'redux';
@@ -19,6 +20,14 @@ FontAwesome5Icon.getStyledIconSet('light').loadFont();
 FontAwesome5Icon.getStyledIconSet('regular').loadFont();
 FontAwesome5Icon.getStyledIconSet('solid').loadFont();
 
+Text.defaultProps = {
+  ...(Text.defaultProps || {}),
+  allowFontScaling: false,
+};
+TextInput.defaultProps = {
+  ...(TextInput.defaultProps || {}),
+  allowFontScaling: false,
+};
 export const store = createStore(allReducers, applyMiddleware(thunk));
 
 export default function App() {

@@ -8,7 +8,7 @@ import FriendsScreen from '../screens/friends/FriendsScreen';
 import CustomSafeAreaView from '../components/CustomSafeAreaView';
 import styles from '../styles';
 import StreamsListScreen from '../screens/streams/StreamsListScreen';
-import { scale } from 'react-native-size-matters';
+import {scale} from 'react-native-size-matters';
 
 const FriendsTopTabNavigator = createMaterialTopTabNavigator();
 
@@ -20,6 +20,7 @@ export default FriendsTopTab = () => {
           labelStyle: {
             fontSize: scale(10),
           },
+          allowFontScaling: false,
         }}>
         <FriendsTopTabNavigator.Screen
           name="Friends"
