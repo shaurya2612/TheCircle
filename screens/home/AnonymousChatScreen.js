@@ -44,6 +44,7 @@ import TheCircleLoading from '../../components/svgs/TheCircleLoading';
 import {setErrorMessage} from '../../store/actions/error';
 import MatchProfileScreen from '../matches/MatchProfileScreen';
 import {setItsAMatchModalVisible} from '../../store/actions/loading';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 const AnonymousChatScreen = props => {
   const matchingState = useSelector(state => state.matching);
@@ -329,8 +330,18 @@ const AnonymousChatScreen = props => {
         renderActions={props => (
           <Actions
             {...props}
-            iconTextStyle={{color: '#cccccc'}}
-            wrapperStyle={{borderColor: '#cccccc'}}
+            icon={() => (
+              <View
+                style={{alignSelf: 'center', flex: 1, ...styles.centerView}}>
+                <FontAwesome5Icon
+                  name="plus-circle"
+                  size={scale(20)}
+                  color="grey"
+                />
+              </View>
+            )}
+            // iconTextStyle={{color: '#cccccc'}}
+            // wrapperStyle={{borderColor: '#cccccc'}}
             options={{
               'Send Image': async props => {
                 const granted = await PermissionsAndroid.request(
