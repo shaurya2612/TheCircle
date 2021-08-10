@@ -18,6 +18,7 @@ import {listenForPresence} from '../store/actions/user';
 import messaging from '@react-native-firebase/messaging';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 const MainAppBottomTabNavigator = createBottomTabNavigator();
 
@@ -45,9 +46,15 @@ const MainAppBottomTab = () => {
       });
 
     // Listen to whether the token changes
-    return messaging().onTokenRefresh(token => {
+    const unsubscribe = messaging().onTokenRefresh(token => {
       saveTokenToDatabase(token);
     });
+
+    return unsubscribe;
+  }, [dispatch]);
+
+  useEffect(() => {
+    crashlytics().setUserId(auth().currentUser.uid);
   }, []);
 
   return (

@@ -240,6 +240,9 @@ PODS:
     - FirebaseAnalytics (~> 7.11.0)
   - Firebase/CoreOnly (7.11.0):
     - FirebaseCore (= 7.11.0)
+  - Firebase/Crashlytics (7.11.0):
+    - Firebase/CoreOnly
+    - FirebaseCrashlytics (~> 7.11.0)
   - Firebase/Database (7.11.0):
     - Firebase/CoreOnly
     - FirebaseDatabase (~> 7.11.0)
@@ -296,6 +299,12 @@ PODS:
     - GoogleUtilities/Environment (~> 7.0)
     - GoogleUtilities/Logger (~> 7.0)
     - nanopb (~> 2.30908.0)
+  - FirebaseCrashlytics (7.11.0):
+    - FirebaseCore (~> 7.0)
+    - FirebaseInstallations (~> 7.0)
+    - GoogleDataTransport (~> 8.4)
+    - nanopb (~> 2.30908.0)
+    - PromisesObjC (~> 1.2)
   - FirebaseDatabase (7.11.0):
     - FirebaseCore (~> 7.0)
     - leveldb-library (~> 1.22)
@@ -662,6 +671,8 @@ PODS:
     - React-perflogger (= 0.64.0)
   - RNBootSplash (3.2.4):
     - React-Core
+  - RNDeviceInfo (8.1.4):
+    - React-Core
   - RNFBAnalytics (11.5.0):
     - Firebase/Analytics (= 7.11.0)
     - React-Core
@@ -671,6 +682,10 @@ PODS:
     - React-Core
   - RNFBAuth (11.5.0):
     - Firebase/Auth (= 7.11.0)
+    - React-Core
+    - RNFBApp
+  - RNFBCrashlytics (11.5.0):
+    - Firebase/Crashlytics (= 7.11.0)
     - React-Core
     - RNFBApp
   - RNFBDatabase (11.5.0):
@@ -767,9 +782,11 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RNBootSplash (from `../node_modules/react-native-bootsplash`)
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
+  - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
   - "RNFBDatabase (from `../node_modules/@react-native-firebase/database`)"
   - "RNFBFirestore (from `../node_modules/@react-native-firebase/firestore`)"
   - "RNFBFunctions (from `../node_modules/@react-native-firebase/functions`)"
@@ -792,6 +809,7 @@ SPEC REPOS:
     - FirebaseAuth
     - FirebaseCore
     - FirebaseCoreDiagnostics
+    - FirebaseCrashlytics
     - FirebaseDatabase
     - FirebaseFirestore
     - FirebaseFunctions
@@ -874,12 +892,16 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNBootSplash:
     :path: "../node_modules/react-native-bootsplash"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
   RNFBAnalytics:
     :path: "../node_modules/@react-native-firebase/analytics"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBAuth:
     :path: "../node_modules/@react-native-firebase/auth"
+  RNFBCrashlytics:
+    :path: "../node_modules/@react-native-firebase/crashlytics"
   RNFBDatabase:
     :path: "../node_modules/@react-native-firebase/database"
   RNFBFirestore:
@@ -916,6 +938,7 @@ SPEC CHECKSUMS:
   FirebaseAuth: 5fe4585c2ed847319f0ea68bd1d82c77e49ff9a0
   FirebaseCore: 907447d8917a4d3eb0cce2829c5a0ad21d90b432
   FirebaseCoreDiagnostics: 68ad972f99206cef818230f3f3179d52ccfb7f8c
+  FirebaseCrashlytics: 272b675aa9d1e9bae1f9e1449fcc1f2cf6042806
   FirebaseDatabase: 6c39fbf1c8514a2f32e610f9bf9ef30c535dc15a
   FirebaseFirestore: f495bb336b23eca23ea5d3605dce2a4cc214fde9
   FirebaseFunctions: cf3d041e5292b1c4bda868d542071a0f8291a4d4
@@ -960,9 +983,11 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: cad74a1eaa53ee6e7a3620231939d8fe2c6afcf0
   ReactCommon: cfe2b7fd20e0dbd2d1185cd7d8f99633fbc5ff05
   RNBootSplash: 4844706cbb56a3270556c9b94e59dedadccd47e4
+  RNDeviceInfo: 0b3e0154c1c659ea9779cb3e883e66ece92326a9
   RNFBAnalytics: 3e250066a98d6ea0a7816c52de75f2633f726580
   RNFBApp: 9c90f9d576861947ba75fe0830567c570bcbcf6d
   RNFBAuth: 99fdbce04ff3d39e57a7a3956d632ee69145685b
+  RNFBCrashlytics: 8eafacfe3dc4aeb7733c3c3d65228f4e75861e72
   RNFBDatabase: 64aaecd9e48c6378864ef7d0fe65cc5f312987ed
   RNFBFirestore: bedb9727c0df9a1f1ec23b5e23988075a4cbea78
   RNFBFunctions: 570969b0b7a104066374d4f6e840d6d8a217e3ad
