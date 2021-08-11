@@ -404,7 +404,10 @@ exports.onMatchAdded = functions
       .ref('/stats')
       .child(uid)
       .child('matches')
-      .transaction(currentMatches => currentMatches + 1);
+      .transaction(currentMatches => {
+        if (currentMatches === null) return null;
+        return currentMatches + 1;
+      });
 
     let tokenDoc = await firestore.collection('tokens').doc(uid).get();
     if (tokenDoc.exists) {
@@ -439,7 +442,10 @@ exports.onUnmatch = functions
       .ref('/stats')
       .child(uid)
       .child('matches')
-      .transaction(currentMatches => currentMatches - 1);
+      .transaction(currentMatches => {
+        if (currentMatches === null) return null;
+        else return Math.max(currentMatches - 1, 0);
+      });
   });
 
 exports.onFriendRequestAdded = functions
@@ -476,7 +482,7 @@ exports.onFriendRequestAdded = functions
 exports.onFriendAdded = functions
   .region(ASIA_SOUTH1)
   .database.instance(INSTANCE_NAME)
-  .ref('/friend/{uid}')
+  .ref('/friends/{uid}')
   .onCreate(async (snapshot, context) => {
     const uid = context.params.uid;
 
@@ -485,7 +491,10 @@ exports.onFriendAdded = functions
       .ref('/stats')
       .child(uid)
       .child('friends')
-      .transaction(currentFriends => currentFriends + 1);
+      .transaction(currentFriends => {
+        if (currentFriends === null) return null;
+        return currentFriends + 1;
+      });
   });
 
 exports.onUnfriend = functions
@@ -500,7 +509,10 @@ exports.onUnfriend = functions
       .ref('/stats')
       .child(uid)
       .child('friends')
-      .transaction(currentFriends => currentFriends - 1);
+      .transaction(currentFriends => {
+        if (currentFriends === null) return null;
+        else return Math.max(currentFriends - 1, 0);
+      });
   });
 
 exports.sendNotification = functions
