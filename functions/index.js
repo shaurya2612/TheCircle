@@ -184,7 +184,7 @@ exports.match = functions
       ]);
 
       FOFName = FOFName?.val();
-      FOFDp = FOFDp[0];
+      if (FOFDp !== null) FOFDp = FOFDp[0];
 
       chosenFOF = {...chosenFOF, name: FOFName, dp: FOFDp};
 
@@ -362,7 +362,7 @@ exports.deleteUser = functions
 
     //delete cue cards
     await firestore.collection('cueCards').doc(uid).delete();
-
+    await firestore.collection('waitingUsers').doc(uid).delete();
     //delete matches
     const matches = await db.ref('/matches').child(uid).once('value');
     if (matches.exists()) {
@@ -393,7 +393,7 @@ exports.deleteUser = functions
 exports.onMatchAdded = functions
   .region(ASIA_SOUTH1)
   .database.instance(INSTANCE_NAME)
-  .ref('/matches/{uid}')
+  .ref('/matches/{uid}/{matchId}')
   .onCreate(async (snapshot, context) => {
     const uid = context.params.uid;
 
@@ -416,7 +416,7 @@ exports.onMatchAdded = functions
       const payload = {
         notification: {
           title: 'You have a new match 💞',
-          body: `Open to find out who it is!`,
+          body: `Tap to find out who it is!`,
         },
       };
 
@@ -433,7 +433,7 @@ exports.onMatchAdded = functions
 exports.onUnmatch = functions
   .region(ASIA_SOUTH1)
   .database.instance(INSTANCE_NAME)
-  .ref('/matches/{uid}')
+  .ref('/matches/{uid}/{matchId}')
   .onDelete(async (snapshot, context) => {
     const uid = context.params.uid;
 
@@ -451,7 +451,7 @@ exports.onUnmatch = functions
 exports.onFriendRequestAdded = functions
   .region(ASIA_SOUTH1)
   .database.instance(INSTANCE_NAME)
-  .ref('/requests/{uid}')
+  .ref('/requests/{uid}/{requestFromId}')
   .onCreate(async (snapshot, context) => {
     const uid = context.params.uid;
     const firestore = admin.firestore();
@@ -482,7 +482,7 @@ exports.onFriendRequestAdded = functions
 exports.onFriendAdded = functions
   .region(ASIA_SOUTH1)
   .database.instance(INSTANCE_NAME)
-  .ref('/friends/{uid}')
+  .ref('/friends/{uid}/{friendId}')
   .onCreate(async (snapshot, context) => {
     const uid = context.params.uid;
 
@@ -492,6 +492,7 @@ exports.onFriendAdded = functions
       .child(uid)
       .child('friends')
       .transaction(currentFriends => {
+        functions.logger.info(uid, currentFriends);
         if (currentFriends === null) return null;
         return currentFriends + 1;
       });
@@ -500,7 +501,7 @@ exports.onFriendAdded = functions
 exports.onUnfriend = functions
   .region(ASIA_SOUTH1)
   .database.instance(INSTANCE_NAME)
-  .ref('/friends/{uid}')
+  .ref('/friends/{uid}/{friendId}')
   .onDelete(async (snapshot, context) => {
     const uid = context.params.uid;
 
