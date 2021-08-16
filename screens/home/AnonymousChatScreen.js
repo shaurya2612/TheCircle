@@ -21,10 +21,14 @@ import CustomSend from '../../components/chat/CustomSend';
 import AnonymousChatHeader from '../../components/chat/AnonymousChatHeader';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  ASIA_SOUTH1,
   changeUserMatchingStatus,
   configureAnonymousChatRoom,
+  onSkipButtonPress,
   paginateMessagesInAnonymousChatRoomQuery,
+  REMOVE_CHAT_ROOM,
   sendMessageInAnonymousChatRoom,
+  SET_LISTENING_FOR_ANONYMOUS_CHAT_ROOM,
   skipThisFOF,
   startListeningForAnonymousChatRoom,
 } from '../../store/actions/matching';
@@ -45,6 +49,8 @@ import {setErrorMessage} from '../../store/actions/error';
 import MatchProfileScreen from '../matches/MatchProfileScreen';
 import {setItsAMatchModalVisible} from '../../store/actions/loading';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import database from '@react-native-firebase/database';
+import functions from '@react-native-firebase/functions';
 
 const AnonymousChatScreen = props => {
   const matchingState = useSelector(state => state.matching);
@@ -143,10 +149,9 @@ const AnonymousChatScreen = props => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => {
+            onPress={async () => {
               dispatch(changeUserMatchingStatus(0.5));
-              dispatch(skipThisFOF());
-              dispatch(changeUserMatchingStatus(1));
+              dispatch(onSkipButtonPress());
             }}
             style={{margin: scale(20)}}>
             <IconCircle

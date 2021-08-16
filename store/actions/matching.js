@@ -44,6 +44,11 @@ export const listenForUserMatchingStatus = () => {
           payload: snapshot.val(),
         });
       });
+    db.ref('/chatRooms')
+      .child(uid)
+      .on('value', snapshot => {
+        console.warn('current chatRoom value: ', snapshot.val());
+      });
   };
 };
 
@@ -63,6 +68,11 @@ export const changeUserMatchingStatus = newStatus => {
         await firestoreDb.collection('waitingUsers').doc(uid).delete();
         dispatch(skipThisFOF());
         await db.ref('/matchingStatus').child(uid).set(0);
+      }
+
+      //Front end loading screen state to avoid multi-tap
+      if (newStatus === 0.5) {
+        dispatch({type: SET_USER_MATCHING_STATUS, payload: 0.5});
       }
 
       //Matching on
@@ -96,9 +106,7 @@ export const changeUserMatchingStatus = newStatus => {
         //   interstitial.load();
         // }
         try {
-          const res = await functions()
-            .app.functions(ASIA_SOUTH1)
-            .httpsCallable('match')();
+          await functions().app.functions(ASIA_SOUTH1).httpsCallable('match')();
         } catch (err) {
           dispatch(setErrorMessage(err.message));
           dispatch(changeUserMatchingStatus(0));
@@ -335,13 +343,23 @@ export const startListeningForAnonymousChatRoom = () => {
     const uid = auth().currentUser.uid;
     const db = database();
 
+    console.warn('started listening for', FOF.id);
     //listen for chat room pairing (in case the other person is not in the chat room OR skips)
     db.ref('/chatRooms')
       .child(FOF.id)
       .on('value', snapshot => {
         //user has been skipped
         if (snapshot.val() !== uid) {
-          dispatch(skipThisFOF());
+          console.warn(
+            'Skipped due to xyz',
+            'found:',
+            snapshot.val(),
+            'for FOF: ',
+            FOF.id,
+            'I am: ',
+            uid,
+          );
+          dispatch(skipThisFOF(false, false));
         }
       });
 
@@ -382,7 +400,7 @@ export const startListeningForAnonymousChatRoom = () => {
   };
 };
 
-export const skipThisFOF = (keepChats = false) => {
+export const skipThisFOF = (keepChats = false, sendNotification = true) => {
   return async (dispatch, getState) => {
     const uid = auth().currentUser.uid;
     const db = database();
@@ -395,6 +413,16 @@ export const skipThisFOF = (keepChats = false) => {
       return;
     }
 
+    ///////////LISTENERS NEED TO BE CLOSED FIRST BEFORE ASYNCHRONOUS TASKS////////////
+    db.ref('/chatRooms').child(FOF.id).off();
+    db.ref('/matchingStatus').child(FOF.id).off();
+    const refString = uid < FOF.id ? uid + '@' + FOF.id : FOF.id + '@' + uid;
+    db.ref('/messages').child(refString).off();
+    db.ref('/isOnline').child(FOF.id).off();
+    db.ref('/isTyping').child(FOF.id).off();
+    console.warn('Listener for', FOF.id, 'was closed');
+    //////////////////////////////////////////////////////////////////////////////////
+
     //check if FOF is in matches
     let FOFInMatches = await db
       .ref('/matches')
@@ -402,6 +430,7 @@ export const skipThisFOF = (keepChats = false) => {
       .child(FOF.id)
       .once('value');
     if (FOFInMatches.exists()) keepChats = true;
+    //TODO Match modal
 
     //delete chats
     if (!keepChats) {
@@ -420,17 +449,83 @@ export const skipThisFOF = (keepChats = false) => {
       }
     }
 
+    await Promise.all([
+      db.ref('/chatRooms').child(uid).remove(),
+      db.ref('/via').child(uid).remove(),
+    ]).then(() => console.warn('chatRooms was made null by skipThisFOF'));
+
+    if (!keepChats && sendNotification) {
+      try {
+        await functions()
+          .app.functions(ASIA_SOUTH1)
+          .httpsCallable('sendNotification')({
+          receiverId: FOF.id,
+          payload: {
+            notification: {
+              title: 'Woops! 😳',
+              body: 'Someone left the chat room',
+            },
+          },
+        });
+      } catch (err) {
+        //Do nothing here
+      }
+    }
+
+    dispatch({type: REMOVE_CHAT_ROOM});
+    dispatch({type: SET_LISTENING_FOR_ANONYMOUS_CHAT_ROOM, payload: false});
+  };
+};
+
+export const onSkipButtonPress = () => {
+  return async (dispatch, getState) => {
+    const uid = auth().currentUser.uid;
+    const db = database();
+    const matchingState = getState().matching;
+    const {FOF} = matchingState;
+
+    ///////////LISTENERS NEED TO BE CLOSED FIRST BEFORE ASYNCHRONOUS TASKS////////////
     db.ref('/chatRooms').child(FOF.id).off();
     db.ref('/matchingStatus').child(FOF.id).off();
     const refString = uid < FOF.id ? uid + '@' + FOF.id : FOF.id + '@' + uid;
     db.ref('/messages').child(refString).off();
     db.ref('/isOnline').child(FOF.id).off();
     db.ref('/isTyping').child(FOF.id).off();
+    console.warn('Listener for', FOF.id, 'was closed');
+    //////////////////////////////////////////////////////////////////////////////////
+
+    let keepChats = false;
+
+    //check if FOF is in matches
+    // let FOFInMatches = await db
+    //   .ref('/matches')
+    //   .child(uid)
+    //   .child(FOF.id)
+    //   .once('value');
+    // if (FOFInMatches.exists()) keepChats = true;
+    //TODO Match modal
+
+    //delete chats
+    if (!keepChats) {
+      const refString = uid < FOF.id ? uid + '@' + FOF.id : FOF.id + '@' + uid;
+      await db.ref('/messages').child(refString).remove();
+
+      console.warn('trying to delete images', refString);
+      try {
+        const instance = functions()
+          .app.functions(ASIA_SOUTH1)
+          .httpsCallable('deleteFilesInStorage');
+
+        await instance({prefix: `messages/${refString}/`});
+      } catch (err) {
+        dispatch(setErrorMessage(err.message));
+      }
+    }
 
     await Promise.all([
       db.ref('/chatRooms').child(uid).remove(),
       db.ref('/via').child(uid).remove(),
-    ]);
+    ]).then(() => console.warn('chatRooms was made null by skipThisFOF'));
 
     if (!keepChats) {
       try {
@@ -452,6 +547,14 @@ export const skipThisFOF = (keepChats = false) => {
 
     dispatch({type: REMOVE_CHAT_ROOM});
     dispatch({type: SET_LISTENING_FOR_ANONYMOUS_CHAT_ROOM, payload: false});
+
+    //CHANGE MATCHING STATE TO 1
+    try {
+      await functions().app.functions(ASIA_SOUTH1).httpsCallable('match')();
+    } catch (err) {
+      dispatch(setErrorMessage(err.message));
+      dispatch(changeUserMatchingStatus(0));
+    }
   };
 };
 

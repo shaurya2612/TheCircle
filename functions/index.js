@@ -146,8 +146,14 @@ exports.match = functions
       viaFriendOrStreamId = chosenFriendOrStreamId;
       //Add in chat rooms
       await Promise.all([
-        db.ref('/chatRooms').child(uid).set(chosenFOF.id),
-        db.ref('/chatRooms').child(chosenFOF.id).set(uid),
+        db
+          .ref('/chatRooms')
+          .child(uid)
+          .transaction(_oldValue => chosenFOF.id),
+        db
+          .ref('/chatRooms')
+          .child(chosenFOF.id)
+          .transaction(_oldValue => uid),
       ]);
 
       var viaType = 'friend';

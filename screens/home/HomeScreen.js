@@ -116,7 +116,7 @@ const HomeScreen = props => {
                 <StartMatchingButton
                   title="START MATCHING !"
                   onPress={() => {
-                    dispatch({type: SET_USER_MATCHING_STATUS, payload: 0.5});
+                    dispatch(changeUserMatchingStatus(0.5));
                     dispatch(changeUserMatchingStatus(1));
                   }}
                 />
