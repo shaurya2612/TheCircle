@@ -153,7 +153,9 @@ export const MatchesListScreen = props => {
             backgroundColor: 'white',
             marginVertical: verticalScale(10),
           }}>
-          <AppText style={styles.titleText}>Conversations</AppText>
+          <AppText style={{...styles.titleText, fontFamily: 'Quicksand-Bold'}}>
+            Conversations
+          </AppText>
         </View>
         <View style={{...styles.expandedCenterView, backgroundColor: 'white'}}>
           <Icon name="inbox" size={scale(80)} color="grey" />
@@ -228,14 +230,13 @@ export const MatchesListScreen = props => {
         }).length === 0 ? null : (
           <View>
             <View style={{padding: scale(10), backgroundColor: 'white'}}>
-              <AppText style={styles.titleText}>New Matches</AppText>
+              <AppText style={{...styles.titleText}}>New Matches</AppText>
             </View>
             <FlatList
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               data={(matches || []).filter(item => {
-                if (item.lastMessage === null) return true;
-                else return false;
+                return item.lastMessage === null;
               })}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item}) => {
@@ -275,7 +276,10 @@ export const MatchesListScreen = props => {
                     backgroundColor: 'white',
                     marginVertical: verticalScale(10),
                   }}>
-                  <AppText style={styles.titleText}>Conversations</AppText>
+                  <AppText
+                    style={{...styles.titleText, fontFamily: 'Quicksand-Bold'}}>
+                    Conversations
+                  </AppText>
                 </View>
               );
             }}

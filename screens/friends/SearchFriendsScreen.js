@@ -28,6 +28,7 @@ import ReactNativeModal from 'react-native-modal';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import LostSvg from '../../assets/svgs/lost.svg';
+import colors from '../../constants/colors';
 
 const SearchFriendsScreen = () => {
   const loadingState = useSelector(state => state.loading);
@@ -199,7 +200,9 @@ const SearchFriendsScreen = () => {
             searchFriendHandler();
             Keyboard.dismiss();
           }}
-          style={{width: '70%'}}
+          // textColor={'white'}
+          style={{width: '50%'}}
+          textSize={scale(15)}
           title="Search"
         />
       </View>
@@ -241,7 +244,7 @@ const SearchFriendsScreen = () => {
             <View style={styles.expandedCenterView}>
               <View style={styles.centerView}>
                 <AppText style={styles.titleText}>Oops !</AppText>
-                <LostSvg height={scale(300)} width={scale(300)}/>
+                <LostSvg height={scale(250)} width={scale(250)} />
                 <AppText style={{...styles.nameText, textAlign: 'center'}}>
                   No matching results
                 </AppText>
