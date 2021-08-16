@@ -286,6 +286,79 @@ exports.match = functions
     };
   });
 
+exports.purgeChatRoom = functions
+  .region(ASIA_SOUTH1)
+  .https.onCall(async (data, context) => {
+    //User is not authenticated
+    if (!context.auth) {
+      throw new functions.https.HttpsError(
+        'unauthenticated',
+        'Endpoint requires authentication.',
+      );
+    }
+
+    const uid = context.auth.uid;
+    const db = admin.database();
+    const firestore = admin.firestore();
+    let {FOF, keepChats, sendNotification} = data;
+
+    //check if FOF is in matches
+    if (!keepChats) {
+      await db
+        .ref('/matches')
+        .child(uid)
+        .child(FOF.id)
+        .transaction(FOFInMatches => {
+          if (FOFInMatches.exists()) keepChats = true;
+          return FOFInMatches;
+        });
+    }
+
+    //DELETE CHATS
+    if (!keepChats) {
+      const refString = uid < FOF.id ? uid + '@' + FOF.id : FOF.id + '@' + uid;
+      await db.ref('/messages').child(refString).remove();
+
+      try {
+        await admin
+          .storage()
+          .bucket(STORAGE_BUCKET_NAME)
+          .deleteFiles({prefix: `messages/${refString}/`, force: true});
+      } catch (err) {
+        // dispatch(setErrorMessage(err.message));
+      }
+    }
+
+    //REMOVE CHAT ROOM OBJECT
+    await Promise.all([
+      db.ref('/chatRooms').child(uid).remove(),
+      db.ref('/via').child(uid).remove(),
+    ]);
+
+    //SEND NOTIFICATION
+    if (sendNotification && !keepChats) {
+      let tokenDoc = await firestore.collection('tokens').doc(FOF.id).get();
+      if (tokenDoc.exists) {
+        let token = tokenDoc.data().token;
+
+        const payload = {
+          notification: {
+            title: 'Woops! 😳',
+            body: 'Someone left the chat room',
+          },
+        };
+
+        try {
+          await admin.messaging().sendToDevice(token, payload);
+        } catch (err) {
+          if (err.code !== 'messaging/invalid-recipient') {
+            functions.logger.error(err.stack);
+          }
+        }
+      }
+    }
+  });
+
 exports.deleteUser = functions
   .region(ASIA_SOUTH1)
   .https.onCall(async (data, context) => {

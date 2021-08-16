@@ -250,11 +250,6 @@ const AnonymousChatScreen = props => {
         onPressEllipsis={() => {
           setIsActionsModalVisible(true);
         }}
-        onPressX={() => {
-          Keyboard.dismiss();
-          dispatch(skipThisFOF());
-          dispatch(changeUserMatchingStatus(1));
-        }}
         {...props}
       />
 

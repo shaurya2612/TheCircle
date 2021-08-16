@@ -359,7 +359,7 @@ export const startListeningForAnonymousChatRoom = () => {
             'I am: ',
             uid,
           );
-          dispatch(skipThisFOF(false, false));
+          dispatch(skipThisFOF(true, false));
         }
       });
 
@@ -432,44 +432,14 @@ export const skipThisFOF = (keepChats = false, sendNotification = true) => {
     if (FOFInMatches.exists()) keepChats = true;
     //TODO Match modal
 
-    //delete chats
-    if (!keepChats) {
-      const refString = uid < FOF.id ? uid + '@' + FOF.id : FOF.id + '@' + uid;
-      await db.ref('/messages').child(refString).remove();
+    const instance = functions()
+      .app.functions(ASIA_SOUTH1)
+      .httpsCallable('purgeChatRoom');
 
-      console.warn('trying to delete images', refString);
-      try {
-        const instance = functions()
-          .app.functions(ASIA_SOUTH1)
-          .httpsCallable('deleteFilesInStorage');
-
-        await instance({prefix: `messages/${refString}/`});
-      } catch (err) {
-        dispatch(setErrorMessage(err.message));
-      }
-    }
-
-    await Promise.all([
-      db.ref('/chatRooms').child(uid).remove(),
-      db.ref('/via').child(uid).remove(),
-    ]).then(() => console.warn('chatRooms was made null by skipThisFOF'));
-
-    if (!keepChats && sendNotification) {
-      try {
-        await functions()
-          .app.functions(ASIA_SOUTH1)
-          .httpsCallable('sendNotification')({
-          receiverId: FOF.id,
-          payload: {
-            notification: {
-              title: 'Woops! 😳',
-              body: 'Someone left the chat room',
-            },
-          },
-        });
-      } catch (err) {
-        //Do nothing here
-      }
+    try {
+      await instance({FOF, sendNotification, keepChats});
+    } catch (err) {
+      dispatch(setErrorMessage(err.message));
     }
 
     dispatch({type: REMOVE_CHAT_ROOM});
@@ -494,57 +464,15 @@ export const onSkipButtonPress = () => {
     console.warn('Listener for', FOF.id, 'was closed');
     //////////////////////////////////////////////////////////////////////////////////
 
-    let keepChats = false;
+    const instance = functions()
+      .app.functions(ASIA_SOUTH1)
+      .httpsCallable('purgeChatRoom');
 
-    //check if FOF is in matches
-    // let FOFInMatches = await db
-    //   .ref('/matches')
-    //   .child(uid)
-    //   .child(FOF.id)
-    //   .once('value');
-    // if (FOFInMatches.exists()) keepChats = true;
-    //TODO Match modal
-
-    //delete chats
-    if (!keepChats) {
-      const refString = uid < FOF.id ? uid + '@' + FOF.id : FOF.id + '@' + uid;
-      await db.ref('/messages').child(refString).remove();
-
-      console.warn('trying to delete images', refString);
-      try {
-        const instance = functions()
-          .app.functions(ASIA_SOUTH1)
-          .httpsCallable('deleteFilesInStorage');
-
-        await instance({prefix: `messages/${refString}/`});
-      } catch (err) {
-        dispatch(setErrorMessage(err.message));
-      }
+    try {
+      await instance({FOF, sendNotification: true, keepChats: false});
+    } catch (err) {
+      dispatch(setErrorMessage(err.message));
     }
-
-    await Promise.all([
-      db.ref('/chatRooms').child(uid).remove(),
-      db.ref('/via').child(uid).remove(),
-    ]).then(() => console.warn('chatRooms was made null by skipThisFOF'));
-
-    if (!keepChats) {
-      try {
-        await functions()
-          .app.functions(ASIA_SOUTH1)
-          .httpsCallable('sendNotification')({
-          receiverId: FOF.id,
-          payload: {
-            notification: {
-              title: 'Woops! 😳',
-              body: 'Someone left the chat room',
-            },
-          },
-        });
-      } catch (err) {
-        //Do nothing here
-      }
-    }
-
     dispatch({type: REMOVE_CHAT_ROOM});
     dispatch({type: SET_LISTENING_FOR_ANONYMOUS_CHAT_ROOM, payload: false});
 
