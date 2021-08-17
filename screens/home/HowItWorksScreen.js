@@ -21,7 +21,7 @@ const localStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  slideImage: {aspectRatio: 1, width: '100%', height: undefined},
+  slideImage: {aspectRatio: 9 / 16, width: '100%', height: undefined},
   slideTitle: {fontSize: 24},
   slideSubtitle: {fontSize: 18},
 
@@ -63,6 +63,7 @@ const data = [
   {image: require('../../assets/how-it-works/4.png')},
   {image: require('../../assets/how-it-works/5.png')},
   {image: require('../../assets/how-it-works/6.png')},
+  {image: require('../../assets/how-it-works/7.png')},
 ];
 
 const Slide = memo(function Slide({item, index}) {
