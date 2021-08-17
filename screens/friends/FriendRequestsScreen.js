@@ -40,7 +40,7 @@ const FriendRequestsScreen = () => {
                     marginBottom: scale(50),
                     marginTop: verticalScale(10),
                   }}>
-                  <AppText style={styles.titleText}>Requests</AppText>
+                  {/* <AppText style={styles.titleText}>Requests</AppText> */}
                 </View>
               );
             }}

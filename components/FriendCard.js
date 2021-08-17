@@ -121,17 +121,17 @@ const FriendCard = ({
 
       <AppText
         style={{
-          ...styles.titleText,
+          fontSize: scale(22),
           textAlign: 'center',
           marginTop: verticalScale(20),
         }}>
-        <AppText style={{...styles.nameText, color: 'white'}}>
+        <AppText style={{fontSize: scale(15), color: 'white'}}>
           {age ? `(${age})  ` : null}
         </AppText>
 
         {name}
 
-        <AppText style={{...styles.nameText, color: 'grey'}}>
+        <AppText style={{fontSize: scale(15), color: 'grey'}}>
           {age ? `  (${age})` : null}
         </AppText>
       </AppText>
