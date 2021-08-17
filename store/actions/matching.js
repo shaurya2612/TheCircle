@@ -108,7 +108,9 @@ export const changeUserMatchingStatus = newStatus => {
         try {
           await functions().app.functions(ASIA_SOUTH1).httpsCallable('match')();
         } catch (err) {
-          dispatch(setErrorMessage(err.message));
+          let showErrorHeading = true;
+          if (err.code === 'failed-precondition') showErrorHeading = false;
+          dispatch(setErrorMessage(err, showErrorHeading));
           dispatch(changeUserMatchingStatus(0));
         }
       }
@@ -133,7 +135,7 @@ export const changeUserMatchingStatus = newStatus => {
         await db.ref('/matchingStatus').child(uid).set(3);
       }
     } catch (err) {
-      dispatch(setErrorMessage(err.message));
+      dispatch(setErrorMessage(err));
       dispatch(changeUserMatchingStatus(0)); //set matching back to off
     }
   };
@@ -227,7 +229,7 @@ export const configureAnonymousChatRoom = () => {
         },
       });
     } catch (err) {
-      dispatch(setErrorMessage(err.message));
+      dispatch(setErrorMessage(err));
     }
   };
 };
@@ -439,7 +441,7 @@ export const skipThisFOF = (keepChats = false, sendNotification = true) => {
     try {
       await instance({FOF, sendNotification, keepChats});
     } catch (err) {
-      dispatch(setErrorMessage(err.message));
+      dispatch(setErrorMessage(err));
     }
 
     dispatch({type: REMOVE_CHAT_ROOM});
@@ -471,7 +473,7 @@ export const onSkipButtonPress = () => {
     try {
       await instance({FOF, sendNotification: true, keepChats: false});
     } catch (err) {
-      dispatch(setErrorMessage(err.message));
+      dispatch(setErrorMessage(err));
     }
     dispatch({type: REMOVE_CHAT_ROOM});
     dispatch({type: SET_LISTENING_FOR_ANONYMOUS_CHAT_ROOM, payload: false});
@@ -480,7 +482,7 @@ export const onSkipButtonPress = () => {
     try {
       await functions().app.functions(ASIA_SOUTH1).httpsCallable('match')();
     } catch (err) {
-      dispatch(setErrorMessage(err.message));
+      dispatch(setErrorMessage(err));
       dispatch(changeUserMatchingStatus(0));
     }
   };

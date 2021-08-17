@@ -132,7 +132,7 @@ export const SignupUserPhotoGrid = () => {
                 {mediaType: 'photo', quality: 0.8},
                 response => {
                   if (response.errorMessage) {
-                    dispatch(setErrorMessage(response.errorMessage));
+                    dispatch(setErrorMessage({message: response.errorMessage}));
                     return;
                   }
                   if (response.didCancel) return;
@@ -140,7 +140,9 @@ export const SignupUserPhotoGrid = () => {
                   if (newImage) {
                     if (response.fileSize / 1048576 > 10) {
                       dispatch(
-                        setErrorMessage('Max file size for upload is 10 MB'),
+                        setErrorMessage({
+                          message: 'Max file size for upload is 10 MB',
+                        }),
                       );
                       return;
                     }

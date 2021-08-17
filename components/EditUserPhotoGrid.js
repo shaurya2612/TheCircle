@@ -159,10 +159,11 @@ export const EditUserPhotoGrid = forwardRef(({onDragStart, onDragEnd}, ref) => {
                 response => {
                   if (response.didCancel) return;
                   if (response.uri) {
-
                     if (response.fileSize / 1048576 > 10) {
                       dispatch(
-                        setErrorMessage('Max file size for upload is 10 MB'),
+                        setErrorMessage({
+                          message: 'Max file size for upload is 10 MB',
+                        }),
                       );
                       return;
                     }

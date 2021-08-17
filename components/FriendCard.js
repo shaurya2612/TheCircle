@@ -40,7 +40,7 @@ const FriendCard = ({
             onPress={async () => {
               await sendFriendRequest(userId);
             }}
-            textColor= {colors.accent}
+            textColor={colors.accent}
             title="Add Friend"
           />
         );
@@ -63,7 +63,7 @@ const FriendCard = ({
                 try {
                   dispatch(acceptRequest(userId));
                 } catch (err) {
-                  dispatch(setErrorMessage(err.message));
+                  dispatch(setErrorMessage(err));
                 }
               }}>
               <IconCircle
@@ -79,7 +79,7 @@ const FriendCard = ({
                 try {
                   await declineRequest(userId);
                 } catch (err) {
-                  dispatch(setErrorMessage(err.message));
+                  dispatch(setErrorMessage(err));
                 }
               }}>
               <IconCircle

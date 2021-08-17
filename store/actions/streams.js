@@ -15,7 +15,7 @@ export const fetchAllStreams = () => {
       });
       dispatch({type: FETCH_ALL_STREAMS, payload: streamsArr});
     } catch (err) {
-      dispatch(setErrorMessage(err.message));
+      dispatch(setErrorMessage(err));
     }
   };
 };

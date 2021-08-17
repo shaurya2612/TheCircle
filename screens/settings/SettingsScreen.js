@@ -79,7 +79,9 @@ const SettingsScreen = props => {
   // Handle confirm code button press
   async function confirmCode() {
     if (!confirm) {
-      setErrorMessage('An error has occured. Please try again');
+      dispatch(
+        setErrorMessage({message: 'An error has occured. Please try again'}),
+      );
       return;
     }
     try {
@@ -93,7 +95,7 @@ const SettingsScreen = props => {
       if (error.code === 'auth/invalid-verification-code') {
         dispatch(setErrorMessage('Invalid Code.'));
       } else {
-        dispatch(setErrorMessage(error.message));
+        dispatch(setErrorMessage(error));
       }
     }
   }
@@ -177,7 +179,7 @@ const SettingsScreen = props => {
               //   // }
               // });
             } catch (err) {
-              dispatch(setErrorMessage(err.message));
+              dispatch(setErrorMessage(err));
               setIsVerificationCodeInputVisible(false);
             }
             setConfirm(confirmFn ?? null);

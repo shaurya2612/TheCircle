@@ -51,7 +51,7 @@ const PhoneVerificationScreen = props => {
       setConfirm(confirmation);
       setCodeSent(true);
     } catch (err) {
-      dispatch(setErrorMessage(err.message));
+      dispatch(setErrorMessage(err));
       props.navigation.navigate('PhoneAuthScreen');
     }
   }
@@ -64,7 +64,7 @@ const PhoneVerificationScreen = props => {
       if (error.code === 'auth/invalid-verification-code') {
         error.message = 'Invalid code.';
       }
-      dispatch(setErrorMessage(error.message));
+      dispatch(setErrorMessage(error));
     }
   }
 

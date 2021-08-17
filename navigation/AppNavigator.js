@@ -19,7 +19,6 @@ import auth from '@react-native-firebase/auth';
 import {PhoneAuthStack} from './PhoneAuthStack';
 import database from '@react-native-firebase/database';
 import {checkVersion} from 'react-native-check-version';
-import {setErrorMessage} from '../store/actions/error';
 import NeedsUpdateScreen from '../screens/NeedsUpdateScreen';
 
 const AppNavigator = () => {

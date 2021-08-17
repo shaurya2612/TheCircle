@@ -127,7 +127,7 @@ const SearchFriendsScreen = () => {
       setFriends(friends);
       dispatch(setSearchingForFriends(false));
     } catch (err) {
-      dispatch(setErrorMessage(err.message));
+      dispatch(setErrorMessage(err));
       dispatch(setSearchingForFriends(false));
       setFriends(null);
     }

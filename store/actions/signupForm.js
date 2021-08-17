@@ -84,7 +84,7 @@ export const signupUser = () => {
       dispatch(clearSignupFormData());
       dispatch(setUserState({...userState, isProfileCompleted: true}));
     } catch (err) {
-      dispatch(setErrorMessage(err.message));
+      dispatch(setErrorMessage(err));
       const uid = auth()?.currentUser?.uid;
       if (uid) {
         auth().currentUser.delete();

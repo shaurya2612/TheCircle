@@ -82,7 +82,7 @@ export const fetchUser = () => {
       ]);
       if (!userObjSnapshot.exists()) {
         dispatch(logoutUser());
-        dispatch(setErrorMessage('An error has occured'));
+        dispatch(setErrorMessage({message: 'An error has occured'}));
       }
       const obj = {
         ...userObjSnapshot.val(),
@@ -96,7 +96,7 @@ export const fetchUser = () => {
       const dp = await storage().ref(`/profiles/${uid}/0`).getDownloadURL();
       dispatch({type: SET_DP, payload: dp});
     } catch (err) {
-      dispatch(setErrorMessage(err.message));
+      dispatch(setErrorMessage(err));
     }
   };
 };
@@ -149,7 +149,7 @@ export const fetchUserPhotos = () => {
       }
       dispatch({type: SET_USER_PHOTOS, payload: userPhotos});
     } catch (err) {
-      dispatch(setErrorMessage(err.message));
+      dispatch(setErrorMessage(err));
     }
   };
 };
@@ -205,7 +205,7 @@ export const updateUserPhotos = photos => {
 
       dispatch({type: SET_USER_PHOTOS, payload: userPhotos});
     } catch (err) {
-      dispatch(setErrorMessage(err.message));
+      dispatch(setErrorMessage(err));
     }
     dispatch(stopAppLoading());
   };
@@ -225,7 +225,7 @@ export const fetchUserProfile = () => {
           dispatch({type: SET_USER_PROFILE, payload: snapshot.val()});
         });
     } catch (err) {
-      dispatch(setErrorMessage(err.message));
+      dispatch(setErrorMessage(err));
     }
   };
 };
@@ -243,7 +243,7 @@ export const updateAbout = about => {
       }
       dispatch({type: UPDATE_ABOUT, payload: about === '' ? null : about});
     } catch (err) {
-      dispatch(setErrorMessage(err.message));
+      dispatch(setErrorMessage(err));
     }
   };
 };
@@ -256,7 +256,7 @@ export const updateProfileInfo = (key, value) => {
       await db.ref(`/profiles`).child(uid).child('info').child(key).set(value);
       dispatch({type: UPDATE_PROFILE_INFO, key, payload: value});
     } catch (err) {
-      dispatch(setErrorMessage(err.message));
+      dispatch(setErrorMessage(err));
     }
   };
 };
@@ -269,7 +269,7 @@ export const updateInterestedIn = value => {
       await db.ref(`/interestedIn`).child(uid).set(value);
       dispatch({type: UPDATE_INTERESTED_IN, payload: value});
     } catch (err) {
-      dispatch(setErrorMessage(err.message));
+      dispatch(setErrorMessage(err));
     }
   };
 };
@@ -436,11 +436,11 @@ export const listenForFriends = () => {
       });
       dispatch({type: SET_LISTENING_FOR_FRIENDS, payload: true});
     } catch (err) {
-      dispatch(setErrorMessage(err.message));
+      dispatch(setErrorMessage(err));
       const db = database();
       const {uid} = auth().currentUser;
       const dbRef = db.ref('/friends').child(uid);
-      const dbQuery = dbRef.orderByKey().limitToFirst(numOfResults);
+      const dbQuery = dbRef.orderByKey();
       dbQuery.off();
       dispatch({type: SET_LISTENING_FOR_FRIENDS, payload: false});
     }
@@ -509,7 +509,7 @@ export const listenForMatches = numOfResults => {
 
       dispatch({type: SET_LISTENING_FOR_MATCHES, payload: true});
     } catch (err) {
-      dispatch(setErrorMessage(err.message));
+      dispatch(setErrorMessage(err));
       const db = database();
       const {uid} = auth().currentUser;
       const dbRef = db.ref('/matches').child(uid);
@@ -684,7 +684,7 @@ export const deleteUser = () => {
 
       dispatch({type: CLEAR_REDUX_STATE});
     } catch (err) {
-      dispatch(setErrorMessage(err.message));
+      dispatch(setErrorMessage(err));
     }
     dispatch(stopAppLoading());
     Alert.alert('Your account was deleted');
