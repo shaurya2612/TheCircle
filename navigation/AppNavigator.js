@@ -82,6 +82,7 @@ const AppNavigator = () => {
       {/* update needed */}
       <ReactNativeModal
         backdropTransitionOutTiming={0}
+        useNativeDriver={true}
         style={{margin: 0}}
         isVisible={updateNeeded}>
         <NeedsUpdateScreen {...needsUpdateScreenProps} />
@@ -90,6 +91,7 @@ const AppNavigator = () => {
       {/* loading screen */}
       <ReactNativeModal
         backdropTransitionOutTiming={0}
+        useNativeDriver={true}
         style={{margin: 0}}
         isVisible={appLoading}>
         <LoadingScreen />
@@ -98,6 +100,7 @@ const AppNavigator = () => {
       {/* error screen */}
       <ReactNativeModal
         backdropTransitionOutTiming={0}
+        useNativeDriver={true}
         style={{margin: 0}}
         isVisible={errorMessage === null ? false : true}>
         <ErrorScreen />

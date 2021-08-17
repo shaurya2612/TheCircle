@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   ActivityIndicator,
   ImageBackground,
@@ -32,6 +32,8 @@ import TheCircleLoading from '../../components/svgs/TheCircleLoading';
 import ReactNativeModal from 'react-native-modal';
 import ModalCardView from '../../components/ModalCardView';
 import AvatarCircle from '../../components/AvatarCircle';
+import HowItWorksScreen from './HowItWorksScreen';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 const HomeScreen = props => {
   const userState = useSelector(state => state.user);
@@ -44,6 +46,10 @@ const HomeScreen = props => {
   const isItsAMatchModalVisible = useSelector(
     state => state.loading.isItsAMatchModalVisible,
   );
+  const [isHowItWorksModalVisible, setIsHowItWorksModalVisible] = useState(
+    false,
+  );
+
   useEffect(() => {
     if (!signingUp) {
       dispatch(fetchUser());
@@ -63,40 +69,38 @@ const HomeScreen = props => {
               ...styles.rootView,
               backgroundColor: 'white',
             }}>
-            {/* <CocentricCircles
-              innerCircleColor={colors.primary}
-              outerCircleColor={'pink'}
-              animatableViewProps={{
-                // animation: 'none',
-                iterationCount: 'infinite',
-                iterationDelay: 2000,
-                easing: 'ease-out',
-                delay: 200,
-                style: {
-                  position: 'absolute',
-                  left: '50%',
-                  top: '-20%',
-                  useNativeDriver: true,
-                },
+            <TouchableOpacity
+              style={{
+                position: 'absolute',
+                alignSelf: 'flex-end',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: scale(10),
               }}
-            />
-            <CocentricCircles
-              innerCircleColor={colors.accent}
-              outerCircleColor={'lightblue'}
-              animatableViewProps={{
-                // animation: 'none',
-                iterationCount: 'infinite',
-                iterationDelay: 2000,
-                easing: 'ease-out',
-                delay: 200,
-                style: {
-                  position: 'absolute',
-                  left: '-50%',
-                  bottom: '-20%',
-                  useNativeDriver: true,
-                },
-              }}
-            /> */}
+              onPress={() => {
+                setIsHowItWorksModalVisible(true);
+              }}>
+              <AppText style={{color: 'white'}}>Help</AppText>
+              <FontAwesome5Icon
+                size={scale(15)}
+                style={{marginHorizontal: scale(5), color: 'white'}}
+                name="question"
+              />
+            </TouchableOpacity>
+
+            <ReactNativeModal
+              backdropTransitionOutTiming={0}
+              useNativeDriver={true}
+              onBackButtonPress={() => setIsHowItWorksModalVisible(false)}
+              isVisible={isHowItWorksModalVisible}
+              style={{margin: 0}}>
+              <HowItWorksScreen
+                onPressX={() => {
+                  setIsHowItWorksModalVisible(false);
+                }}
+              />
+            </ReactNativeModal>
             <View style={{flex: 1}} />
             <View
               style={{
