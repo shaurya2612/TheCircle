@@ -34,15 +34,19 @@ const SearchingScreen = () => {
     <LinearGradient
       style={styles.expandedCenterView}
       colors={[colors.primary, colors.accent]}>
-      <TheCircleLoading height={scale(100)} width={scale(100)}/>
-      <AppText style={{color:'white', textAlign:'center'}}>{canCancel ? "You've been put in the waiting list...\n We will notify you as soon as we find someone." :"Searching for a match..."}</AppText>
+      <TheCircleLoading height={scale(100)} width={scale(100)} />
+      <AppText style={{color: 'white', textAlign: 'center'}}>
+        {canCancel
+          ? "You've been put in the waiting list...\n We will notify you as soon as we find someone."
+          : 'Searching for a match...'}
+      </AppText>
       {canCancel ? (
         <FormButton
           title={'Cancel'}
           onPress={() => {
             dispatch(changeUserMatchingStatus(0));
           }}
-          style={{position:"absolute" ,bottom:'30%'}}
+          style={{position: 'absolute', bottom: '30%'}}
         />
       ) : null}
     </LinearGradient>
