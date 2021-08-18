@@ -1,6 +1,6 @@
 {
   "name": "TheCircle_Native",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
