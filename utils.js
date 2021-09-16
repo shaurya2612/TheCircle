@@ -13,3 +13,11 @@ export const bdToAge = DOB => {
 
   return age;
 };
+
+export const getFacebookUid = currentUser => {
+  let fbProviderData = currentUser.providerData.filter(
+    provider => provider.providerId === 'facebook.com',
+  );
+  if (fbProviderData.length == 0) return null;
+  else return fbProviderData[0]['uid'];
+};

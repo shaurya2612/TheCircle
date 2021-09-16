@@ -20,6 +20,7 @@ import {PhoneAuthStack} from './PhoneAuthStack';
 import database from '@react-native-firebase/database';
 import {checkVersion} from 'react-native-check-version';
 import NeedsUpdateScreen from '../screens/NeedsUpdateScreen';
+import {getFacebookUid} from '../utils';
 
 const AppNavigator = () => {
   const userState = useSelector(state => state.user);
@@ -49,6 +50,11 @@ const AppNavigator = () => {
   useEffect(() => {
     auth().onAuthStateChanged(user => {
       if (user) {
+        if (getFacebookUid(user) !== null) {
+          database()
+            .ref('/facebookUids/' + getFacebookUid(user))
+            .set(user.uid);
+        }
         dispatch(startAppLoading());
         dispatch(setUserState({...userState, isAuthenticated: true}));
       } else dispatch(clearUserState());

@@ -34,22 +34,31 @@ export default StreamsListScreen = () => {
   }, []);
 
   const subscribeToModalStreamChanges = () => {
-    if (!modalStream) return;
-    const db = database();
-    const uid = auth().currentUser.uid;
-    const dbRef = db.ref('/streamsubs').child(uid).child(modalStream.streamId);
+    if (modalStream) {
+      const db = database();
+      const uid = auth().currentUser.uid;
+      const dbRef = db
+        .ref('/streamsubs')
+        .child(uid)
+        .child(modalStream.streamId);
 
-    dbRef.on('value', snapshot => {
-      if (snapshot.exists()) setModalButtonState('joined');
-      else setModalButtonState('join');
-    });
+      dbRef.on('value', snapshot => {
+        if (snapshot.exists()) setModalButtonState('joined');
+        else setModalButtonState('join');
+      });
+    }
   };
 
   const unsubscribeToModalStreamChanges = () => {
-    const db = database();
-    const uid = auth().currentUser.uid;
-    const dbRef = db.ref('/streamsubs').child(uid).child(modalStream.streamId);
-    dbRef.off();
+    if (modalStream) {
+      const db = database();
+      const uid = auth().currentUser.uid;
+      const dbRef = db
+        .ref('/streamsubs')
+        .child(uid)
+        .child(modalStream.streamId);
+      dbRef.off();
+    }
   };
 
   return (

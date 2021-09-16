@@ -421,7 +421,9 @@ const SettingsScreen = props => {
             />
             <FormButton
               onPress={() => {
-                setIsVerificationCodeInputVisible(true);
+                if (auth().currentUser.phoneNumber !== null)
+                  setIsVerificationCodeInputVisible(true);
+                else dispatch(deleteUser());
               }}
               style={{backgroundColor: '#ff3217'}}
               textColor="white"

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Circle</string>
+    <string name="facebook_app_id">303977664830361</string>
+    <string name="fb_login_protocol_scheme">fb303977664830361</string>
 </resources>

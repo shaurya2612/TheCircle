@@ -3,6 +3,7 @@ import {
   Button,
   FlatList,
   ImageBackground,
+  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -21,7 +22,10 @@ import ModalCardView from '../../components/ModalCardView';
 import Icon from 'react-native-vector-icons/Feather';
 import {privacyPolicy, termsOfUse} from '../../constants/official';
 import CustomSafeAreaView from '../../components/CustomSafeAreaView';
-import Svg, {Polygon, Text as SvgText, TextPath} from 'react-native-svg';
+import SocialButton from '../../components/SocialButton';
+import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
+import auth from '@react-native-firebase/auth';
+import SimpleToast from 'react-native-simple-toast';
 
 const LoginScreen = props => {
   const [
@@ -32,6 +36,39 @@ const LoginScreen = props => {
   const [isTermsOfUseModalVisible, setIsTermsOfUseModalVisible] = useState(
     false,
   );
+
+  const onFacebookButtonPress = async () => {
+    try {
+      // Attempt login with permissions
+      const result = await LoginManager.logInWithPermissions([
+        'public_profile',
+        'email',
+        'user_friends',
+      ]);
+
+      if (result.isCancelled) {
+        throw 'User cancelled the login process';
+      }
+
+      // Once signed in, get the users AccesToken
+      const data = await AccessToken.getCurrentAccessToken();
+
+      if (!data) {
+        throw 'Something went wrong obtaining access token';
+      }
+
+      // Create a Firebase credential with the AccessToken
+      const facebookCredential = auth.FacebookAuthProvider.credential(
+        data.accessToken,
+      );
+
+      // Sign-in the user with the credential
+      return auth().signInWithCredential(facebookCredential);
+    } catch (err) {
+      SimpleToast.show('An error occurred. Please try again.');
+      console.log(err);
+    }
+  };
 
   return (
     <LinearGadient
@@ -86,19 +123,28 @@ const LoginScreen = props => {
               textAlign: 'center',
               fontFamily: 'Quicksand-Bold',
             }}>
-            {"Circle"}
+            {'Circle'}
           </AppText>
         </Animatable.View>
         <Animatable.View
           style={{...styles.centerView, flex: 1.5}}
           animation={'slideInUp'}>
           <View style={{height: '20%'}} />
-          <StartMatchingButton
-            style={{alignSelf: 'center'}}
+          <SocialButton
+            style={localStyles.socialButton}
             onPress={() => {
               props.navigation.navigate('PhoneAuthScreen');
             }}
             title={'Sign in via phone'}
+          />
+          <SocialButton
+            style={localStyles.socialButton}
+            onPress={() => {
+              onFacebookButtonPress().then(() => {
+                console.warn('signed in with facebook');
+              });
+            }}
+            title={'Sign in via facebook'}
           />
           <View
             style={{
@@ -133,5 +179,12 @@ const LoginScreen = props => {
     </LinearGadient>
   );
 };
+
+const localStyles = StyleSheet.create({
+  socialButton: {
+    alignSelf: 'center',
+    marginVertical: verticalScale(8),
+  },
+});
 
 export default LoginScreen;

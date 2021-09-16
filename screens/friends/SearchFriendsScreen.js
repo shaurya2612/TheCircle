@@ -29,6 +29,9 @@ import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import LostSvg from '../../assets/svgs/lost.svg';
 import colors from '../../constants/colors';
+import {GraphRequest, GraphRequestManager} from 'react-native-fbsdk-next';
+import {getFacebookUid} from '../../utils';
+import SimpleToast from 'react-native-simple-toast';
 
 const SearchFriendsScreen = () => {
   const loadingState = useSelector(state => state.loading);
@@ -112,6 +115,23 @@ const SearchFriendsScreen = () => {
       setCheckingStatus(true);
     } else setCheckingStatus(false);
   }, [isFriend, inRequests, sentRequest]);
+
+  useEffect(() => {
+    const facebookUid = auth().currentUser.providerData[0].uid;
+    const facebookFriendsReq = new GraphRequest(
+      `/me/friends`,
+      null,
+      (error, result) => {
+        if (error) {
+          console.log('Error fetching data: ' + JSON.stringify(error));
+          SimpleToast.show('Error fetching data');
+        } else {
+          console.log('Success fetching data: ' + JSON.stringify(result));
+        }
+      },
+    );
+    new GraphRequestManager().addRequest(facebookFriendsReq).start();
+  }, []);
 
   const searchFriendHandler = async () => {
     if (nameOrUsername.trim().length === 0) {

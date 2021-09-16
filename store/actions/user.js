@@ -405,7 +405,7 @@ export const listenForFriends = () => {
         if (!snapshot.exists()) {
           return;
         }
-
+        console.warn(snapshot.key);
         let [name, username, dp] = await Promise.all([
           db.ref('/users').child(snapshot.key).child('name').once('value'),
           db
@@ -462,7 +462,7 @@ export const listenForMatches = numOfResults => {
 
       dbQuery.on('child_added', async snapshot => {
         if (!snapshot.exists()) return;
-
+        console.warn(snapshot.key);
         let [name, dp, unseen] = await Promise.all([
           db.ref('/users').child(snapshot.key).child('name').once('value'),
           storage()
