@@ -1,5 +1,5 @@
 import {Platform} from 'react-native';
-import {isUsernameValid, uploadUserPhotos} from '../../firebase/utils';
+import {isUsernameValid, uploadUserPhotos} from '../../firebase/util';
 import {setErrorMessage} from './error';
 import {setSigningUp, startAppLoading, stopAppLoading} from './loading';
 import {loginUser, setUserState} from './user';

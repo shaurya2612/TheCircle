@@ -5,7 +5,7 @@ import {
   unfriend,
   unmatch,
   uploadUserPhotos,
-} from '../../firebase/utils';
+} from '../../firebase/util';
 import {bdToAge, CLEAR_REDUX_STATE} from '../../utils';
 import {setErrorMessage} from './error';
 import {startAppLoading, stopAppLoading} from './loading';

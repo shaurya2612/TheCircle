@@ -31,7 +31,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import ReactNativeModal from 'react-native-modal';
 import NameText from '../../components/NameText';
 import ModalCardView from '../../components/ModalCardView';
-import {unmatch} from '../../firebase/utils';
+import {unmatch} from '../../firebase/util';
 import CustomSafeAreaView from '../../components/CustomSafeAreaView';
 // const data = [
 //   {

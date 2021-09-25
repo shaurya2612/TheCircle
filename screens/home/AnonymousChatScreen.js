@@ -39,7 +39,7 @@ import colors from '../../constants/colors';
 import {scale, verticalScale} from 'react-native-size-matters';
 import Modal from 'react-native-modalbox';
 import CueCardsScreen from '../CueCardsScreen';
-import {setUserIsTyping} from '../../firebase/utils';
+import {setUserIsTyping} from '../../firebase/util';
 import auth from '@react-native-firebase/auth';
 import {launchImageLibrary} from 'react-native-image-picker';
 import ImageChatFooter from '../../components/chat/ImageChatFooter';

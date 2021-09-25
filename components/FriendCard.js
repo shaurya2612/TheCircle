@@ -12,7 +12,7 @@ import * as Animatable from 'react-native-animatable';
 import {scale, verticalScale} from 'react-native-size-matters';
 import {useDispatch} from 'react-redux';
 import colors from '../constants/colors';
-import {declineRequest, sendFriendRequest} from '../firebase/utils';
+import {declineRequest, sendFriendRequest} from '../firebase/util';
 import {setErrorMessage} from '../store/actions/error';
 import {acceptRequest} from '../store/actions/user';
 import styles from '../styles';

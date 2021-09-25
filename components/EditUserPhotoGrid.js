@@ -22,7 +22,7 @@ import {setSignupFormData} from '../store/actions/signupForm';
 import colors from '../constants/colors';
 import {forwardRef} from 'react';
 import {useImperativeHandle} from 'react';
-import {uploadUserPhotos} from '../firebase/utils';
+import {uploadUserPhotos} from '../firebase/util';
 import {setUserState, updateUserPhotos} from '../store/actions/user';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {setErrorMessage} from '../store/actions/error';

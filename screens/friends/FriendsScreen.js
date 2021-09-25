@@ -16,7 +16,7 @@ import styles from '../../styles';
 import NameText from '../../components/NameText';
 import {useDispatch, useSelector} from 'react-redux';
 import {listenForFriends, loadMoreFriends} from '../../store/actions/user';
-import {unfriend} from '../../firebase/utils';
+import {unfriend} from '../../firebase/util';
 import colors from '../../constants/colors';
 import LinearGradient from 'react-native-linear-gradient';
 import AvatarCircle from '../../components/AvatarCircle';

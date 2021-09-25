@@ -47,7 +47,7 @@ import {
 import MatchProfileScreen from './MatchProfileScreen';
 import CueCardsScreen from '../CueCardsScreen';
 import ReactNativeModal from 'react-native-modal';
-import {setUserIsTyping} from '../../firebase/utils';
+import {setUserIsTyping} from '../../firebase/util';
 import auth from '@react-native-firebase/auth';
 import ImageChatFooter from '../../components/chat/ImageChatFooter';
 import {launchImageLibrary} from 'react-native-image-picker';

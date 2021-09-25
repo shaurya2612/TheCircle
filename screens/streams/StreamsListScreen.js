@@ -19,7 +19,7 @@ import StreamsListItem, {
 } from '../../components/StreamsListItem';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
-import {joinStream, leaveStream} from '../../firebase/utils';
+import {joinStream, leaveStream} from '../../firebase/util';
 import {fetchAllStreams} from '../../store/actions/streams';
 import styles from '../../styles';
 

@@ -13,7 +13,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setSignupFormData} from '../../store/actions/signupForm';
 import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
 import ProgressLine from '../../components/ProgressLine';
-import {isUsernameValid} from '../../firebase/utils';
+import {isUsernameValid} from '../../firebase/util';
 import {setLoadingState} from '../../store/actions/loading';
 import colors from '../../constants/colors';
 import CocentricCircles from '../../components/svgs/CocentricCircles';

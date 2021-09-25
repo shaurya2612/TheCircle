@@ -18,7 +18,7 @@ import FormButton from '../../components/FormButton';
 import {
   searchFriendByUsername,
   searchFriendsByNameOrUsername,
-} from '../../firebase/utils';
+} from '../../firebase/util';
 import {useDispatch, useSelector} from 'react-redux';
 import {setSearchingForFriends} from '../../store/actions/loading';
 import {setErrorMessage} from '../../store/actions/error';
@@ -36,6 +36,7 @@ import SimpleToast from 'react-native-simple-toast';
 const SearchFriendsScreen = () => {
   const loadingState = useSelector(state => state.loading);
   const searchingForFriends = loadingState.searchingForFriends;
+  const facebookRecommendations = [];
   const [friends, setFriends] = useState(null);
   const [nameOrUsername, setNameOrUsername] = useState('');
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
@@ -117,14 +118,13 @@ const SearchFriendsScreen = () => {
   }, [isFriend, inRequests, sentRequest]);
 
   useEffect(() => {
-    const facebookUid = auth().currentUser.providerData[0].uid;
     const facebookFriendsReq = new GraphRequest(
       `/me/friends`,
       null,
       (error, result) => {
         if (error) {
           console.log('Error fetching data: ' + JSON.stringify(error));
-          SimpleToast.show('Error fetching data');
+          SimpleToast.show('An error has occured, please try again later');
         } else {
           console.log('Success fetching data: ' + JSON.stringify(result));
         }

@@ -1,5 +1,3 @@
-import {PermissionsAndroid} from 'react-native';
-
 export const CLEAR_REDUX_STATE = 'CLEAR_REDUX_STATE';
 
 export const bdToAge = DOB => {
