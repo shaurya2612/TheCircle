@@ -24,6 +24,7 @@ export const SearchBar = ({placeholder, textInputStyle, ...props}) => {
         {...props}
         style={{width: '80%', ...(textInputStyle || {})}}
         placeholder={placeholder}
+        selectionColor="#ccc"
       />
     </View>
   );

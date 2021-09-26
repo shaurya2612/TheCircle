@@ -10,33 +10,42 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {scale, verticalScale} from 'react-native-size-matters';
 import Icon from 'react-native-vector-icons/Feather';
-import AppText from '../../components/AppText';
-import FriendCard from '../../components/FriendCard';
-import SearchBar from '../../components/SearchBar';
-import styles from '../../styles';
-import FormButton from '../../components/FormButton';
+import AppText from '../../../components/AppText';
+import FriendCard from '../../../components/FriendCard';
+import SearchBar from '../../../components/SearchBar';
+import styles from '../../../styles';
+import FormButton from '../../../components/FormButton';
 import {
   searchFriendByUsername,
   searchFriendsByNameOrUsername,
-} from '../../firebase/util';
+} from '../../../firebase/util';
 import {useDispatch, useSelector} from 'react-redux';
-import {setSearchingForFriends} from '../../store/actions/loading';
-import {setErrorMessage} from '../../store/actions/error';
-import FriendsListItem from '../../components/FriendsListItem';
+import {setSearchingForFriends} from '../../../store/actions/loading';
+import {setErrorMessage} from '../../../store/actions/error';
+import FriendsListItem from '../../../components/FriendsListItem';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import ReactNativeModal from 'react-native-modal';
 import database from '@react-native-firebase/database';
+import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';
-import LostSvg from '../../assets/svgs/lost.svg';
-import colors from '../../constants/colors';
+import LostSvg from '../../../assets/svgs/lost.svg';
+import colors from '../../../constants/colors';
 import {GraphRequest, GraphRequestManager} from 'react-native-fbsdk-next';
-import {getFacebookUid} from '../../utils';
+import {getFacebookUid} from '../../../utils';
 import SimpleToast from 'react-native-simple-toast';
+import {
+  fetchFacebookFriends,
+  fetchFacebookRecommendations,
+} from '../../../utils/services/facebook';
+import {setFacebookRecommendations} from '../../../store/actions/recommendations';
+import RecommendationsList from './RecommendationsList';
 
 const SearchFriendsScreen = () => {
   const loadingState = useSelector(state => state.loading);
+  const facebookRecommendations = useSelector(
+    state => state.recommendations.facebook,
+  );
   const searchingForFriends = loadingState.searchingForFriends;
-  const facebookRecommendations = [];
   const [friends, setFriends] = useState(null);
   const [nameOrUsername, setNameOrUsername] = useState('');
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
@@ -118,20 +127,15 @@ const SearchFriendsScreen = () => {
   }, [isFriend, inRequests, sentRequest]);
 
   useEffect(() => {
-    const facebookFriendsReq = new GraphRequest(
-      `/me/friends`,
-      null,
-      (error, result) => {
-        if (error) {
-          console.log('Error fetching data: ' + JSON.stringify(error));
-          SimpleToast.show('An error has occured, please try again later');
-        } else {
-          console.log('Success fetching data: ' + JSON.stringify(result));
-        }
-      },
-    );
-    new GraphRequestManager().addRequest(facebookFriendsReq).start();
-  }, []);
+    fetchFacebookRecommendations()
+      .then(recommendations => {
+        dispatch(setFacebookRecommendations(recommendations));
+      })
+      .catch(error => {
+        console.error(error);
+        SimpleToast.show('An error occured, Please try again later');
+      });
+  }, [dispatch]);
 
   const searchFriendHandler = async () => {
     if (nameOrUsername.trim().length === 0) {
@@ -277,11 +281,11 @@ const SearchFriendsScreen = () => {
         ) : (
           //When keyboard is visible or searchBar is empty
           <TouchableWithoutFeedback
-            style={{...styles.rootView, backgroundColor: 'blue'}}
+            style={styles.rootView}
             onPress={() => {
               Keyboard.dismiss();
             }}>
-            <View />
+            <RecommendationsList />
           </TouchableWithoutFeedback>
         )}
       </View>

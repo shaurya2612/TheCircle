@@ -8,6 +8,14 @@ import firestore from '@react-native-firebase/firestore';
 import functions from '@react-native-firebase/functions';
 import {ASIA_SOUTH1} from '../store/actions/matching';
 
+//Relation states, No relation resolves to null
+export const relations = {
+  USER_RECEIVED_REQUEST: 'USER_RECEIVED_REQUEST',
+  USER_SENT_REQUEST: 'USER_SENT_REQUEST',
+  FRIENDS: 'FRIENDS',
+  NONE: null,
+};
+
 export const isUsernameValid = async username => {
   const db = database();
   const snapshot = await db.ref('/usernames').child(username).once('value');
@@ -47,44 +55,44 @@ export const searchFriendByUsername = async username => {
   return {id: friendId, name: name.val(), dp};
 };
 
-// export const checkRelation = async (userId, targetUserId) => {
-//   //check if the person is in your requests
-//   const db = database();
-//   let isPersonInMyRequests = (
-//     await db
-//       .ref("/requests")
-//       .child(userId)
-//       .orderByValue()
-//       .equalTo(targetUserId)
-//       .limitToFirst(1)
-//       .once("value")
-//   ).exists();
+export const checkRelation = async (userId, targetUserId) => {
+  //check if the person is in your requests
+  const db = database();
+  let isPersonInMyRequests = (
+    await db
+      .ref('/requests')
+      .child(userId)
+      .orderByValue()
+      .equalTo(targetUserId)
+      .limitToFirst(1)
+      .once('value')
+  ).exists();
 
-//   if (isPersonInMyRequests) {
-//     return "inRequests";
-//   }
-//   //check if you have sent the person a request
-//   let sentRequest = (
-//     await db
-//       .ref("/requests")
-//       .child(targetUserId)
-//       .orderByValue()
-//       .equalTo(userId)
-//       .limitToFirst(1)
-//       .once("value")
-//   ).exists();
-//   if (sentRequest) {
-//     return "sentRequest";
-//   }
-//   //check if you are already friends
-//   const isFriend = (
-//     await db.ref("/friends").child(userId).child(targetUserId).once("value")
-//   ).exists();
-//   if (isFriend) {
-//     return "isFriend";
-//   }
-//   return null;
-// };
+  if (isPersonInMyRequests) {
+    return relations.USER_RECEIVED_REQUEST;
+  }
+  //check if you have sent the person a request
+  let sentRequest = (
+    await db
+      .ref('/requests')
+      .child(targetUserId)
+      .orderByValue()
+      .equalTo(userId)
+      .limitToFirst(1)
+      .once('value')
+  ).exists();
+  if (sentRequest) {
+    return relations.USER_SENT_REQUEST;
+  }
+  //check if you are already friends
+  const isFriend = (
+    await db.ref('/friends').child(userId).child(targetUserId).once('value')
+  ).exists();
+  if (isFriend) {
+    return relations.FRIENDS;
+  }
+  return relations.NONE;
+};
 
 export const searchFriendsByNameOrUsername = async (
   nameOrUsername,
