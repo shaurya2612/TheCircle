@@ -15,6 +15,7 @@ export const FriendsListItem = ({
   onPress,
   username,
   age,
+  ...props
 }) => {
   return (
     <TouchableOpacity

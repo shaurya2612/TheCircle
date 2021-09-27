@@ -23,6 +23,7 @@ FontAwesome5Icon.getStyledIconSet('solid').loadFont();
 Text.defaultProps = {
   ...(Text.defaultProps || {}),
   allowFontScaling: false,
+  includeFontPadding: false,
 };
 TextInput.defaultProps = {
   ...(TextInput.defaultProps || {}),

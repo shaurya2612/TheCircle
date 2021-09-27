@@ -7,7 +7,7 @@ import {
 } from 'react-native-size-matters';
 import colors from './constants/colors';
 
-const styles = StyleSheet.create({
+const gstyles = StyleSheet.create({
   centerView: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     flexWrap: 'nowrap',
     // width:"100%"
   },
-  nameText: {fontSize: scale(17)},
+  nameText: {fontSize: scale(17), fontFamily: 'Quicksand-Medium'},
   lastMessageText: {fontSize: scale(12), color: 'grey'},
   usernameText: {fontSize: scale(15), color: 'grey'},
   chatComposerText: {fontSize: scale(15)},
@@ -182,4 +182,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default styles;
+export default gstyles;

@@ -3,12 +3,14 @@ import database from '@react-native-firebase/database';
 import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';
 import {checkRelation} from '../../firebase/util';
+import {getFacebookUid} from '..';
 
 export const fetchFacebookFriends = () => {
   //Only fetches friends of users that are using the app
   return new Promise((resolve, reject) => {
+    const facebookUid = getFacebookUid(auth().currentUser);
     const facebookFriendsReq = new GraphRequest(
-      `/me/friends`,
+      `/${facebookUid}/friends`,
       null,
       (error, result) => {
         if (error) {

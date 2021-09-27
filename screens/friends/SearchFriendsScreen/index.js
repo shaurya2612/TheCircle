@@ -285,7 +285,7 @@ const SearchFriendsScreen = () => {
             onPress={() => {
               Keyboard.dismiss();
             }}>
-            <RecommendationsList />
+            <RecommendationsList data={facebookRecommendations} />
           </TouchableWithoutFeedback>
         )}
       </View>
