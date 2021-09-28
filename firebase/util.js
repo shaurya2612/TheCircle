@@ -6,7 +6,8 @@ import {Platform} from 'react-native';
 import {serverKey} from './config';
 import firestore from '@react-native-firebase/firestore';
 import functions from '@react-native-firebase/functions';
-import {ASIA_SOUTH1} from '../store/actions/matching';
+
+export const ASIA_SOUTH1 = 'asia-south1';
 
 //Relation states, No relation resolves to null
 export const relations = {
@@ -59,13 +60,7 @@ export const checkRelation = async (userId, targetUserId) => {
   //check if the person is in your requests
   const db = database();
   let isPersonInMyRequests = (
-    await db
-      .ref('/requests')
-      .child(userId)
-      .orderByValue()
-      .equalTo(targetUserId)
-      .limitToFirst(1)
-      .once('value')
+    await db.ref('/requests').child(userId).child(targetUserId).once('value')
   ).exists();
 
   if (isPersonInMyRequests) {
@@ -73,13 +68,7 @@ export const checkRelation = async (userId, targetUserId) => {
   }
   //check if you have sent the person a request
   let sentRequest = (
-    await db
-      .ref('/requests')
-      .child(targetUserId)
-      .orderByValue()
-      .equalTo(userId)
-      .limitToFirst(1)
-      .once('value')
+    await db.ref('/requests').child(targetUserId).child(userId).once('value')
   ).exists();
   if (sentRequest) {
     return relations.USER_SENT_REQUEST;
@@ -169,6 +158,13 @@ export const sendFriendRequest = async receiverId => {
     .child(receiverId)
     .child(uid)
     .set(database.ServerValue.TIMESTAMP);
+  await sendFCM(receiverId, {
+    data: {
+      type: 'relation',
+      sender: auth().currentUser.uid,
+      status: relations.USER_RECEIVED_REQUEST,
+    },
+  });
 };
 
 export const fetchNameAgeUsernameDpById = async id => {
@@ -274,4 +270,13 @@ export const leaveStream = async streamId => {
       if (currentMembers === null) return 0;
       else return currentMembers - 1;
     });
+};
+
+export const sendFCM = async (receiverId, payload) => {
+  await functions()
+    .app.functions(ASIA_SOUTH1)
+    .httpsCallable('sendNotification')({
+    receiverId: receiverId,
+    payload: payload,
+  });
 };

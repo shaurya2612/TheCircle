@@ -21,7 +21,6 @@ import CustomSend from '../../components/chat/CustomSend';
 import AnonymousChatHeader from '../../components/chat/AnonymousChatHeader';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  ASIA_SOUTH1,
   changeUserMatchingStatus,
   configureAnonymousChatRoom,
   onSkipButtonPress,

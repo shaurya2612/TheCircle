@@ -14,6 +14,7 @@ import functions from '@react-native-firebase/functions';
 // } from '@react-native-firebase/admob';
 import {Platform} from 'react-native';
 import {setAdOpened, setLoadingAd} from './loading';
+import {ASIA_SOUTH1, sendFCM} from '../../firebase/util';
 
 export const SET_USER_MATCHING_STATUS = 'SET_USER_MATCHING_STATUS';
 export const SET_CHAT_ROOM = 'SET_CHAT_ROOM';
@@ -28,7 +29,6 @@ export const ADD_EARLIER_MESSAGES_IN_ANONYMOUS_CHAT_ROOM =
   'ADD_EARLIER_MESSAGES_IN_ANONYMOUS_CHAT_ROOM';
 export const SET_LISTENING_FOR_ANONYMOUS_CHAT_ROOM =
   'SET_LISTENING_FOR_ANONYMOUS_CHAT_ROOM';
-export const ASIA_SOUTH1 = 'asia-south1';
 
 export const listenForUserMatchingStatus = () => {
   return (dispatch, getState) => {
@@ -275,15 +275,10 @@ export const sendMessageInAnonymousChatRoom = messages => {
     }
     await Promise.all(promisesArr);
     try {
-      await functions()
-        .app.functions(ASIA_SOUTH1)
-        .httpsCallable('sendNotification')({
-        receiverId: FOF.id,
-        payload: {
-          notification: {
-            title: 'New Message 💬',
-            body: 'New message in chat room',
-          },
+      await sendFCM(FOF.id, {
+        notification: {
+          title: 'New Message 💬',
+          body: 'New message in chat room',
         },
       });
     } catch (err) {}
@@ -345,22 +340,12 @@ export const startListeningForAnonymousChatRoom = () => {
     const uid = auth().currentUser.uid;
     const db = database();
 
-    console.warn('started listening for', FOF.id);
     //listen for chat room pairing (in case the other person is not in the chat room OR skips)
     db.ref('/chatRooms')
       .child(FOF.id)
       .on('value', snapshot => {
         //user has been skipped
         if (snapshot.val() !== uid) {
-          console.warn(
-            'Skipped due to xyz',
-            'found:',
-            snapshot.val(),
-            'for FOF: ',
-            FOF.id,
-            'I am: ',
-            uid,
-          );
           dispatch(skipThisFOF(true, false));
         }
       });
@@ -422,7 +407,6 @@ export const skipThisFOF = (keepChats = false, sendNotification = true) => {
     db.ref('/messages').child(refString).off();
     db.ref('/isOnline').child(FOF.id).off();
     db.ref('/isTyping').child(FOF.id).off();
-    console.warn('Listener for', FOF.id, 'was closed');
     //////////////////////////////////////////////////////////////////////////////////
 
     //check if FOF is in matches
@@ -463,7 +447,6 @@ export const onSkipButtonPress = () => {
     db.ref('/messages').child(refString).off();
     db.ref('/isOnline').child(FOF.id).off();
     db.ref('/isTyping').child(FOF.id).off();
-    console.warn('Listener for', FOF.id, 'was closed');
     //////////////////////////////////////////////////////////////////////////////////
 
     const instance = functions()

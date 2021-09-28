@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {scale, verticalScale} from 'react-native-size-matters';
+import colors from '../../../../constants/colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -38,10 +39,21 @@ const styles = StyleSheet.create({
     paddingVertical: scale(8),
     paddingHorizontal: scale(12),
     borderRadius: scale(100),
-    // borderWidth: StyleSheet.hairlineWidth,
+    width: '90%',
   },
-  text: {
+  addFriend: {backgroundColor: colors.primary},
+  addFriendText: {
     color: '#fff',
+    fontSize: scale(12),
+    fontFamily: 'Quicksand-Bold',
+  },
+  pending: {
+    backgroundColor: '#fff',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: '#ccc',
+  },
+  pendingText: {
+    color: '#000',
     fontSize: scale(12),
     fontFamily: 'Quicksand-Bold',
   },

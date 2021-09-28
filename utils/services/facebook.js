@@ -60,6 +60,7 @@ export const fetchFacebookRecommendations = () => {
                 return Promise.all([name, username, dp, status, uid]);
               })
               .then(([name, username, dp, status, uid]) => {
+                console.warn('apap', status);
                 return {
                   name: name.val(),
                   username: Object.keys(username.val())[0],

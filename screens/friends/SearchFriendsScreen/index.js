@@ -42,9 +42,6 @@ import RecommendationsList from './RecommendationsList';
 
 const SearchFriendsScreen = () => {
   const loadingState = useSelector(state => state.loading);
-  const facebookRecommendations = useSelector(
-    state => state.recommendations.facebook,
-  );
   const searchingForFriends = loadingState.searchingForFriends;
   const [friends, setFriends] = useState(null);
   const [nameOrUsername, setNameOrUsername] = useState('');
@@ -285,7 +282,7 @@ const SearchFriendsScreen = () => {
             onPress={() => {
               Keyboard.dismiss();
             }}>
-            <RecommendationsList data={facebookRecommendations} />
+            <RecommendationsList />
           </TouchableWithoutFeedback>
         )}
       </View>

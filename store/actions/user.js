@@ -1,4 +1,5 @@
 import {
+  ASIA_SOUTH1,
   declineRequest,
   fetchNameAgeUsernameDpById,
   leaveStream,
@@ -14,7 +15,7 @@ import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import messaging from '@react-native-firebase/messaging';
-import {ASIA_SOUTH1, changeUserMatchingStatus, skipThisFOF} from './matching';
+import {changeUserMatchingStatus, skipThisFOF} from './matching';
 import {Alert} from 'react-native';
 import functions from '@react-native-firebase/functions';
 
@@ -405,7 +406,6 @@ export const listenForFriends = () => {
         if (!snapshot.exists()) {
           return;
         }
-        console.warn(snapshot.key);
         let [name, username, dp] = await Promise.all([
           db.ref('/users').child(snapshot.key).child('name').once('value'),
           db
@@ -462,7 +462,6 @@ export const listenForMatches = numOfResults => {
 
       dbQuery.on('child_added', async snapshot => {
         if (!snapshot.exists()) return;
-        console.warn(snapshot.key);
         let [name, dp, unseen] = await Promise.all([
           db.ref('/users').child(snapshot.key).child('name').once('value'),
           storage()

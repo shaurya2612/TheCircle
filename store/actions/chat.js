@@ -5,7 +5,7 @@ import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import {Platform} from 'react-native';
 import functions from '@react-native-firebase/functions';
-import {ASIA_SOUTH1} from './matching';
+import {sendFCM} from '../../firebase/util';
 
 export const SET_LISTENING_FOR_CHAT = 'SET_LISTENING_FOR_CHAT';
 export const ADD_MESSAGE_IN_CHAT = 'ADD_MESSAGE_IN_CHAT';
@@ -169,15 +169,10 @@ export const sendMessageToMatch = messages => {
 
     await Promise.all(promisesArr);
     try {
-      await functions()
-        .app.functions(ASIA_SOUTH1)
-        .httpsCallable('sendNotification')({
-        receiverId: match.id,
-        payload: {
-          notification: {
-            title: 'New Message 💬',
-            body: 'New message from match',
-          },
+      await sendFCM(match.id, {
+        notification: {
+          title: 'New Message 💬',
+          body: 'New message from match',
         },
       });
     } catch (err) {}

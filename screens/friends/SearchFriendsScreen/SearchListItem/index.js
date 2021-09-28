@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {scale} from 'react-native-size-matters';
 import AppText from '../../../../components/AppText';
@@ -8,22 +8,21 @@ import gstyles from '../../../../styles';
 import ButtonContainer from './ButtonContainer';
 import styles from './styles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useSelector} from 'react-redux';
 
-const SearchListItem = ({
-  imageUri,
-  name,
-  userId,
-  onPress,
-  username,
-  age,
-  ...props
-}) => {
+const SearchListItem = ({userId, onPress, ...props}) => {
+  const facebookRecommendationData = useSelector(
+    state => state.recommendations.facebook.byIds?.[userId] || {},
+  );
+  const {name, username, uid, status, dp} = facebookRecommendationData;
+
+  if (!facebookRecommendationData) return null;
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={[styles.row, {flex: 1}]}>
         <View style={styles.avatarContainer}>
           {/* Avatar */}
-          <AvatarCircle disabled size={scale(65)} source={{uri: imageUri}} />
+          <AvatarCircle disabled size={scale(65)} source={{uri: dp}} />
         </View>
 
         <View style={styles.textContainer}>
@@ -35,14 +34,14 @@ const SearchListItem = ({
             <View style={[styles.iconContainer]}>
               {true ? (
                 <MaterialCommunityIcons
-                  size={scale(17)}
+                  size={scale(15)}
                   name="facebook"
                   style={styles.icon}
                 />
               ) : null}
               {true ? (
                 <MaterialCommunityIcons
-                  size={scale(17)}
+                  size={scale(15)}
                   name="phone"
                   style={styles.icon}
                 />
@@ -56,7 +55,7 @@ const SearchListItem = ({
           </AppText>
         </View>
 
-        <ButtonContainer />
+        <ButtonContainer uid={uid} />
       </View>
 
       {/* <View style={{height: 10, width: 10, backgroundColor: 'red'}}></View> */}

@@ -8,7 +8,7 @@ import MatchesListScreen from '../screens/matches/MatchesListScreen';
 import FriendsTopTab from './FriendsTopTab';
 import EditProfileScreen from '../screens/user/EditProfileScreen';
 import AvatarCircle from '../components/AvatarCircle';
-import {Text, View} from 'react-native';
+import {Alert, Text, View} from 'react-native';
 import styles from '../styles';
 import CurrentUserProfileStack from './UserProfileStack';
 import HomeStack from './HomeStack';
@@ -19,6 +19,7 @@ import messaging from '@react-native-firebase/messaging';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import crashlytics from '@react-native-firebase/crashlytics';
+import {FCMMessageHandler} from '../store/actions/pubsub';
 
 const MainAppBottomTabNavigator = createBottomTabNavigator();
 
@@ -48,6 +49,14 @@ const MainAppBottomTab = () => {
     // Listen to whether the token changes
     const unsubscribe = messaging().onTokenRefresh(token => {
       saveTokenToDatabase(token);
+    });
+
+    return unsubscribe;
+  }, [dispatch]);
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(remoteMessage => {
+      dispatch(FCMMessageHandler(remoteMessage));
     });
 
     return unsubscribe;
