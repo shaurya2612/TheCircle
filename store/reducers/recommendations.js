@@ -28,7 +28,7 @@ export default (state = initialState, action) => {
       if (newFacebookByIds?.[uid]) {
         newFacebookByIds[uid].status = status;
       }
-
+      console.warn('changing rec', newFacebookByIds);
       let newContactsByIds = state.contacts.byIds;
       if (newContactsByIds?.[uid]) {
         newContactsByIds[uid].status = status;

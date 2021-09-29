@@ -3,6 +3,8 @@ import {
   declineRequest,
   fetchNameAgeUsernameDpById,
   leaveStream,
+  relations,
+  sendFCM,
   unfriend,
   unmatch,
   uploadUserPhotos,
@@ -516,26 +518,6 @@ export const listenForMatches = numOfResults => {
       dbQuery.off();
       dispatch({type: SET_LISTENING_FOR_MATCHES, payload: false});
     }
-  };
-};
-
-export const acceptRequest = friendId => {
-  return async (dispatch, getState) => {
-    const {uid} = auth().currentUser;
-    const db = database();
-
-    const gender = await db.ref('/genders').child(friendId).once('value');
-    if (!gender.exists()) {
-      //User is deleted
-      return;
-    }
-    db.ref('/friends').child(uid).child(friendId).set(gender.val());
-
-    //add user in the friends list of accepted friend
-    const userState = getState().user;
-    db.ref('/friends').child(friendId).child(uid).set(userState.gender);
-
-    db.ref('/requests').child(uid).child(friendId).remove();
   };
 };
 

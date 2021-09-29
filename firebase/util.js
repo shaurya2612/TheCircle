@@ -6,6 +6,7 @@ import {Platform} from 'react-native';
 import {serverKey} from './config';
 import firestore from '@react-native-firebase/firestore';
 import functions from '@react-native-firebase/functions';
+import SimpleToast from 'react-native-simple-toast';
 
 export const ASIA_SOUTH1 = 'asia-south1';
 
@@ -14,7 +15,7 @@ export const relations = {
   USER_RECEIVED_REQUEST: 'USER_RECEIVED_REQUEST',
   USER_SENT_REQUEST: 'USER_SENT_REQUEST',
   FRIENDS: 'FRIENDS',
-  NONE: null,
+  NONE: 'NONE',
 };
 
 export const isUsernameValid = async username => {
@@ -161,7 +162,7 @@ export const sendFriendRequest = async receiverId => {
   await sendFCM(receiverId, {
     data: {
       type: 'relation',
-      sender: auth().currentUser.uid,
+      senderId: auth().currentUser.uid,
       status: relations.USER_RECEIVED_REQUEST,
     },
   });
@@ -189,10 +190,50 @@ export const fetchNameAgeUsernameDpById = async id => {
   };
 };
 
+export const acceptRequest = async friendId => {
+  const {uid} = auth().currentUser;
+  const db = database();
+
+  const friendGender = await db.ref('/genders').child(friendId).once('value');
+  if (!friendGender.exists()) {
+    //User is deleted
+    return;
+  }
+  db.ref('/friends').child(uid).child(friendId).set(friendGender.val());
+
+  //add user in the friends list of accepted friend
+
+  db.ref('/genders')
+    .child(uid)
+    .once('value')
+    .then(userGender => {
+      userGender = userGender.val();
+      console.warn('usergender', userGender);
+      db.ref('/friends').child(friendId).child(uid).set(userGender);
+    })
+    .catch(error => {
+      console.error(error);
+      SimpleToast.show('An error occured, please try again later');
+    });
+
+  db.ref('/requests').child(uid).child(friendId).remove();
+
+  await sendFCM(friendId, {
+    data: {type: 'relation', senderId: friendId, status: relations.FRIENDS},
+  });
+};
+
 export const declineRequest = async rejectedUserId => {
   const {uid} = auth().currentUser;
   const db = database();
   await db.ref('/requests').child(uid).child(rejectedUserId).remove();
+  await sendFCM(rejectedUserId, {
+    data: {
+      type: 'relation',
+      senderId: auth().currentUser.uid,
+      status: relations.NONE,
+    },
+  });
 };
 
 export const unfriend = async unfriendId => {
@@ -203,6 +244,14 @@ export const unfriend = async unfriendId => {
     db.ref('/friends').child(uid).child(unfriendId).remove(),
     db.ref('/friends').child(unfriendId).child(uid).remove(),
   ]);
+
+  await sendFCM(unfriendId, {
+    data: {
+      type: 'relation',
+      senderId: auth().currentUser.uid,
+      status: relations.NONE,
+    },
+  });
 };
 
 export const unmatch = async unmatchId => {

@@ -9,12 +9,18 @@ import {
   View,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
+import SimpleToast from 'react-native-simple-toast';
 import {scale, verticalScale} from 'react-native-size-matters';
 import {useDispatch} from 'react-redux';
 import colors from '../constants/colors';
-import {declineRequest, sendFriendRequest} from '../firebase/util';
+import {
+  acceptRequest,
+  declineRequest,
+  relations,
+  sendFriendRequest,
+} from '../firebase/util';
 import {setErrorMessage} from '../store/actions/error';
-import {acceptRequest} from '../store/actions/user';
+import {setRecommendationStatus} from '../store/actions/recommendations';
 import styles from '../styles';
 import AppText from './AppText';
 import FormButton from './FormButton';
@@ -61,9 +67,13 @@ const FriendCard = ({
             <TouchableOpacity
               onPress={async () => {
                 try {
-                  dispatch(acceptRequest(userId));
-                } catch (err) {
-                  dispatch(setErrorMessage(err));
+                  var oldStatus = relations.USER_RECEIVED_REQUEST;
+                  dispatch(setRecommendationStatus(userId, relations.FRIENDS));
+                  await acceptRequest(userId);
+                } catch (error) {
+                  dispatch(setRecommendationStatus(userId, oldStatus));
+                  SimpleToast.show('An error occurred, please try again');
+                  console.error(error);
                 }
               }}>
               <IconCircle
@@ -77,9 +87,13 @@ const FriendCard = ({
             <TouchableOpacity
               onPress={async () => {
                 try {
+                  var oldStatus = relations.USER_RECEIVED_REQUEST;
+                  dispatch(setRecommendationStatus(userId, relations.NONE));
                   await declineRequest(userId);
-                } catch (err) {
-                  dispatch(setErrorMessage(err));
+                } catch (error) {
+                  dispatch(setRecommendationStatus(userId, oldStatus));
+                  SimpleToast.show('An error occurred, please try again');
+                  console.error(error);
                 }
               }}>
               <IconCircle

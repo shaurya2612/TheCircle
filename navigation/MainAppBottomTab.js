@@ -30,6 +30,8 @@ async function saveTokenToDatabase(token) {
   await firestore().collection('tokens').doc(userId).set({
     token,
   });
+
+  console.warn('saved token to database');
 }
 
 const MainAppBottomTab = () => {
@@ -48,7 +50,7 @@ const MainAppBottomTab = () => {
 
     // Listen to whether the token changes
     const unsubscribe = messaging().onTokenRefresh(token => {
-      saveTokenToDatabase(token);
+      return saveTokenToDatabase(token);
     });
 
     return unsubscribe;
@@ -56,6 +58,7 @@ const MainAppBottomTab = () => {
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(remoteMessage => {
+      console.warn('remoteMessage', remoteMessage);
       dispatch(FCMMessageHandler(remoteMessage));
     });
 

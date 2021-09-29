@@ -8,6 +8,8 @@ import gstyles from '../../../../styles';
 import ButtonContainer from './ButtonContainer';
 import styles from './styles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useSelector} from 'react-redux';
 
 const SearchListItem = ({userId, onPress, ...props}) => {
@@ -39,19 +41,19 @@ const SearchListItem = ({userId, onPress, ...props}) => {
                   style={styles.icon}
                 />
               ) : null}
-              {true ? (
-                <MaterialCommunityIcons
+              {/* {true ? (
+                <AntDesign
                   size={scale(15)}
-                  name="phone"
+                  name="contacts"
                   style={styles.icon}
                 />
-              ) : null}
+              ) : null} */}
             </View>
           </View>
           <AppText
             numberOfLines={1}
             style={{...gstyles.usernameText, ...styles.username}}>
-            {username}
+            {'@' + username}
           </AppText>
         </View>
 

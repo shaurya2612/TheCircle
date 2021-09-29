@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingTop: scale(4),
     height: '100%',
   },
   buttonContainer: {
@@ -53,6 +54,26 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
   },
   pendingText: {
+    color: '#000',
+    fontSize: scale(12),
+    fontFamily: 'Quicksand-Bold',
+  },
+  respond: {
+    backgroundColor: '#fff',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: '#ccc',
+  },
+  respondText: {
+    color: '#000',
+    fontSize: scale(12),
+    fontFamily: 'Quicksand-Bold',
+  },
+  friends: {
+    backgroundColor: '#fff',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: '#ccc',
+  },
+  friendsText: {
     color: '#000',
     fontSize: scale(12),
     fontFamily: 'Quicksand-Bold',
