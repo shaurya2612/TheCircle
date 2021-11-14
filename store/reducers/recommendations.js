@@ -1,8 +1,6 @@
 import {CLEAR_REDUX_STATE} from '../../utils';
-import {
-  SET_FACEBOOK_RECOMMENDATIONS,
-  SET_RECOMMENDATION_STATUS,
-} from '../actions/recommendations';
+import {SET_FACEBOOK_RECOMMENDATIONS} from '../actions/recommendations';
+import {SET_RELATION} from '../actions/user';
 
 const initialState = {
   facebook: {
@@ -22,16 +20,16 @@ export default (state = initialState, action) => {
       let {byIds, allIds} = payload;
       return {...state, facebook: {byIds, allIds}};
 
-    case SET_RECOMMENDATION_STATUS:
-      let {uid, status} = payload;
+    case SET_RELATION:
+      let {uid, relation} = payload;
       let newFacebookByIds = state.facebook.byIds;
       if (newFacebookByIds?.[uid]) {
-        newFacebookByIds[uid].status = status;
+        newFacebookByIds[uid].status = relation;
       }
-      console.warn('changing rec', newFacebookByIds);
+      console.warn('changing rec', uid, relation);
       let newContactsByIds = state.contacts.byIds;
       if (newContactsByIds?.[uid]) {
-        newContactsByIds[uid].status = status;
+        newContactsByIds[uid].status = relation;
       }
       return {
         ...state,

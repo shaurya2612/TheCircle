@@ -29,9 +29,11 @@ import {
   SET_CAN_LOAD_MORE_REQUESTS,
   ADD_MULTIPLE_REQUESTS,
   SET_USER_STATS,
+  SET_RELATION,
 } from '../actions/user';
 import database from '@react-native-firebase/database';
 import storage from '@react-native-firebase/storage';
+import {relations} from '../../firebase/util';
 
 const initialState = {
   bd: null,
@@ -47,7 +49,10 @@ const initialState = {
   gender: null,
   username: null,
   cueCards: null,
-  requests: null,
+  requests: {
+    allIds: null,
+    byIds: null,
+  },
   listeningForRequests: false,
   canLoadMoreRequests: true,
   friends: null,
@@ -128,9 +133,15 @@ export default (state = initialState, action) => {
       return {...state, interestedIn: payload};
 
     case ADD_REQUEST:
+      let newRequestsByIds = state.requests.byIds || {};
+      newRequestsByIds[payload.id] = payload;
+
       return {
         ...state,
-        requests: [payload, ...(state.requests || [])],
+        requests: {
+          byIds: newRequestsByIds,
+          allIds: [payload.id, ...(state.requests.allIds || [])],
+        },
         listeningForRequests: true,
       };
 
@@ -148,9 +159,16 @@ export default (state = initialState, action) => {
       };
 
     case REMOVE_REQUEST:
+      let requestsByIds = state.requests.byIds || {};
+      delete requestsByIds[payload];
       return {
         ...state,
-        requests: (state.requests || []).filter(obj => obj.id !== payload),
+        requests: {
+          byIds: requestsByIds,
+          allIds: (state.requests.allIds || []).filter(
+            obj => obj.id !== payload,
+          ),
+        },
         listeningForRequests: true,
       };
 
@@ -276,6 +294,17 @@ export default (state = initialState, action) => {
     case CLEAR_REDUX_STATE:
       return initialState;
 
+    case SET_RELATION:
+      const {uid, relation} = payload;
+      let newReqByIds = state.requests.byIds || {};
+      delete newReqByIds[uid];
+      return {
+        ...state,
+        requests: {
+          byIds: newReqByIds,
+          allIds: state.requests.allIds,
+        },
+      };
     default:
       return state;
   }

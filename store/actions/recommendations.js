@@ -19,10 +19,3 @@ export const setFacebookRecommendations = recommendations => {
     payload: {byIds: recommendationsByIds, allIds: recommendationsAllIds},
   };
 };
-
-export const setRecommendationStatus = (uid, status) => {
-  return {
-    type: SET_RECOMMENDATION_STATUS,
-    payload: {uid, status},
-  };
-};

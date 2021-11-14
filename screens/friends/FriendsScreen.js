@@ -3,6 +3,7 @@ import {useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
+  StyleSheet,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -12,7 +13,7 @@ import AppText from '../../components/AppText';
 import ModalCardView from '../../components/ModalCardView';
 import FriendsListItem from '../../components/FriendsListItem';
 import SearchBar from '../../components/SearchBar';
-import styles from '../../styles';
+import gstyles from '../../styles';
 import NameText from '../../components/NameText';
 import {useDispatch, useSelector} from 'react-redux';
 import {listenForFriends, loadMoreFriends} from '../../store/actions/user';
@@ -20,6 +21,7 @@ import {unfriend} from '../../firebase/util';
 import colors from '../../constants/colors';
 import LinearGradient from 'react-native-linear-gradient';
 import AvatarCircle from '../../components/AvatarCircle';
+import ConnectListItem from '../../components/ConnectListItem';
 
 const dummyData = [
   {
@@ -53,15 +55,14 @@ const FriendsScreen = () => {
 
   if (!listeningForFriends) {
     return (
-      <View style={{...styles.expandedCenterView, backgroundColor: 'white'}}>
+      <View style={{...gstyles.expandedCenterView, backgroundColor: 'white'}}>
         <ActivityIndicator color={colors.primary} size={'large'} />
       </View>
     );
   }
 
   return (
-    <View style={{...styles.rootView, backgroundColor: 'white'}}>
-
+    <View style={{...gstyles.rootView, backgroundColor: 'white'}}>
       {/* Actions Modal  */}
       <ReactNativeModal
         style={{justifyContent: 'flex-end', margin: 0}}
@@ -75,7 +76,7 @@ const FriendsScreen = () => {
         <ModalCardView>
           <View>
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
-              <AppText style={styles.titleText}>Actions</AppText>
+              <AppText style={gstyles.titleText}>Actions</AppText>
             </View>
             {/* <FriendsListItem
                 onPress={() => {
@@ -101,7 +102,7 @@ const FriendsScreen = () => {
               />
               <View>
                 <NameText>{modalUser?.name}</NameText>
-                <AppText style={styles.usernameText}>
+                <AppText style={gstyles.usernameText}>
                   {'@' + modalUser?.username}
                 </AppText>
               </View>
@@ -128,37 +129,27 @@ const FriendsScreen = () => {
           // }}
           showsVerticalScrollIndicator={false}
           // ListHeaderComponent={() => {
-          //   return (
-          //     <View colors={[colors.primary, colors.accent]}>
-          //       <View
-          //         style={{
-          //           paddingHorizontal: scale(10),
-          //           marginVertical: verticalScale(10),
-          //         }}>
-          //         <AppText style={{...styles.titleText, color:"white"}}>Friends</AppText>
-          //       </View>
-          //     </View>
-          //   );
+          //   return <View></View>;
           // }}
           renderItem={({item}) => {
             return (
-              <FriendsListItem
+              <ConnectListItem
                 onPress={() => {
                   setModalUser(item);
                   setIsModalVisible(true);
                 }}
-                imageUri={item.dp}
+                dp={item.dp}
                 name={item.name}
                 userId={item.id}
-                username={'@' + item.username}
+                username={item.username}
               />
             );
           }}
         />
       ) : (
-        <View style={styles.expandedCenterView}>
-          <AppText style={styles.nameText}>No friends yet !</AppText>
-          <AppText style={styles.labelText}>
+        <View style={gstyles.expandedCenterView}>
+          <AppText style={gstyles.nameText}>No friends yet !</AppText>
+          <AppText style={gstyles.labelText}>
             Tip: Try searching for friends
           </AppText>
         </View>
@@ -166,5 +157,7 @@ const FriendsScreen = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({});
 
 export default FriendsScreen;

@@ -7,6 +7,8 @@ import {serverKey} from './config';
 import firestore from '@react-native-firebase/firestore';
 import functions from '@react-native-firebase/functions';
 import SimpleToast from 'react-native-simple-toast';
+import {store} from '../App';
+import {setRelation} from '../store/actions/user';
 
 export const ASIA_SOUTH1 = 'asia-south1';
 
@@ -152,6 +154,7 @@ export const searchFriendsByNameOrUsername = async (
 };
 
 export const sendFriendRequest = async receiverId => {
+  store.dispatch(setRelation(relations.USER_SENT_REQUEST));
   const db = database();
   const {uid} = auth().currentUser;
   await db
@@ -159,13 +162,13 @@ export const sendFriendRequest = async receiverId => {
     .child(receiverId)
     .child(uid)
     .set(database.ServerValue.TIMESTAMP);
-  await sendFCM(receiverId, {
-    data: {
-      type: 'relation',
-      senderId: auth().currentUser.uid,
-      status: relations.USER_RECEIVED_REQUEST,
-    },
-  });
+  // await sendFCM(receiverId, {
+  //   data: {
+  //     type: 'relation',
+  //     senderId: auth().currentUser.uid,
+  //     status: relations.USER_RECEIVED_REQUEST,
+  //   },
+  // });
 };
 
 export const fetchNameAgeUsernameDpById = async id => {
@@ -191,6 +194,7 @@ export const fetchNameAgeUsernameDpById = async id => {
 };
 
 export const acceptRequest = async friendId => {
+  store.dispatch(setRelation(uid, relations.FRIENDS));
   const {uid} = auth().currentUser;
   const db = database();
 
@@ -217,26 +221,28 @@ export const acceptRequest = async friendId => {
     });
 
   db.ref('/requests').child(uid).child(friendId).remove();
-
-  await sendFCM(friendId, {
-    data: {type: 'relation', senderId: friendId, status: relations.FRIENDS},
-  });
+  // await sendFCM(friendId, {
+  //   data: {type: 'relation', senderId: friendId, status: relations.FRIENDS},
+  // });
 };
 
 export const declineRequest = async rejectedUserId => {
+  store.dispatch(setRelation(uid, relations.NONE));
   const {uid} = auth().currentUser;
   const db = database();
+  console.warn(uid);
   await db.ref('/requests').child(uid).child(rejectedUserId).remove();
-  await sendFCM(rejectedUserId, {
-    data: {
-      type: 'relation',
-      senderId: auth().currentUser.uid,
-      status: relations.NONE,
-    },
-  });
+  // await sendFCM(rejectedUserId, {
+  //   data: {
+  //     type: 'relation',
+  //     senderId: auth().currentUser.uid,
+  //     status: relations.NONE,
+  //   },
+  // });
 };
 
 export const unfriend = async unfriendId => {
+  store.dispatch(setRelation(uid, relations.NONE));
   const {uid} = auth().currentUser;
   const db = database();
 
@@ -245,13 +251,13 @@ export const unfriend = async unfriendId => {
     db.ref('/friends').child(unfriendId).child(uid).remove(),
   ]);
 
-  await sendFCM(unfriendId, {
-    data: {
-      type: 'relation',
-      senderId: auth().currentUser.uid,
-      status: relations.NONE,
-    },
-  });
+  // await sendFCM(unfriendId, {
+  //   data: {
+  //     type: 'relation',
+  //     senderId: auth().currentUser.uid,
+  //     status: relations.NONE,
+  //   },
+  // });
 };
 
 export const unmatch = async unmatchId => {

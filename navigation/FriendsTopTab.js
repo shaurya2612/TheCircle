@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import SearchFriendsScreen from '../screens/friends/SearchFriendsScreen';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
-import FriendRequestsScreen from '../screens/friends/FriendRequestsScreen';
+import FriendRequestsScreen from '../screens/friends/FriendRequestScreen';
 import FriendsScreen from '../screens/friends/FriendsScreen';
 import CustomSafeAreaView from '../components/CustomSafeAreaView';
 import styles from '../styles';
@@ -14,7 +14,7 @@ import AppText from '../components/AppText';
 
 const FriendsTopTabNavigator = createMaterialTopTabNavigator();
 
-export default FriendsTopTab = () => {
+const FriendsTopTab = () => {
   return (
     <CustomSafeAreaView style={styles.rootView}>
       <View
@@ -28,10 +28,19 @@ export default FriendsTopTab = () => {
             paddingHorizontal: scale(10),
             backgroundColor: 'white',
             marginVertical: verticalScale(10),
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexDirection: 'row',
+            width: '100%',
           }}>
           <AppText style={{...styles.titleText, fontFamily: 'Quicksand-Bold'}}>
             Connect
           </AppText>
+          <View>
+            {/* <AppText style={{fontFamily: 'Quicksand-Bold', color: 'steelblue'}}>
+              Copy invite
+            </AppText> */}
+          </View>
         </View>
       </View>
       <FriendsTopTabNavigator.Navigator
@@ -53,6 +62,10 @@ export default FriendsTopTab = () => {
           // renderIndicator:() => <View style={{backgroundColor:'blue'}}></View>,
           allowFontScaling: false,
           style: {backgroundColor: 'white'},
+          tabBarBadge: () => (
+            <View
+              style={{height: 40, width: 40, backgroundColor: 'red'}}></View>
+          ),
         }}>
         <FriendsTopTabNavigator.Screen
           name="Friends"
@@ -74,3 +87,5 @@ export default FriendsTopTab = () => {
     </CustomSafeAreaView>
   );
 };
+
+export default FriendsTopTab;

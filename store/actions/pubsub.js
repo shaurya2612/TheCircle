@@ -1,5 +1,5 @@
 import {Alert} from 'react-native';
-import {setRecommendationStatus} from './recommendations';
+import {setRelation} from './user';
 
 // {"sentTime":1632854074433,"data":{"type":"relation","senderId":"nhkoNyu5MaP3oV7AcdySqazYi3a2","status":"USER_RECEIVED_REQUEST"},"messageId":"0:1632854074452499%db043a62f9fd7ecd","ttl":2419200,"from":"227255097562"}
 
@@ -12,7 +12,7 @@ export const FCMMessageHandler = remoteMessage => {
       switch (data.type) {
         case 'relation':
           let {senderId, status} = data;
-          dispatch(setRecommendationStatus(senderId, status));
+          dispatch(setRelation(senderId, status));
           return;
         default:
           return;

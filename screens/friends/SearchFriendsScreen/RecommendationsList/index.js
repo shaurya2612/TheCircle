@@ -7,25 +7,32 @@ import styles from './styles';
 import FriendsListItem from '../../../../components/FriendsListItem';
 import SearchListItem from '../SearchListItem';
 import {useSelector} from 'react-redux';
+import {getFacebookUid} from '../../../../utils';
+import auth from '@react-native-firebase/auth';
 
 const RecommendationsList = ({...props}) => {
   const facebookRecommendationsAllIds = useSelector(
     state => state.recommendations.facebook.allIds,
   );
-  // console.warn(facebookRecommendationsAllIds);
   return (
     <View style={[gstyles.rootView]}>
       <View style={styles.titleContainer}>
         <AppText style={styles.suggested}>Suggested</AppText>
       </View>
-      <FlatList
-        data={facebookRecommendationsAllIds}
-        keyExtractor={(item, index) => String(item)}
-        renderItem={({item}) => {
-          console.warn(item);
-          return <SearchListItem userId={item} />;
-        }}
-      />
+      {true ? (
+        <FlatList
+          data={facebookRecommendationsAllIds}
+          keyExtractor={(item, index) => String(item)}
+          renderItem={({item}) => {
+            console.warn(item);
+            return <SearchListItem userId={item} />;
+          }}
+        />
+      ) : (
+        <View style={gstyles.expandedCenterView}>
+          <AppText>Hi</AppText>
+        </View>
+      )}
     </View>
   );
 };

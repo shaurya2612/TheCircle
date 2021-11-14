@@ -11,6 +11,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useSelector} from 'react-redux';
+import ConnectListItem from '../../../../components/ConnectListItem';
 
 const SearchListItem = ({userId, onPress, ...props}) => {
   const facebookRecommendationData = useSelector(
@@ -20,48 +21,16 @@ const SearchListItem = ({userId, onPress, ...props}) => {
 
   if (!facebookRecommendationData) return null;
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
-      <View style={[styles.row, {flex: 1}]}>
-        <View style={styles.avatarContainer}>
-          {/* Avatar */}
-          <AvatarCircle disabled size={scale(65)} source={{uri: dp}} />
-        </View>
-
-        <View style={styles.textContainer}>
-          {/* Name */}
-          <View style={[styles.row, {alignItems: 'center'}]}>
-            <View style={styles.nameContainer}>
-              <NameText numberOfLines={1}>{name}</NameText>
-            </View>
-            <View style={[styles.iconContainer]}>
-              {true ? (
-                <MaterialCommunityIcons
-                  size={scale(15)}
-                  name="facebook"
-                  style={styles.icon}
-                />
-              ) : null}
-              {/* {true ? (
-                <AntDesign
-                  size={scale(15)}
-                  name="contacts"
-                  style={styles.icon}
-                />
-              ) : null} */}
-            </View>
-          </View>
-          <AppText
-            numberOfLines={1}
-            style={{...gstyles.usernameText, ...styles.username}}>
-            {'@' + username}
-          </AppText>
-        </View>
-
-        <ButtonContainer uid={uid} />
-      </View>
-
-      {/* <View style={{height: 10, width: 10, backgroundColor: 'red'}}></View> */}
-    </TouchableOpacity>
+    <ConnectListItem
+      buttonInRow={true}
+      name={name}
+      username={username}
+      uid={uid}
+      facebook={true}
+      status={status}
+      dp={dp}>
+      <ButtonContainer uid={uid} />
+    </ConnectListItem>
   );
 };
 

@@ -20,7 +20,7 @@ import {
   sendFriendRequest,
 } from '../firebase/util';
 import {setErrorMessage} from '../store/actions/error';
-import {setRecommendationStatus} from '../store/actions/recommendations';
+import {setRelation} from '../store/actions/user';
 import styles from '../styles';
 import AppText from './AppText';
 import FormButton from './FormButton';
@@ -68,10 +68,10 @@ const FriendCard = ({
               onPress={async () => {
                 try {
                   var oldStatus = relations.USER_RECEIVED_REQUEST;
-                  dispatch(setRecommendationStatus(userId, relations.FRIENDS));
+                  dispatch(setRelation(userId, relations.FRIENDS));
                   await acceptRequest(userId);
                 } catch (error) {
-                  dispatch(setRecommendationStatus(userId, oldStatus));
+                  dispatch(setRelation(userId, oldStatus));
                   SimpleToast.show('An error occurred, please try again');
                   console.error(error);
                 }
@@ -88,10 +88,10 @@ const FriendCard = ({
               onPress={async () => {
                 try {
                   var oldStatus = relations.USER_RECEIVED_REQUEST;
-                  dispatch(setRecommendationStatus(userId, relations.NONE));
+                  dispatch(setRelation(userId, relations.NONE));
                   await declineRequest(userId);
                 } catch (error) {
-                  dispatch(setRecommendationStatus(userId, oldStatus));
+                  dispatch(setRelation(userId, oldStatus));
                   SimpleToast.show('An error occurred, please try again');
                   console.error(error);
                 }

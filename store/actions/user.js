@@ -18,7 +18,7 @@ import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import messaging from '@react-native-firebase/messaging';
 import {changeUserMatchingStatus, skipThisFOF} from './matching';
-import {Alert} from 'react-native';
+import {Alert, Platform} from 'react-native';
 import functions from '@react-native-firebase/functions';
 
 export const SET_USER_STATE = 'SET_USER_STATE';
@@ -50,6 +50,7 @@ export const SET_FETCHED_MATCH_PROFILE = 'SET_FETCHED_MATCH_PROFILE';
 export const SET_CURRENT_MATCH_PROFILE = 'SET_CURRENT_MATCH_PROFILE';
 export const SET_CAN_LOAD_MORE_FRIENDS = 'SET_CAN_LOAD_MORE_FRIENDS';
 export const SET_CAN_LOAD_MORE_REQUESTS = 'SET_CAN_LOAD_MORE_REQUESTS';
+export const SET_RELATION = 'SET_RELATION';
 
 export const setUserState = payload => {
   return {type: SET_USER_STATE, payload};
@@ -379,6 +380,7 @@ export const listenForRequests = () => {
         age: bdToAge(bd.val()),
         username: Object.keys(username.val())[0],
         dp,
+        status: relations.USER_RECEIVED_REQUEST,
         createdAt: snapshot.val(),
       };
       dispatch({
@@ -430,6 +432,7 @@ export const listenForFriends = () => {
           dp,
         };
         dispatch({type: ADD_FRIEND, payload: obj});
+        dispatch(setRelation(snapshot.key, relations.FRIENDS));
         dispatch({type: SET_LISTENING_FOR_FRIENDS, payload: true});
       });
       dbQuery.on('child_removed', snapshot => {
@@ -670,4 +673,8 @@ export const deleteUser = () => {
     dispatch(stopAppLoading());
     Alert.alert('Your account was deleted');
   };
+};
+
+export const setRelation = (uid, relation) => {
+  return {type: SET_RELATION, payload: {uid, relation}};
 };

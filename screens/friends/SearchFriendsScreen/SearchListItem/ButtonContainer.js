@@ -18,9 +18,9 @@ import {
   sendFriendRequest,
 } from '../../../../firebase/util';
 import {useDispatch, useSelector} from 'react-redux';
-import {setRecommendationStatus} from '../../../../store/actions/recommendations';
 import SimpleToast from 'react-native-simple-toast';
 import {ActionsModal} from '../../../../components/ActionsModal';
+import {setRelation} from '../../../../store/actions/user';
 
 const ButtonContainer = ({uid, ...props}) => {
   let status = useSelector(
@@ -32,11 +32,11 @@ const ButtonContainer = ({uid, ...props}) => {
   const addFriendHandler = useCallback(async () => {
     console.warn('huh');
     const oldStatus = status;
-    dispatch(setRecommendationStatus(uid, relations.USER_SENT_REQUEST));
+    dispatch(setRelation(uid, relations.USER_SENT_REQUEST));
     try {
       await sendFriendRequest(uid);
     } catch (err) {
-      dispatch(setRecommendationStatus(uid, oldStatus));
+      dispatch(setRelation(uid, oldStatus));
       SimpleToast.show('An error occured, please try again later');
       console.error(err);
     }
@@ -114,10 +114,10 @@ const ButtonContainer = ({uid, ...props}) => {
               setIsVisible(false);
               try {
                 var oldStatus = status;
-                dispatch(setRecommendationStatus(uid, relations.FRIENDS));
+                dispatch(setRelation(uid, relations.FRIENDS));
                 await acceptRequest(uid);
               } catch (error) {
-                dispatch(setRecommendationStatus(uid, oldStatus));
+                dispatch(setRelation(uid, oldStatus));
                 SimpleToast.show('An error occurred, please try again');
                 console.error(error);
               }
@@ -130,10 +130,10 @@ const ButtonContainer = ({uid, ...props}) => {
               setIsVisible(false);
               try {
                 var oldStatus = status;
-                dispatch(setRecommendationStatus(uid, relations.NONE));
+                dispatch(setRelation(uid, relations.NONE));
                 await declineRequest(uid);
               } catch (error) {
-                dispatch(setRecommendationStatus(uid, oldStatus));
+                dispatch(setRelation(uid, oldStatus));
                 SimpleToast.show('An error occurred, please try again');
                 console.error(error);
               }

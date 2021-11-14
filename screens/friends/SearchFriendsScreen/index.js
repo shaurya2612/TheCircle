@@ -124,6 +124,9 @@ const SearchFriendsScreen = () => {
   }, [isFriend, inRequests, sentRequest]);
 
   useEffect(() => {
+    if (!getFacebookUid(auth().currentUser)) {
+      return;
+    }
     fetchFacebookRecommendations()
       .then(recommendations => {
         dispatch(setFacebookRecommendations(recommendations));
