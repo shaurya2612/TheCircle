@@ -99,7 +99,7 @@ export const EditUserPhotoGrid = forwardRef(({onDragStart, onDragEnd}, ref) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   backgroundColor: 'black',
-                  padding: moderateVerticalScale(10, 0.4),
+                  padding: moderateVerticalScale(8, 0.4),
                   borderRadius: moderateVerticalScale(20, 0.4),
                   position: 'absolute',
                   right: verticalScale(-5),
@@ -190,7 +190,6 @@ const localStyles = StyleSheet.create({
   item: {
     width: childrenWidth,
     height: childrenHeight,
-    backgroundColor: 'red',
     borderRadius: moderateScale(4, 0.4),
   },
   item_children: {
@@ -199,7 +198,7 @@ const localStyles = StyleSheet.create({
     backgroundColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: moderateScale(4, 0.4),
+    borderRadius: moderateScale(10, 0.4),
   },
   item_icon: {
     width: childrenWidth - 4 - 8,

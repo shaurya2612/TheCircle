@@ -14,7 +14,7 @@ import functions from '@react-native-firebase/functions';
 // } from '@react-native-firebase/admob';
 import {Platform} from 'react-native';
 import {setAdOpened, setLoadingAd} from './loading';
-import {ASIA_SOUTH1, sendFCM} from '../../firebase/util';
+import {ASIA_SOUTH1, db, sendFCM} from '../../firebase/util';
 
 export const SET_USER_MATCHING_STATUS = 'SET_USER_MATCHING_STATUS';
 export const SET_CHAT_ROOM = 'SET_CHAT_ROOM';
@@ -35,7 +35,6 @@ export const listenForUserMatchingStatus = () => {
     const {listeningForUserMatchingStatus} = getState().matching;
     if (listeningForUserMatchingStatus) return; //listener is already on
     const {uid} = auth().currentUser;
-    const db = database();
     db.ref(`/matchingStatus`)
       .child(uid)
       .on('value', snapshot => {
@@ -59,7 +58,6 @@ export const changeUserMatchingStatus = newStatus => {
       const userState = getState().user;
       const adOpened = getState().loading.adOpened;
       const {uid} = auth().currentUser;
-      const db = database();
       const firestoreDb = firestore();
 
       //Matching off
@@ -145,7 +143,6 @@ export const configureAnonymousChatRoom = () => {
   return async (dispatch, getState) => {
     try {
       const uid = auth().currentUser.uid;
-      const db = database();
 
       let [FOFId, via] = await Promise.all([
         db.ref('/chatRooms').child(uid).once('value'),
@@ -237,7 +234,6 @@ export const configureAnonymousChatRoom = () => {
 export const sendMessageInAnonymousChatRoom = messages => {
   return async (dispatch, getState) => {
     const {FOF} = getState().matching;
-    const db = database();
     const {uid} = auth().currentUser;
     const refString = uid < FOF.id ? uid + '@' + FOF.id : FOF.id + '@' + uid;
 
@@ -288,7 +284,6 @@ export const sendMessageInAnonymousChatRoom = messages => {
 export const paginateMessagesInAnonymousChatRoomQuery = () => {
   return async (dispatch, getState) => {
     const {FOF, messages} = getState().matching;
-    const db = database();
     const {uid} = auth().currentUser;
     const refString = uid < FOF.id ? uid + '@' + FOF.id : FOF.id + '@' + uid;
 
@@ -338,7 +333,6 @@ export const startListeningForAnonymousChatRoom = () => {
     if (FOF === null) return;
 
     const uid = auth().currentUser.uid;
-    const db = database();
 
     //listen for chat room pairing (in case the other person is not in the chat room OR skips)
     db.ref('/chatRooms')
@@ -390,7 +384,6 @@ export const startListeningForAnonymousChatRoom = () => {
 export const skipThisFOF = (keepChats = false, sendNotification = true) => {
   return async (dispatch, getState) => {
     const uid = auth().currentUser.uid;
-    const db = database();
     const matchingState = getState().matching;
     const {FOF} = matchingState;
 
@@ -436,7 +429,6 @@ export const skipThisFOF = (keepChats = false, sendNotification = true) => {
 export const onSkipButtonPress = () => {
   return async (dispatch, getState) => {
     const uid = auth().currentUser.uid;
-    const db = database();
     const matchingState = getState().matching;
     const {FOF} = matchingState;
 
@@ -475,7 +467,6 @@ export const addFOFToMatches = () => {
   return async (dispatch, getState) => {
     const {FOF} = getState().matching;
     const uid = auth().currentUser.uid;
-    const db = database();
     const refString = uid < FOF.id ? uid + '@' + FOF.id : FOF.id + '@' + uid;
 
     let lastMessage = await db

@@ -1,5 +1,6 @@
 import {
   ASIA_SOUTH1,
+  db,
   declineRequest,
   fetchNameAgeUsernameDpById,
   leaveStream,
@@ -12,7 +13,6 @@ import {
 import {bdToAge, CLEAR_REDUX_STATE} from '../../utils';
 import {setErrorMessage} from './error';
 import {startAppLoading, stopAppLoading} from './loading';
-import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
@@ -66,7 +66,6 @@ export const fetchUser = () => {
     if (userState.name) return;
 
     try {
-      const db = database();
       const uid = auth().currentUser.uid;
       let [
         userObjSnapshot,
@@ -107,7 +106,6 @@ export const fetchUser = () => {
 
 export const listenForUserStats = () => {
   return async (dispatch, getState) => {
-    const db = database();
     const uid = auth().currentUser.uid;
     db.ref('/stats')
       .child(uid)
@@ -119,7 +117,6 @@ export const listenForUserStats = () => {
 
 export const listenForPresence = () => {
   return async (dispatch, getState) => {
-    const db = database();
     const {uid} = auth().currentUser;
     const amOnlineRef = db.ref('.info/connected');
     const isOnlineRef = db.ref('/isOnline').child(uid);
@@ -220,7 +217,6 @@ export const fetchUserProfile = () => {
     const userState = getState().user;
     if (userState.profileUpdated) return;
     try {
-      const db = database();
       const {uid} = auth().currentUser;
       await db
         .ref('/profiles')
@@ -237,7 +233,6 @@ export const fetchUserProfile = () => {
 export const updateAbout = about => {
   return async (dispatch, getState) => {
     try {
-      const db = database();
       const {uid} = auth().currentUser;
       //About has been removed
       if (about === '' || about === null) {
@@ -255,7 +250,6 @@ export const updateAbout = about => {
 export const updateProfileInfo = (key, value) => {
   return async (dispatch, getState) => {
     try {
-      const db = database();
       const {uid} = auth().currentUser;
       await db.ref(`/profiles`).child(uid).child('info').child(key).set(value);
       dispatch({type: UPDATE_PROFILE_INFO, key, payload: value});
@@ -268,7 +262,6 @@ export const updateProfileInfo = (key, value) => {
 export const updateInterestedIn = value => {
   return async dispatch => {
     try {
-      const db = database();
       const {uid} = auth().currentUser;
       await db.ref(`/interestedIn`).child(uid).set(value);
       dispatch({type: UPDATE_INTERESTED_IN, payload: value});
@@ -344,7 +337,6 @@ export const listenForRequests = () => {
     const {listeningForRequests} = getState().user;
     if (listeningForRequests) return; //listener is already on --> end the function
 
-    const db = database();
     const {uid} = auth().currentUser;
     const dbRef = db.ref('/requests').child(uid);
     const dbQuery = dbRef.orderByValue();
@@ -401,7 +393,6 @@ export const listenForFriends = () => {
       const {listeningForFriends} = getState().user;
       if (listeningForFriends) return; //listener is already on --> end the function
 
-      const db = database();
       const {uid} = auth().currentUser;
       const dbRef = db.ref('/friends').child(uid);
       const dbQuery = dbRef.orderByKey();
@@ -442,7 +433,6 @@ export const listenForFriends = () => {
       dispatch({type: SET_LISTENING_FOR_FRIENDS, payload: true});
     } catch (err) {
       dispatch(setErrorMessage(err));
-      const db = database();
       const {uid} = auth().currentUser;
       const dbRef = db.ref('/friends').child(uid);
       const dbQuery = dbRef.orderByKey();
@@ -458,7 +448,6 @@ export const listenForMatches = numOfResults => {
       const {listeningForMatches} = getState().user;
       if (listeningForMatches) return; //listener is already on --> end the function
 
-      const db = database();
       const {uid} = auth().currentUser;
       const dbRef = db.ref('/matches').child(uid);
       const dbQuery = dbRef
@@ -514,7 +503,6 @@ export const listenForMatches = numOfResults => {
       dispatch({type: SET_LISTENING_FOR_MATCHES, payload: true});
     } catch (err) {
       dispatch(setErrorMessage(err));
-      const db = database();
       const {uid} = auth().currentUser;
       const dbRef = db.ref('/matches').child(uid);
       const dbQuery = dbRef.orderByValue().limitToFirst(numOfResults);
@@ -530,7 +518,6 @@ export const fetchMatchProfile = matchId => {
     if (matchId === getState().user.currentMatchProfile?.id) return;
 
     dispatch({type: SET_FETCHED_MATCH_PROFILE, payload: false});
-    const db = database();
     let [name, bd, profile] = await Promise.all([
       db.ref('/users').child(matchId).child('name').once('value'),
       db.ref('/users').child(matchId).child('bd').once('value'),
@@ -561,7 +548,6 @@ export const logoutUser = () => {
     const matchingState = getState().matching;
     dispatch(startAppLoading());
     try {
-      const db = database();
       const uid = auth().currentUser.uid;
       const existingToken = await messaging().getToken();
 
@@ -626,7 +612,6 @@ export const deleteUser = () => {
     const matchingState = getState().matching;
     dispatch(startAppLoading());
     try {
-      const db = database();
       const uid = auth().currentUser.uid;
 
       //TURN OFF ALL LISTENERS

@@ -28,6 +28,28 @@ export const EditInfoBar = ({
   const [areOptionsVisible, setAreOptionsVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [localValue, setLocalValue] = useState(value);
+
+  const renderItem = ({item}) => (
+    <TouchableOpacity
+      onPress={() => {
+        setLocalValue(item);
+        setAreOptionsVisible(false);
+      }}
+      style={{
+        padding: scale(10),
+        backgroundColor: item === localValue ? '#cccccc' : 'white',
+        borderRadius: scale(10),
+      }}>
+      <NameText
+        numberOfLines={1}
+        style={{
+          fontWeight: item === localValue ? 'bold' : 'normal',
+        }}>
+        {item}
+      </NameText>
+    </TouchableOpacity>
+  );
+
   return (
     <TouchableOpacity
       onPress={() => {
@@ -89,28 +111,7 @@ export const EditInfoBar = ({
               </TouchableOpacity>
             </View>
 
-            <FlatList
-              data={valueOptions}
-              renderItem={({item}) => (
-                <TouchableOpacity
-                  onPress={() => {
-                    setLocalValue(item);
-                    setAreOptionsVisible(false);
-                  }}
-                  style={{
-                    padding: scale(10),
-                    backgroundColor: item === localValue ? '#cccccc' : 'white',
-                    borderRadius: scale(10),
-                  }}>
-                  <NameText
-                    style={{
-                      fontWeight: item === localValue ? 'bold' : 'normal',
-                    }}>
-                    {item}
-                  </NameText>
-                </TouchableOpacity>
-              )}
-            />
+            <FlatList data={valueOptions} renderItem={renderItem} />
           </View>
         </ModalCardView>
       </ReactNativeModal>

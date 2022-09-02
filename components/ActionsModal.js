@@ -8,6 +8,14 @@ import AppText from './AppText';
 
 //data : [{icon: <Icon/>, title: String, onPress: () => any}]
 export const ActionsModal = ({data, isVisible, setIsVisible, ...props}) => {
+  const renderItem = ({item}) => {
+    return (
+      <TouchableOpacity onPress={item.onPress} style={styles.itemContainer}>
+        <View style={styles.iconContainer}>{item.icon}</View>
+        <AppText style={styles.title}>{item.title}</AppText>
+      </TouchableOpacity>
+    );
+  };
   return (
     <ReactNativeModal
       style={styles.modal}
@@ -23,16 +31,7 @@ export const ActionsModal = ({data, isVisible, setIsVisible, ...props}) => {
         <FlatList
           data={data}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({item}) => {
-            return (
-              <TouchableOpacity
-                onPress={item.onPress}
-                style={styles.itemContainer}>
-                <View style={styles.iconContainer}>{item.icon}</View>
-                <AppText style={styles.title}>{item.title}</AppText>
-              </TouchableOpacity>
-            );
-          }}
+          renderItem={renderItem}
         />
       </View>
     </ReactNativeModal>

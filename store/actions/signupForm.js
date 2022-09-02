@@ -3,7 +3,6 @@ import {isUsernameValid, uploadUserPhotos} from '../../firebase/util';
 import {setErrorMessage} from './error';
 import {setSigningUp, startAppLoading, stopAppLoading} from './loading';
 import {loginUser, setUserState} from './user';
-import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
@@ -43,7 +42,6 @@ export const signupUser = () => {
       //Firebase auth state will change
 
       const {uid} = auth().currentUser;
-      const db = database();
 
       //Setting array for tokens (notifications)
       if (!isUsernameValid(username))

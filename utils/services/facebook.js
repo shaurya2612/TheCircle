@@ -1,8 +1,7 @@
 import {GraphRequest, GraphRequestManager} from 'react-native-fbsdk-next';
-import database from '@react-native-firebase/database';
 import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';
-import {checkRelation} from '../../firebase/util';
+import {checkRelation, db} from '../../firebase/util';
 import {getFacebookUid} from '..';
 
 export const fetchFacebookFriends = () => {
@@ -32,13 +31,12 @@ export const fetchFacebookRecommendations = () => {
 
         return Promise.all(
           data.map(obj => {
-            return database()
+            return db
               .ref('facebookUids')
               .child(obj.id)
               .once('value')
               .then(uid => {
                 uid = uid.val();
-                const db = database();
                 let [name, username, dp, status] = [
                   db.ref('/users').child(uid).child('name').once('value'),
                   db

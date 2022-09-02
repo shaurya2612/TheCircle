@@ -17,10 +17,10 @@ import {
 import {startAppLoading, stopAppLoading} from '../store/actions/loading';
 import auth from '@react-native-firebase/auth';
 import {PhoneAuthStack} from './PhoneAuthStack';
-import database from '@react-native-firebase/database';
 import {checkVersion} from 'react-native-check-version';
 import NeedsUpdateScreen from '../screens/NeedsUpdateScreen';
 import {getFacebookUid} from '../utils';
+import {db} from '../firebase/util';
 
 const AppNavigator = () => {
   const userState = useSelector(state => state.user);
@@ -48,12 +48,12 @@ const AppNavigator = () => {
   }, [updateNeeded, dispatch]);
 
   useEffect(() => {
+    console.log('Shaurya');
     auth().onAuthStateChanged(user => {
+      console.log('Damn son', user);
       if (user) {
         if (getFacebookUid(user) !== null) {
-          database()
-            .ref('/facebookUids/' + getFacebookUid(user))
-            .set(user.uid);
+          db.ref('/facebookUids/' + getFacebookUid(user)).set(user.uid);
         }
         dispatch(startAppLoading());
         dispatch(setUserState({...userState, isAuthenticated: true}));
@@ -63,13 +63,15 @@ const AppNavigator = () => {
 
   useEffect(() => {
     //Check whether user profile is completed or not
-    const fn = async () => {
+    const checkIfProfileIsComplete = async () => {
       dispatch(startAppLoading());
+      const uid = auth().currentUser.uid;
       if (isAuthenticated) {
-        const name = await database()
-          .ref('/users/' + auth().currentUser.uid)
+        const name = await db
+          .ref('/users/' + uid)
           .child('name')
           .once('value');
+        console.log('SUDA', name.val());
         if (name.exists())
           dispatch(setUserState({...userState, isProfileCompleted: true}));
         else dispatch(setUserState({...userState, isProfileCompleted: false}));
@@ -77,8 +79,12 @@ const AppNavigator = () => {
       if (initialAppLoading) setInitialAppLoading(false);
       dispatch(stopAppLoading());
     };
-    fn();
+    checkIfProfileIsComplete();
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    console.log('DADADDA', isAuthenticated, isProfileCompleted);
+  }, [isAuthenticated, isProfileCompleted]);
 
   if (initialAppLoading) return <LoadingScreen />;
 

@@ -14,6 +14,10 @@ const RecommendationsList = ({...props}) => {
   const facebookRecommendationsAllIds = useSelector(
     state => state.recommendations.facebook.allIds,
   );
+  const renderItem = ({item}) => {
+    console.warn(item);
+    return <SearchListItem userId={item} />;
+  };
   return (
     <View style={[gstyles.rootView]}>
       <View style={styles.titleContainer}>
@@ -23,10 +27,7 @@ const RecommendationsList = ({...props}) => {
         <FlatList
           data={facebookRecommendationsAllIds}
           keyExtractor={(item, index) => String(item)}
-          renderItem={({item}) => {
-            console.warn(item);
-            return <SearchListItem userId={item} />;
-          }}
+          renderItem={renderItem}
         />
       ) : (
         <View style={gstyles.expandedCenterView}>

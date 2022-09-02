@@ -17,9 +17,8 @@ import NameText from '../../components/NameText';
 import StreamsListItem, {
   StreamsListItemIcon,
 } from '../../components/StreamsListItem';
-import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
-import {joinStream, leaveStream} from '../../firebase/util';
+import {db, joinStream, leaveStream} from '../../firebase/util';
 import {fetchAllStreams} from '../../store/actions/streams';
 import styles from '../../styles';
 
@@ -35,7 +34,6 @@ export default StreamsListScreen = () => {
 
   const subscribeToModalStreamChanges = () => {
     if (modalStream) {
-      const db = database();
       const uid = auth().currentUser.uid;
       const dbRef = db
         .ref('/streamsubs')
@@ -51,7 +49,6 @@ export default StreamsListScreen = () => {
 
   const unsubscribeToModalStreamChanges = () => {
     if (modalStream) {
-      const db = database();
       const uid = auth().currentUser.uid;
       const dbRef = db
         .ref('/streamsubs')
@@ -59,6 +56,19 @@ export default StreamsListScreen = () => {
         .child(modalStream.streamId);
       dbRef.off();
     }
+  };
+
+  const renderItem = ({item}) => {
+    return (
+      <StreamsListItem
+        icon={item.icon}
+        name={item.name}
+        members={item.members}
+        onPress={() => {
+          setModalStream(item);
+        }}
+      />
+    );
   };
 
   return (
@@ -143,21 +153,7 @@ export default StreamsListScreen = () => {
           </TouchableOpacity>
         </ModalCardView>
       </ReactNativeModal>
-      <FlatList
-        data={streams}
-        renderItem={({item}) => {
-          return (
-            <StreamsListItem
-              icon={item.icon}
-              name={item.name}
-              members={item.members}
-              onPress={() => {
-                setModalStream(item);
-              }}
-            />
-          );
-        }}
-      />
+      <FlatList data={streams} renderItem={renderItem} />
     </View>
   );
 };

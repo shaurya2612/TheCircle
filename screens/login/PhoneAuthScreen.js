@@ -7,6 +7,7 @@ import {
   Text,
   TouchableWithoutFeedback,
   View,
+  StyleSheet,
 } from 'react-native';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
@@ -24,7 +25,7 @@ import {
   setSignupFormData,
 } from '../../store/actions/signupForm';
 import auth from '@react-native-firebase/auth';
-import styles from '../../styles';
+import gstyles from '../../styles';
 import CustomSafeAreaView from '../../components/CustomSafeAreaView';
 import Svg, {Circle} from 'react-native-svg';
 import * as Animatable from 'react-native-animatable';
@@ -72,90 +73,99 @@ const PhoneAuthScreen = props => {
   }, []);
 
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        Keyboard.dismiss();
-      }}
-      style={styles.rootView}>
-      <CustomSafeAreaView
-        style={{...styles.rootView, backgroundColor: 'white'}}>
-        <View style={{...styles.rootView, backgroundColor: 'white'}}>
-          <CocentricCircles
-            innerCircleColor={colors.primary}
-            outerCircleColor={'pink'}
-            animatableViewProps={{
-              animation: 'pulse',
-              iterationCount: 'infinite',
-              iterationDelay: 2000,
-              easing: 'ease-out',
-              delay: 200,
-              style: {
-                position: 'absolute',
-                left: '50%',
-                top: isKeyboardVisible ? '-33%' : '-22%',
-              },
-            }}
-          />
-          <CustomHeader>
-            <Icon
-              name={'x'}
-              size={35}
-              color={'black'}
-              onPress={() => {
-                dispatch(clearSignupFormData());
-                props.navigation.goBack();
+    <View style={styles.root}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Keyboard.dismiss();
+        }}
+        style={gstyles.rootView}>
+        <CustomSafeAreaView
+          style={{...gstyles.rootView, backgroundColor: 'white'}}>
+          <View style={{...gstyles.rootView, backgroundColor: 'white'}}>
+            <CocentricCircles
+              innerCircleColor={colors.primary}
+              outerCircleColor={'pink'}
+              animatableViewProps={{
+                animation: 'pulse',
+                iterationCount: 'infinite',
+                iterationDelay: 2000,
+                easing: 'ease-out',
+                delay: 200,
+                style: {
+                  position: 'absolute',
+                  left: '50%',
+                  top: isKeyboardVisible ? '-33%' : '-22%',
+                },
               }}
             />
-          </CustomHeader>
-          <View style={styles.expandedCenterView}>
-            <View style={styles.titleView}>
-              <AppText style={{...styles.titleText, color: colors.primary}}>
-                Enter your phone number
-              </AppText>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                paddingHorizontal: scale(70),
-              }}>
-              <CountryCodeInput />
-              <FormTextInput
-                placeholder={'Phone Number'}
-                value={phoneNumber}
-                selectedBorderColor={colors.primary}
+            <CustomHeader>
+              <Icon
+                name={'x'}
+                size={35}
+                color={'black'}
+                onPress={() => {
+                  dispatch(clearSignupFormData());
+                  props.navigation.goBack();
+                }}
+              />
+            </CustomHeader>
+            <View style={gstyles.expandedCenterView}>
+              <View style={gstyles.titleView}>
+                <AppText style={{...gstyles.titleText, color: colors.primary}}>
+                  Enter your phone number
+                </AppText>
+              </View>
+              <View
                 style={{
-                  fontSize: verticalScale(20),
-                  color: colors.primary,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingHorizontal: scale(70),
+                }}>
+                <CountryCodeInput />
+                <FormTextInput
+                  placeholder={'Phone Number'}
+                  value={phoneNumber}
+                  selectedBorderColor={colors.primary}
+                  style={{
+                    fontSize: verticalScale(20),
+                    color: colors.primary,
+                  }}
+                  selectionColor={'#cccccc'}
+                  keyboardType={'number-pad'}
+                  onChangeText={text => {
+                    dispatch(
+                      setSignupFormData({...signupFormData, phoneNumber: text}),
+                    );
+                  }}
+                  maxLength={10}
+                />
+              </View>
+            </View>
+
+            <View style={gstyles.formButtonView}>
+              <FormButton
+                disabled={isButtonDisabled}
+                title={'Continue'}
+                onPress={async () => {
+                  Keyboard.dismiss();
+                  props.navigation.navigate('PhoneVerificationScreen');
                 }}
-                selectionColor={'#cccccc'}
-                keyboardType={'number-pad'}
-                onChangeText={text => {
-                  dispatch(
-                    setSignupFormData({...signupFormData, phoneNumber: text}),
-                  );
-                }}
-                maxLength={10}
               />
             </View>
+            <Spacer height={80} />
           </View>
-
-          <View style={styles.formButtonView}>
-            <FormButton
-              disabled={isButtonDisabled}
-              title={'Continue'}
-              onPress={async () => {
-                Keyboard.dismiss();
-                props.navigation.navigate('PhoneVerificationScreen');
-              }}
-            />
-          </View>
-          <Spacer height={80} />
-        </View>
-      </CustomSafeAreaView>
-    </TouchableWithoutFeedback>
+        </CustomSafeAreaView>
+      </TouchableWithoutFeedback>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+});
 
 export default PhoneAuthScreen;

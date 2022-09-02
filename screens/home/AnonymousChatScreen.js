@@ -48,9 +48,6 @@ import {setErrorMessage} from '../../store/actions/error';
 import MatchProfileScreen from '../matches/MatchProfileScreen';
 import {setItsAMatchModalVisible} from '../../store/actions/loading';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import database from '@react-native-firebase/database';
-import functions from '@react-native-firebase/functions';
-
 const AnonymousChatScreen = props => {
   const matchingState = useSelector(state => state.matching);
   const {via, messages, matchingStatus, canLoadEarlierMessages} = matchingState;

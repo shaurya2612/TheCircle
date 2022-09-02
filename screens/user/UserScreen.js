@@ -17,6 +17,7 @@ import {EditInfoBar} from '../../components/EditInfoBar';
 import NameText from '../../components/NameText';
 import colors from '../../constants/colors';
 import {fetchUser, updateInterestedIn} from '../../store/actions/user';
+import gstyles from '../../styles';
 import styles from '../../styles';
 import UserProfileScreen from './UserProfileScreen';
 
@@ -43,70 +44,71 @@ const UserScreen = props => {
 
   return (
     <View style={{...styles.rootView, backgroundColor: 'white'}}>
-      <Modal
-        style={{margin: 0}}
-        swipeToClose={true}
-        swipeArea={verticalScale(25)} // The height in pixels of the swipeable area, window height by default
-        swipeThreshold={50} // The threshold to reach in pixels to close the modal
-        isOpen={isProfileVisible}
-        ref={modalRef}
-        backButtonClose={true}
-        onClosed={() => {
-          setIsProfileVisible(false);
-        }}
-        backdropOpacity={0}
-        coverScreen={true}
-        isVisible={isProfileVisible}>
-        <UserProfileScreen
-          onPressX={() => {
+      <CustomSafeAreaView style={gstyles.rootView}>
+        <Modal
+          style={{margin: 0}}
+          swipeToClose={true}
+          swipeArea={verticalScale(25)} // The height in pixels of the swipeable area, window height by default
+          swipeThreshold={50} // The threshold to reach in pixels to close the modal
+          isOpen={isProfileVisible}
+          ref={modalRef}
+          backButtonClose={true}
+          onClosed={() => {
             setIsProfileVisible(false);
           }}
-          onEditIconPress={() => {
-            setIsProfileVisible(false);
-            props.navigation.navigate('EditProfileScreen');
-          }}
-          scrollViewRef={scrollViewRef}
-          onScroll={handleOnScroll}
-        />
-      </Modal>
-      <View style={{backgroundColor: 'white', flex: 1}}>
-        {/* Profile Preview Screen */}
-        <CustomHeader style={{height: 'auto', padding: scale(10)}}>
-          {/* <View /> */}
-          <Icon
-            style={{marginHorizontal: scale(5)}}
-            onPress={() => {
-              props.navigation.navigate('SettingsStack');
+          backdropOpacity={0}
+          coverScreen={true}
+          isVisible={isProfileVisible}>
+          <UserProfileScreen
+            onPressX={() => {
+              setIsProfileVisible(false);
             }}
-            name="settings"
-            size={scale(25)}
+            onEditIconPress={() => {
+              setIsProfileVisible(false);
+              props.navigation.navigate('EditProfileScreen');
+            }}
+            scrollViewRef={scrollViewRef}
+            onScroll={handleOnScroll}
           />
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            {/* <AppText style={styles.titleText}>Your Profile</AppText> */}
-          </View>
-          <View style={{width: scale(35)}}>
+        </Modal>
+        <View style={{backgroundColor: 'white', flex: 1}}>
+          {/* Profile Preview Screen */}
+          <CustomHeader style={{height: 'auto', padding: scale(10)}}>
+            {/* <View /> */}
             <Icon
               style={{marginHorizontal: scale(5)}}
               onPress={() => {
-                props.navigation.navigate('EditProfileScreen');
+                props.navigation.navigate('SettingsStack');
               }}
-              name="edit"
+              name="settings"
               size={scale(25)}
             />
-          </View>
-        </CustomHeader>
-        <View style={styles.expandedCenterView}>
-          <TouchableOpacity
-            onPress={() => {
-              setIsProfileVisible(true);
-            }}>
-            <AvatarCircle disabled size={scale(110)} source={{uri: dp}} />
-            {/* Icon on image  */}
-            {/* <View
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              {/* <AppText style={styles.titleText}>Your Profile</AppText> */}
+            </View>
+            <View style={{width: scale(35)}}>
+              <Icon
+                style={{marginHorizontal: scale(5)}}
+                onPress={() => {
+                  props.navigation.navigate('EditProfileScreen');
+                }}
+                name="edit"
+                size={scale(25)}
+              />
+            </View>
+          </CustomHeader>
+          <View style={styles.expandedCenterView}>
+            <TouchableOpacity
+              onPress={() => {
+                setIsProfileVisible(true);
+              }}>
+              <AvatarCircle disabled size={scale(110)} source={{uri: dp}} />
+              {/* Icon on image  */}
+              {/* <View
               style={{
                 position: 'absolute',
                 backgroundColor: 'white',
@@ -121,40 +123,41 @@ const UserScreen = props => {
               }}>
               <Icon size={scale(15)} color="black" name="edit-2" />
             </View> */}
-          </TouchableOpacity>
-          <View style={{marginBottom: scale(20)}}>
-            <AppText style={styles.titleText}>
-              {name}, {age}
-            </AppText>
+            </TouchableOpacity>
+            <View style={{marginBottom: scale(20)}}>
+              <AppText style={styles.titleText}>
+                {name}, {age}
+              </AppText>
+            </View>
+            <EditInfoBar
+              iconName={'user'}
+              title={'Show me'}
+              value={(() => {
+                if (interestedIn === 'Male') return 'Men';
+                else if (interestedIn === 'Female') return 'Women';
+                else return 'Everyone';
+              })()}
+              valueOptions={['Men', 'Women', 'Everyone']}
+              onValueChange={value => {
+                if (value === 'Men') value = 'Male';
+                else if (value === 'Women') value = 'Female';
+                else value = 'Everyone';
+                dispatch(updateInterestedIn(value));
+              }}
+              style={{marginBottom: scale(20)}}
+            />
+            <EditInfoBar
+              iconName={'clone'}
+              title={'Cue Cards'}
+              value={<FontAwesome5Icon name={'chevron-right'} />}
+              style={{marginBottom: scale(20)}}
+              onPress={() => {
+                props.navigation.navigate('UserCueCardsScreen');
+              }}
+            />
           </View>
-          <EditInfoBar
-            iconName={'user'}
-            title={'Show me'}
-            value={(() => {
-              if (interestedIn === 'Male') return 'Men';
-              else if (interestedIn === 'Female') return 'Women';
-              else return 'Everyone';
-            })()}
-            valueOptions={['Men', 'Women', 'Everyone']}
-            onValueChange={value => {
-              if (value === 'Men') value = 'Male';
-              else if (value === 'Women') value = 'Female';
-              else value = 'Everyone';
-              dispatch(updateInterestedIn(value));
-            }}
-            style={{marginBottom: scale(20)}}
-          />
-          <EditInfoBar
-            iconName={'clone'}
-            title={'Cue Cards'}
-            value={<FontAwesome5Icon name={'chevron-right'} />}
-            style={{marginBottom: scale(20)}}
-            onPress={() => {
-              props.navigation.navigate('UserCueCardsScreen');
-            }}
-          />
         </View>
-      </View>
+      </CustomSafeAreaView>
     </View>
   );
 };

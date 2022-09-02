@@ -15,22 +15,14 @@ import FriendCard from '../../../components/FriendCard';
 import SearchBar from '../../../components/SearchBar';
 import styles from '../../../styles';
 import FormButton from '../../../components/FormButton';
-import {
-  searchFriendByUsername,
-  searchFriendsByNameOrUsername,
-} from '../../../firebase/util';
+import {db, searchFriendsByNameOrUsername} from '../../../firebase/util';
 import {useDispatch, useSelector} from 'react-redux';
 import {setSearchingForFriends} from '../../../store/actions/loading';
 import {setErrorMessage} from '../../../store/actions/error';
 import FriendsListItem from '../../../components/FriendsListItem';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import ReactNativeModal from 'react-native-modal';
-import database from '@react-native-firebase/database';
-import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';
 import LostSvg from '../../../assets/svgs/lost.svg';
-import colors from '../../../constants/colors';
-import {GraphRequest, GraphRequestManager} from 'react-native-fbsdk-next';
 import {getFacebookUid} from '../../../utils';
 import SimpleToast from 'react-native-simple-toast';
 import {
@@ -56,7 +48,6 @@ const SearchFriendsScreen = () => {
 
   useEffect(() => {
     if (!modalUser) return;
-    const db = database();
 
     const listenForChanges = () => {
       //listen for change in relation with current Modal User
@@ -93,7 +84,6 @@ const SearchFriendsScreen = () => {
 
   useEffect(() => {
     if (!modalUser || isModalVisible) return;
-    const db = database();
 
     //Close all listening connections
     db.ref('/friends').child(auth().currentUser.uid).child(modalUser.id).off();
@@ -137,6 +127,29 @@ const SearchFriendsScreen = () => {
       });
   }, [dispatch]);
 
+  const renderItem = ({item}) => (
+    <View>
+      <View
+        style={{
+          width: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <FriendsListItem
+          imageUri={item.dp}
+          userId={item.id}
+          name={item.name}
+          username={'@' + item.username}
+          age={item.age}
+          onPress={() => {
+            setModalUser(item);
+            setIsModalVisible(true);
+          }}
+        />
+      </View>
+    </View>
+  );
+
   const searchFriendHandler = async () => {
     if (nameOrUsername.trim().length === 0) {
       setFriends(null);
@@ -176,6 +189,7 @@ const SearchFriendsScreen = () => {
       keyboardDidShowListener.remove();
     };
   }, []);
+
   return (
     <View style={{...styles.rootView, backgroundColor: 'white'}}>
       <ReactNativeModal
@@ -238,31 +252,7 @@ const SearchFriendsScreen = () => {
               <ActivityIndicator size="large" color="black" />
             </View>
           ) : friends !== null ? (
-            <FlatList
-              data={friends}
-              renderItem={({item}) => (
-                <View>
-                  <View
-                    style={{
-                      width: '100%',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <FriendsListItem
-                      imageUri={item.dp}
-                      userId={item.id}
-                      name={item.name}
-                      username={'@' + item.username}
-                      age={item.age}
-                      onPress={() => {
-                        setModalUser(item);
-                        setIsModalVisible(true);
-                      }}
-                    />
-                  </View>
-                </View>
-              )}
-            />
+            <FlatList data={friends} renderItem={renderItem} />
           ) : (
             //When there is either an error or no results
             <View style={styles.expandedCenterView}>

@@ -16,75 +16,78 @@ const FriendsTopTabNavigator = createMaterialTopTabNavigator();
 
 const FriendsTopTab = () => {
   return (
-    <CustomSafeAreaView style={styles.rootView}>
-      <View
-        style={{
-          backgroundColor: 'white',
-          justifyContent: 'center',
-          alignItems: 'flex-start',
-        }}>
+    <View style={[styles.rootView, {backgroundColor: '#fff'}]}>
+      <CustomSafeAreaView style={styles.rootView}>
         <View
           style={{
-            paddingHorizontal: scale(10),
             backgroundColor: 'white',
-            marginVertical: verticalScale(10),
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexDirection: 'row',
-            width: '100%',
+            justifyContent: 'center',
+            alignItems: 'flex-start',
           }}>
-          <AppText style={{...styles.titleText, fontFamily: 'Quicksand-Bold'}}>
-            Connect
-          </AppText>
-          <View>
-            {/* <AppText style={{fontFamily: 'Quicksand-Bold', color: 'steelblue'}}>
+          <View
+            style={{
+              paddingHorizontal: scale(10),
+              backgroundColor: 'white',
+              marginVertical: verticalScale(10),
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexDirection: 'row',
+              width: '100%',
+            }}>
+            <AppText
+              style={{...styles.titleText, fontFamily: 'Quicksand-Bold'}}>
+              Connect
+            </AppText>
+            <View>
+              {/* <AppText style={{fontFamily: 'Quicksand-Bold', color: 'steelblue'}}>
               Copy invite
             </AppText> */}
+            </View>
           </View>
         </View>
-      </View>
-      <FriendsTopTabNavigator.Navigator
-        tabBarOptions={{
-          labelStyle: {
-            textTransform: 'none',
-            fontSize: scale(11),
-            fontWeight: 'bold',
-          },
-          activeTintColor: 'white',
-          inactiveTintColor: 'grey',
-          indicatorStyle: {
-            height: null,
-            top: '20%',
-            bottom: '20%',
-            backgroundColor: colors.primary,
-            borderRadius: scale(100),
-          },
-          // renderIndicator:() => <View style={{backgroundColor:'blue'}}></View>,
-          allowFontScaling: false,
-          style: {backgroundColor: 'white'},
-          tabBarBadge: () => (
-            <View
-              style={{height: 40, width: 40, backgroundColor: 'red'}}></View>
-          ),
-        }}>
-        <FriendsTopTabNavigator.Screen
-          name="Friends"
-          component={FriendsScreen}
-        />
-        <FriendsTopTabNavigator.Screen
-          name="Streams"
-          component={StreamsListScreen}
-        />
-        <FriendsTopTabNavigator.Screen
-          name="Requests"
-          component={FriendRequestsScreen}
-        />
-        <FriendsTopTabNavigator.Screen
-          name="Search"
-          component={SearchFriendsScreen}
-        />
-      </FriendsTopTabNavigator.Navigator>
-    </CustomSafeAreaView>
+        <FriendsTopTabNavigator.Navigator
+          tabBarOptions={{
+            labelStyle: {
+              textTransform: 'none',
+              fontSize: scale(11),
+              fontWeight: 'bold',
+            },
+            activeTintColor: 'white',
+            inactiveTintColor: 'grey',
+            indicatorStyle: {
+              height: null,
+              top: '20%',
+              bottom: '20%',
+              backgroundColor: colors.primary,
+              borderRadius: scale(100),
+            },
+            // renderIndicator:() => <View style={{backgroundColor:'blue'}}></View>,
+            allowFontScaling: false,
+            style: {backgroundColor: 'white'},
+            tabBarBadge: () => (
+              <View
+                style={{height: 40, width: 40, backgroundColor: 'red'}}></View>
+            ),
+          }}>
+          <FriendsTopTabNavigator.Screen
+            name="Friends"
+            component={FriendsScreen}
+          />
+          <FriendsTopTabNavigator.Screen
+            name="Streams"
+            component={StreamsListScreen}
+          />
+          <FriendsTopTabNavigator.Screen
+            name="Requests"
+            component={FriendRequestsScreen}
+          />
+          <FriendsTopTabNavigator.Screen
+            name="Search"
+            component={SearchFriendsScreen}
+          />
+        </FriendsTopTabNavigator.Navigator>
+      </CustomSafeAreaView>
+    </View>
   );
 };
 

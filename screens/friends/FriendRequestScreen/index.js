@@ -23,6 +23,17 @@ const FriendRequestsScreen = () => {
   const dispatch = useDispatch();
   let requestsAllIds = useSelector(state => state.user.requests.allIds);
 
+  const renderItem = ({item}) => (
+    <View
+      style={{
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      <RequestListItem userId={item} />
+    </View>
+  );
+
   useEffect(() => {
     dispatch(listenForRequests());
   }, []);
@@ -46,16 +57,7 @@ const FriendRequestsScreen = () => {
             //     </View>
             //   );
             // }}
-            renderItem={({item}) => (
-              <View
-                style={{
-                  width: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <RequestListItem userId={item} />
-              </View>
-            )}
+            renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
           />
         ) : (

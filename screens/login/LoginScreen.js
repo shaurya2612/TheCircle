@@ -37,6 +37,17 @@ const LoginScreen = props => {
     false,
   );
 
+  const renderItem = ({item}) => {
+    return (
+      <View style={{marginVertical: scale(10)}}>
+        {item.heading ? (
+          <Text style={{fontSize: scale(20)}}>{item.heading}</Text>
+        ) : null}
+        <View>{item.text}</View>
+      </View>
+    );
+  };
+
   const onFacebookButtonPress = async () => {
     try {
       // Attempt login with permissions
@@ -96,18 +107,7 @@ const LoginScreen = props => {
                 keyExtractor={(item, index) => {
                   return index.toString();
                 }}
-                renderItem={({item}) => {
-                  return (
-                    <View style={{marginVertical: scale(10)}}>
-                      {item.heading ? (
-                        <Text style={{fontSize: scale(20)}}>
-                          {item.heading}
-                        </Text>
-                      ) : null}
-                      <View>{item.text}</View>
-                    </View>
-                  );
-                }}></FlatList>
+                renderItem={renderItem}></FlatList>
             </ModalCardView>
           </View>
         </ReactNativeModal>

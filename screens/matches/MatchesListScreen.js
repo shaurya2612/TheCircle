@@ -135,6 +135,77 @@ export const MatchesListScreen = props => {
     );
   }
 
+  const renderHorizontalListItem = ({item}) => {
+    return (
+      <AvatarCircle
+        onLongPress={() => {
+          setActionModalMatch(item);
+          setIsActionsModalVisible(true);
+        }}
+        onPress={() => {
+          dispatch(setMatch(item));
+          props.navigation.navigate('ChatScreen');
+        }}
+        style={{
+          marginHorizontal: scale(5),
+          marginVertical: scale(10),
+        }}
+        size={100}
+        source={{uri: item.dp}}
+      />
+    );
+  };
+
+  const renderVerticalListItem = ({item}) => {
+    if (item.lastMessage || item.hasPhoto)
+      return (
+        <ChatListItem
+          onLongPress={() => {
+            setActionModalMatch(item);
+            setIsActionsModalVisible(true);
+          }}
+          onPressAvatar={() => {
+            setProfileMatchId(item.id);
+            modalRef.current.open();
+            setIsProfileModalVisible(true);
+          }}
+          onPress={() => {
+            dispatch(setMatch(item));
+            props.navigation.navigate('ChatScreen');
+          }}
+          id={item.id}
+          imageUri={item.dp}
+          name={item.name}
+          label={item.unseen}
+          lastMessage={
+            item.hasPhoto ? (
+              <View style={{flexDirection: 'row'}}>
+                <View
+                  style={{
+                    ...styles.centerView,
+                    height: '100%',
+                  }}>
+                  <Icon
+                    style={{
+                      marginRight: scale(5),
+                    }}
+                    name={'camera'}
+                    size={scale(15)}
+                  />
+                </View>
+                <AppText>Photo</AppText>
+              </View>
+            ) : item.lastMessage.length > 15 ? (
+              item.lastMessage.substring(0, 26) + '...'
+            ) : (
+              item.lastMessage
+            )
+          }
+        />
+      );
+    else return null;
+  };
+
   //This function helps in closing the scrollview modal whenever the offset is negative
   const handleOnScroll = event => {
     if (event.nativeEvent.contentOffset.y < -25) {
@@ -239,26 +310,7 @@ export const MatchesListScreen = props => {
                 return item.lastMessage === null;
               })}
               keyExtractor={(item, index) => index.toString()}
-              renderItem={({item}) => {
-                return (
-                  <AvatarCircle
-                    onLongPress={() => {
-                      setActionModalMatch(item);
-                      setIsActionsModalVisible(true);
-                    }}
-                    onPress={() => {
-                      dispatch(setMatch(item));
-                      props.navigation.navigate('ChatScreen');
-                    }}
-                    style={{
-                      marginHorizontal: scale(5),
-                      marginVertical: scale(10),
-                    }}
-                    size={100}
-                    source={{uri: item.dp}}
-                  />
-                );
-              }}
+              renderItem={renderHorizontalListItem}
             />
           </View>
         )}
@@ -283,55 +335,7 @@ export const MatchesListScreen = props => {
                 </View>
               );
             }}
-            renderItem={({item}) => {
-              if (item.lastMessage || item.hasPhoto)
-                return (
-                  <ChatListItem
-                    onLongPress={() => {
-                      setActionModalMatch(item);
-                      setIsActionsModalVisible(true);
-                    }}
-                    onPressAvatar={() => {
-                      setProfileMatchId(item.id);
-                      modalRef.current.open();
-                      setIsProfileModalVisible(true);
-                    }}
-                    onPress={() => {
-                      dispatch(setMatch(item));
-                      props.navigation.navigate('ChatScreen');
-                    }}
-                    id={item.id}
-                    imageUri={item.dp}
-                    name={item.name}
-                    label={item.unseen}
-                    lastMessage={
-                      item.hasPhoto ? (
-                        <View style={{flexDirection: 'row'}}>
-                          <View
-                            style={{
-                              ...styles.centerView,
-                              height: '100%',
-                            }}>
-                            <Icon
-                              style={{
-                                marginRight: scale(5),
-                              }}
-                              name={'camera'}
-                              size={scale(15)}
-                            />
-                          </View>
-                          <AppText>Photo</AppText>
-                        </View>
-                      ) : item.lastMessage.length > 15 ? (
-                        item.lastMessage.substring(0, 26) + '...'
-                      ) : (
-                        item.lastMessage
-                      )
-                    }
-                  />
-                );
-              else return null;
-            }}
+            renderItem={renderVerticalListItem}
           />
         </View>
       </ScrollView>

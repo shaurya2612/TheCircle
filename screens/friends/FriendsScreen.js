@@ -41,14 +41,28 @@ const dummyData = [
 ];
 
 const FriendsScreen = () => {
+  const dispatch = useDispatch();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalUser, setModalUser] = useState(null);
 
   const {friends, canLoadMoreFriends, listeningForFriends} = useSelector(
     state => state.user,
   );
-  const dispatch = useDispatch();
 
+  const renderItem = ({item}) => {
+    return (
+      <ConnectListItem
+        onPress={() => {
+          setModalUser(item);
+          setIsModalVisible(true);
+        }}
+        dp={item.dp}
+        name={item.name}
+        userId={item.id}
+        username={item.username}
+      />
+    );
+  };
   useEffect(() => {
     dispatch(listenForFriends(10));
   }, []);
@@ -131,20 +145,7 @@ const FriendsScreen = () => {
           // ListHeaderComponent={() => {
           //   return <View></View>;
           // }}
-          renderItem={({item}) => {
-            return (
-              <ConnectListItem
-                onPress={() => {
-                  setModalUser(item);
-                  setIsModalVisible(true);
-                }}
-                dp={item.dp}
-                name={item.name}
-                userId={item.id}
-                username={item.username}
-              />
-            );
-          }}
+          renderItem={renderItem}
         />
       ) : (
         <View style={gstyles.expandedCenterView}>

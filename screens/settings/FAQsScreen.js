@@ -9,6 +9,57 @@ import {faqs} from '../../constants/official';
 import styles from '../../styles';
 
 const FAQsScreen = props => {
+  const renderItem = ({item, index}) => (
+    <View
+      style={{
+        minHeight: scale(200),
+        minWidth: '50%',
+        borderRadius: scale(20),
+        backgroundColor: 'white',
+        margin: scale(10),
+        overflow: 'hidden',
+        ...styles.elevation_medium,
+      }}>
+      {/* Question  */}
+      <View
+        style={{
+          backgroundColor: 'black',
+          paddingVertical: scale(20),
+          paddingHorizontal: scale(10),
+        }}>
+        <View>
+          <AppText
+            style={{
+              fontSize: scale(18),
+              color: 'white',
+            }}>
+            {item.question}
+          </AppText>
+        </View>
+      </View>
+
+      {/* Answer */}
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          paddingHorizontal: scale(10),
+          paddingVertical: scale(20),
+        }}>
+        <AppText
+          style={{
+            fontSize: scale(15),
+            color: 'black',
+            textAlign: 'justify',
+            lineHeight: verticalScale(20),
+            // fontWeight: "bold",
+          }}>
+          {item.answer}
+        </AppText>
+      </View>
+    </View>
+  );
+
   return (
     <CustomSafeAreaView style={{...styles.rootView, backgroundColor: 'white'}}>
       <CustomHeader style={{height: verticalScale(40)}}>
@@ -55,56 +106,7 @@ const FAQsScreen = props => {
 
       <FlatList
         data={faqs}
-        renderItem={({item, index}) => (
-          <View
-            style={{
-              minHeight: scale(200),
-              minWidth: '50%',
-              borderRadius: scale(20),
-              backgroundColor: 'white',
-              margin: scale(10),
-              overflow: 'hidden',
-              ...styles.elevation_medium,
-            }}>
-            {/* Question  */}
-            <View
-              style={{
-                backgroundColor: 'black',
-                paddingVertical: scale(20),
-                paddingHorizontal: scale(10)
-              }}>
-              <View>
-                <AppText
-                  style={{
-                    fontSize: scale(18),
-                    color: 'white',
-                  }}>
-                  {item.question}
-                </AppText>
-              </View>
-            </View>
-
-            {/* Answer */}
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                paddingHorizontal: scale(10),
-                paddingVertical: scale(20),
-              }}>
-              <AppText
-                style={{
-                  fontSize: scale(15),
-                  color: 'black',
-                  textAlign: 'justify',
-                  lineHeight: verticalScale(20),
-                  // fontWeight: "bold",
-                }}>
-                {item.answer}
-              </AppText>
-            </View>
-          </View>
-        )}
+        renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
       />
     </CustomSafeAreaView>

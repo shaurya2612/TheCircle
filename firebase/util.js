@@ -1,5 +1,5 @@
 import {bdToAge} from '../utils';
-import database from '@react-native-firebase/database';
+import {firebase} from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import {Platform} from 'react-native';
@@ -11,7 +11,12 @@ import {store} from '../App';
 import {setRelation} from '../store/actions/user';
 
 export const ASIA_SOUTH1 = 'asia-south1';
+export const RTDB_URL =
+  'https://thecircle-native.asia-southeast1.firebasedatabase.app/';
 
+export const db = firebase
+  .app()
+  .database('https://thecircle-native.asia-southeast1.firebasedatabase.app/');
 //Relation states, No relation resolves to null
 export const relations = {
   USER_RECEIVED_REQUEST: 'USER_RECEIVED_REQUEST',
@@ -21,7 +26,6 @@ export const relations = {
 };
 
 export const isUsernameValid = async username => {
-  const db = database();
   const snapshot = await db.ref('/usernames').child(username).once('value');
   if (snapshot.val() === null) return true;
   return false;
@@ -49,7 +53,6 @@ export const uploadUserPhotos = async userPhotos => {
 };
 
 export const searchFriendByUsername = async username => {
-  const db = database();
   const friendId = await db.ref('/usernames').child(username).once('value');
   if (!friendId) return null;
   const [name, dp] = await Promise.all(
@@ -61,7 +64,6 @@ export const searchFriendByUsername = async username => {
 
 export const checkRelation = async (userId, targetUserId) => {
   //check if the person is in your requests
-  const db = database();
   let isPersonInMyRequests = (
     await db.ref('/requests').child(userId).child(targetUserId).once('value')
   ).exists();
@@ -91,7 +93,6 @@ export const searchFriendsByNameOrUsername = async (
   numOfResults,
 ) => {
   let friends = [];
-  const db = database();
 
   //search by username
   let lowerCaseUsername =
@@ -155,7 +156,6 @@ export const searchFriendsByNameOrUsername = async (
 
 export const sendFriendRequest = async receiverId => {
   store.dispatch(setRelation(relations.USER_SENT_REQUEST));
-  const db = database();
   const {uid} = auth().currentUser;
   await db
     .ref('/requests')
@@ -172,7 +172,6 @@ export const sendFriendRequest = async receiverId => {
 };
 
 export const fetchNameAgeUsernameDpById = async id => {
-  const db = database();
   const [name, bd, username, dp] = await Promise.all([
     db.ref('/users').child(id).child('name').once('value'),
     db.ref('/users').child(id).child('bd').once('value'),
@@ -196,7 +195,6 @@ export const fetchNameAgeUsernameDpById = async id => {
 export const acceptRequest = async friendId => {
   store.dispatch(setRelation(uid, relations.FRIENDS));
   const {uid} = auth().currentUser;
-  const db = database();
 
   const friendGender = await db.ref('/genders').child(friendId).once('value');
   if (!friendGender.exists()) {
@@ -229,7 +227,6 @@ export const acceptRequest = async friendId => {
 export const declineRequest = async rejectedUserId => {
   store.dispatch(setRelation(uid, relations.NONE));
   const {uid} = auth().currentUser;
-  const db = database();
   console.warn(uid);
   await db.ref('/requests').child(uid).child(rejectedUserId).remove();
   // await sendFCM(rejectedUserId, {
@@ -244,7 +241,6 @@ export const declineRequest = async rejectedUserId => {
 export const unfriend = async unfriendId => {
   store.dispatch(setRelation(uid, relations.NONE));
   const {uid} = auth().currentUser;
-  const db = database();
 
   await Promise.all([
     db.ref('/friends').child(uid).child(unfriendId).remove(),
@@ -262,7 +258,6 @@ export const unfriend = async unfriendId => {
 
 export const unmatch = async unmatchId => {
   const {uid} = auth().currentUser;
-  const db = database();
   const refString =
     uid < unmatchId ? uid + '@' + unmatchId : unmatchId + '@' + uid;
   await Promise.all([
@@ -281,7 +276,6 @@ export const unmatch = async unmatchId => {
 };
 
 export const setUserIsTyping = async (chatPartnerId, userIsTyping) => {
-  const db = database();
   const {uid} = auth().currentUser;
   const refString =
     uid < chatPartnerId ? uid + '@' + chatPartnerId : chatPartnerId + '@' + uid;
@@ -297,7 +291,6 @@ export const setUserIsTyping = async (chatPartnerId, userIsTyping) => {
 };
 
 export const joinStream = async streamId => {
-  const db = database();
   const uid = auth().currentUser.uid;
 
   await db.ref('/streamsubs').child(uid).child(streamId).set('true');
@@ -313,7 +306,6 @@ export const joinStream = async streamId => {
 };
 
 export const leaveStream = async streamId => {
-  const db = database();
   const uid = auth().currentUser.uid;
 
   await db.ref('/streamsubs').child(uid).child(streamId).remove();

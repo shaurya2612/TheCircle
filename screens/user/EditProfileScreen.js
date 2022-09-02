@@ -10,6 +10,7 @@ import {
   FlatList,
   TouchableWithoutFeedback,
   ActivityIndicator,
+  StyleSheet,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import ReactNativeModal from 'react-native-modal';
@@ -30,7 +31,7 @@ import {
   updateAbout,
   updateProfileInfo,
 } from '../../store/actions/user';
-import styles from '../../styles';
+import gstyles from '../../styles';
 
 const iconMap = {
   Zodiac: 'moon',
@@ -110,21 +111,49 @@ const EditProfileScreen = props => {
     photoGridRef.current.savePhotos();
     /////////////////////////////////////
   };
+  const renderItem = ({item}) => (
+    <View
+      style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: verticalScale(10),
+      }}>
+      {/* //Fetch the value of the bar for the user from the database */}
+      <EditInfoBar
+        valueOptions={valueOptions[item]}
+        onValueChange={value => {
+          dispatch(updateProfileInfo(item, value));
+        }}
+        removeOption={true}
+        title={item}
+        iconName={iconMap[item]}
+        value={
+          profile
+            ? profile.info
+              ? profile.info[item]
+                ? profile.info[item]
+                : null
+              : null
+            : null
+        }
+      />
+    </View>
+  );
 
   if (!profileUpdated) {
     return (
       <LinearGradient
         colors={[colors.primary, colors.accent]}
-        style={{...styles.expandedCenterView}}>
+        style={{...gstyles.expandedCenterView}}>
         <ActivityIndicator style={'white'} />
       </LinearGradient>
     );
   }
   return (
-    <View style={{...styles.rootView, backgroundColor: 'white'}}>
-      <CustomSafeAreaView style={styles.rootView}>
+    <View style={{...gstyles.rootView, backgroundColor: 'white'}}>
+      <CustomSafeAreaView style={gstyles.rootView}>
         <LinearGradient
-          style={styles.rootView}
+          style={gstyles.rootView}
           colors={[colors.primary, colors.accent]}>
           <ScrollView
             scrollEnabled={!isDraggingPhotoGrid}
@@ -158,19 +187,11 @@ const EditProfileScreen = props => {
               onPress={() => {
                 aboutRef.current.focus();
               }}>
-              <View
-                style={{
-                  height: scale(100),
-                  backgroundColor: 'white',
-                  marginHorizontal: scale(10),
-                  borderRadius: scale(20),
-                  paddingHorizontal: scale(10),
-                  marginBottom: verticalScale(50),
-                }}>
+              <View style={styles.aboutContainer}>
                 <TextInput
                   placeholder="Type in something interesting!"
                   ref={aboutRef}
-                  style={{fontSize: scale(15), color: 'black'}}
+                  style={styles.aboutTextInput}
                   placeholderTextColor="grey"
                   multiline
                   onChangeText={text => {
@@ -183,34 +204,7 @@ const EditProfileScreen = props => {
             <FlatList
               data={Object.keys(iconMap)}
               extraData={profile}
-              renderItem={({item}) => (
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginBottom: verticalScale(10),
-                  }}>
-                  {/* //Fetch the value of the bar for the user from the database */}
-                  <EditInfoBar
-                    valueOptions={valueOptions[item]}
-                    onValueChange={value => {
-                      dispatch(updateProfileInfo(item, value));
-                    }}
-                    removeOption={true}
-                    title={item}
-                    iconName={iconMap[item]}
-                    value={
-                      profile
-                        ? profile.info
-                          ? profile.info[item]
-                            ? profile.info[item]
-                            : null
-                          : null
-                        : null
-                    }
-                  />
-                </View>
-              )}
+              renderItem={renderItem}
             />
           </ScrollView>
         </LinearGradient>
@@ -218,4 +212,20 @@ const EditProfileScreen = props => {
     </View>
   );
 };
+const styles = StyleSheet.create({
+  aboutTextInput: {
+    fontSize: scale(15),
+    color: 'black',
+    textAlignVertical:'top'
+  },
+  aboutContainer: {
+    height: scale(100),
+    backgroundColor: 'white',
+    marginHorizontal: scale(10),
+    borderRadius: scale(20),
+    paddingHorizontal: scale(10),
+    paddingVertical: scale(8),
+    marginBottom: verticalScale(50),
+  },
+});
 export default EditProfileScreen;

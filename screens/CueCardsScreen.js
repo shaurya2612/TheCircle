@@ -33,7 +33,110 @@ const CueCardsScreen = ({matchMode, FOFMode, onPressX, ...props}) => {
     if (FOFMode === true) dispatch(fetchFOFCueCards());
   }, [currentFOF]);
 
+  const renderItem = ({item}) => (
+    <View
+      style={{
+        minHeight: scale(200),
+        minWidth: '50%',
+        borderRadius: scale(20),
+        backgroundColor: 'white',
+        margin: scale(10),
+        overflow: 'hidden',
+        ...styles.elevation_medium,
+      }}>
+      {/* Question  */}
+      <View
+        style={{
+          backgroundColor: '#6A82FB',
+          paddingVertical: scale(20),
+          paddingHorizontal: scale(10),
+        }}>
+        <View>
+          <AppText
+            style={{
+              fontSize: scale(18),
+              color: 'white',
+              // fontWeight: "bold",
+            }}>
+            {questions[item.qid]}
+          </AppText>
+        </View>
+      </View>
+
+      {/* Answer */}
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          paddingHorizontal: scale(10),
+          paddingVertical: scale(20),
+        }}>
+        <AppText
+          style={{
+            fontSize: scale(15),
+            color: 'black',
+            textAlign: 'justify',
+            lineHeight: verticalScale(20),
+            // fontWeight: "bold",
+          }}>
+          {item.ans}
+        </AppText>
+      </View>
+    </View>
+  );
+
   const renderContent = () => {
+    ({item}) => (
+      <View
+        style={{
+          minHeight: scale(200),
+          minWidth: '50%',
+          borderRadius: scale(20),
+          backgroundColor: 'white',
+          margin: scale(10),
+          overflow: 'hidden',
+          ...styles.elevation_medium,
+        }}>
+        {/* Question  */}
+        <View
+          style={{
+            backgroundColor: '#6A82FB',
+            paddingVertical: scale(20),
+            paddingHorizontal: scale(10),
+          }}>
+          <View>
+            <AppText
+              style={{
+                fontSize: scale(18),
+                color: 'white',
+                // fontWeight: "bold",
+              }}>
+              {questions[item.qid]}
+            </AppText>
+          </View>
+        </View>
+
+        {/* Answer */}
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            paddingHorizontal: scale(10),
+            paddingVertical: scale(20),
+          }}>
+          <AppText
+            style={{
+              fontSize: scale(15),
+              color: 'black',
+              textAlign: 'justify',
+              lineHeight: verticalScale(20),
+              // fontWeight: "bold",
+            }}>
+            {item.ans}
+          </AppText>
+        </View>
+      </View>
+    );
     if (matchMode && matchCueCards === null) {
       return (
         <View style={styles.expandedCenterView}>
@@ -66,57 +169,7 @@ const CueCardsScreen = ({matchMode, FOFMode, onPressX, ...props}) => {
       return (
         <FlatList
           data={matchMode ? matchCueCards : FOFCueCards}
-          renderItem={({item}) => (
-            <View
-              style={{
-                minHeight: scale(200),
-                minWidth: '50%',
-                borderRadius: scale(20),
-                backgroundColor: 'white',
-                margin: scale(10),
-                overflow: 'hidden',
-                ...styles.elevation_medium,
-              }}>
-              {/* Question  */}
-              <View
-                style={{
-                  backgroundColor: '#6A82FB',
-                  paddingVertical: scale(20),
-                  paddingHorizontal: scale(10),
-                }}>
-                <View>
-                  <AppText
-                    style={{
-                      fontSize: scale(18),
-                      color: 'white',
-                      // fontWeight: "bold",
-                    }}>
-                    {questions[item.qid]}
-                  </AppText>
-                </View>
-              </View>
-
-              {/* Answer */}
-              <View
-                style={{
-                  flex: 1,
-                  alignItems: 'center',
-                  paddingHorizontal: scale(10),
-                  paddingVertical: scale(20),
-                }}>
-                <AppText
-                  style={{
-                    fontSize: scale(15),
-                    color: 'black',
-                    textAlign: 'justify',
-                    lineHeight: verticalScale(20),
-                    // fontWeight: "bold",
-                  }}>
-                  {item.ans}
-                </AppText>
-              </View>
-            </View>
-          )}
+          renderItem={renderItem}
           keyExtractor={item => item.qid.toString()}
         />
       );

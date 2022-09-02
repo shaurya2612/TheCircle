@@ -1,11 +1,11 @@
 import {REMOVE_UNSEEN} from './user';
-import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import {Platform} from 'react-native';
 import functions from '@react-native-firebase/functions';
-import {sendFCM} from '../../firebase/util';
+import database from '@react-native-firebase/database';
+import {db, sendFCM} from '../../firebase/util';
 
 export const SET_LISTENING_FOR_CHAT = 'SET_LISTENING_FOR_CHAT';
 export const ADD_MESSAGE_IN_CHAT = 'ADD_MESSAGE_IN_CHAT';
@@ -30,7 +30,6 @@ export const startListeningForChat = () => {
     if (match === null) return;
 
     const uid = auth().currentUser.uid;
-    const db = database();
 
     //listen for chat messages
     const refString =
@@ -71,7 +70,6 @@ export const startListeningForChat = () => {
 export const stopListeningForChat = () => {
   return async (dispatch, getState) => {
     const uid = auth().currentUser.uid;
-    const db = database();
 
     const chatState = getState().chat;
     const {match} = chatState;
@@ -88,7 +86,6 @@ export const stopListeningForChat = () => {
 export const sendMessageToMatch = messages => {
   return async (dispatch, getState) => {
     const {match} = getState().chat;
-    const db = database();
     const {uid} = auth().currentUser;
     const refString =
       uid < match.id ? uid + '@' + match.id : match.id + '@' + uid;
@@ -182,7 +179,6 @@ export const sendMessageToMatch = messages => {
 export const paginateMessagesQuery = () => {
   return async (dispatch, getState) => {
     const {match, messages} = getState().chat;
-    const db = database();
     const {uid} = auth().currentUser;
     const refString =
       uid < match.id ? uid + '@' + match.id : match.id + '@' + uid;
@@ -220,7 +216,6 @@ export const paginateMessagesQuery = () => {
 
 export const removeUnseenMessages = () => {
   return async (dispatch, getState) => {
-    const db = database();
     const {match} = getState().chat;
     const {uid} = auth().currentUser;
     await db.ref('/unseen').child(uid).child(match.id).remove();

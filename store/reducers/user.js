@@ -31,9 +31,8 @@ import {
   SET_USER_STATS,
   SET_RELATION,
 } from '../actions/user';
-import database from '@react-native-firebase/database';
 import storage from '@react-native-firebase/storage';
-import {relations} from '../../firebase/util';
+import {db, relations} from '../../firebase/util';
 
 const initialState = {
   bd: null,
@@ -223,7 +222,6 @@ export default (state = initialState, action) => {
       //need to fetch the match list item  *TODO rfc
       else {
         const fetchMatchListItem = async () => {
-          const db = database();
 
           let [name, dp] = await Promise.all([
             db.ref('/users').child(payload.id).child('name').once('value'),

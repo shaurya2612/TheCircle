@@ -76,6 +76,30 @@ const SettingsScreen = props => {
   const textInputRef5 = useRef();
   const dispatch = useDispatch();
 
+  const renderPolicyItem = ({item}) => {
+    return (
+      <View style={{marginVertical: scale(10)}}>
+        {item.heading ? (
+          <Text style={{fontSize: scale(20)}}>{item.heading}</Text>
+        ) : null}
+        <View>{item.text}</View>
+      </View>
+    );
+  };
+
+  const renderItem = ({item}) => (
+    <OptionView
+      title={item.title}
+      style={{
+        backgroundColor: 'white',
+        marginVertical: verticalScale(5),
+        // borderBottomWidth: scale(0.1)
+      }}
+      fontStyle={item.fontStyle || {}}
+      onPress={item.onPress}
+    />
+  );
+
   // Handle confirm code button press
   async function confirmCode() {
     if (!confirm) {
@@ -125,18 +149,8 @@ const SettingsScreen = props => {
                 keyExtractor={(item, index) => {
                   return index.toString();
                 }}
-                renderItem={({item}) => {
-                  return (
-                    <View style={{marginVertical: scale(10)}}>
-                      {item.heading ? (
-                        <Text style={{fontSize: scale(20)}}>
-                          {item.heading}
-                        </Text>
-                      ) : null}
-                      <View>{item.text}</View>
-                    </View>
-                  );
-                }}></FlatList>
+                renderItem={renderPolicyItem}
+              />
             </ModalCardView>
           </View>
         </ReactNativeModal>
@@ -359,14 +373,10 @@ const SettingsScreen = props => {
             onPress={() => {
               props.navigation.goBack();
             }}>
-            <Icon
-              style={{marginHorizontal: scale(10)}}
-              name={'arrow-left'}
-              size={scale(20)}
-            />
+            <Icon name={'arrow-left'} size={scale(20)} />
           </TouchableOpacity>
           <AppText style={{fontSize: scale(18)}}>{'Settings'}</AppText>
-          <View style={{width: scale(50)}} />
+          <View style={{width: scale(20)}} />
         </CustomHeader>
 
         <View
@@ -386,18 +396,7 @@ const SettingsScreen = props => {
             <FlatList
               data={data}
               keyExtractor={(item, index) => index.toString()}
-              renderItem={({item}) => (
-                <OptionView
-                  title={item.title}
-                  style={{
-                    backgroundColor: 'white',
-                    marginVertical: verticalScale(5),
-                    // borderBottomWidth: scale(0.1)
-                  }}
-                  fontStyle={item.fontStyle || {}}
-                  onPress={item.onPress}
-                />
-              )}
+              renderItem={renderItem}
             />
           </View>
           <View
